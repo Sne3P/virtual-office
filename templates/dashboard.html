@@ -1,0 +1,63 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}Bureau - Virtual Office{% endblock %}
+{% block content %}
+<div id="desktop">
+  <!-- Icônes du bureau (positionnées par un grid, pouvant être enregistrées pour l'utilisateur) -->
+  <div class="desktop-icons">
+    <div class="desktop-icon" data-app="terminal">
+      <img src="{% static 'images/terminal.png' %}" alt="Terminal">
+      <span>Terminal</span>
+    </div>
+    <div class="desktop-icon" data-app="explorer">
+      <img src="{% static 'images/explorer.png' %}" alt="Explorer">
+      <span>Explorer</span>
+    </div>
+  </div>
+  <!-- Conteneur pour les fenêtres -->
+  <div id="windows-container"></div>
+  <!-- Barre des tâches -->
+  <div id="taskbar">
+    <div id="start-button">
+      <i class="fa-solid fa-bars"></i> <span>Menu</span>
+    </div>
+    <div id="taskbar-icons"></div>
+    <div id="task-manager-button" title="Task Manager">
+      <i class="fa-solid fa-tasks"></i>
+    </div>
+  </div>
+  <!-- Task Manager Panel -->
+  <div id="task-manager" class="hidden">
+    <div class="task-manager-header">
+      <span>Gestionnaire des Tâches</span>
+      <button id="close-task-manager"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="task-list"></div>
+  </div>
+  <!-- Start Menu – Glassmorphic -->
+  <div id="start-menu" class="hidden">
+    <div class="start-menu-content">
+      <div class="start-menu-header">
+        <div class="account-info">
+          <i class="fa-solid fa-user"></i> <a href="/accounts/profile/">Mon Compte</a>
+        </div>
+        <div class="logout">
+          <a href="/accounts/logout/"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</a>
+        </div>
+      </div>
+      <div class="start-menu-search">
+        <input type="text" id="start-search" placeholder="Rechercher des applications...">
+      </div>
+      <div class="start-menu-apps">
+        <div class="start-app" data-app="terminal">
+          <img src="{% static 'images/terminal.png' %}" alt="Terminal">
+          <span>Terminal</span>
+        </div>
+        <div class="start-app" data-app="explorer">
+          <img src="{% static 'images/explorer.png' %}" alt="Explorer">
+          <span>Explorer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Inscription - Virtual Office{% endblock %}
+{% block content %}
+<div class="login-container">
+    <div class="login-box">
+        <h2>Inscription</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">S'inscrire</button>
+        </form>
+        <p>Déjà inscrit ? <a href="{% url 'login' %}">Se connecter</a></p>
+    </div>
+</div>
+{% endblock %}
