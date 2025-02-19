@@ -1,0 +1,254 @@
+/* base.css */
+
+/* Global Styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  user-select: none;
+}
+
+/* Taskbar */
+#taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+#start-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 15px;
+  color: #fff;
+  font-size: 22px;
+}
+#start-button i {
+  margin-right: 8px;
+}
+#taskbar-icons {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+.taskbar-icon, .taskbar-group {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
+  padding: 4px 6px;
+}
+.taskbar-icon:hover, .taskbar-group:hover {
+  background: rgba(255,255,255,0.1);
+}
+.taskbar-icon img {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+}
+.taskbar-icon span, .taskbar-group span {
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Indicateur actif – barre bleue */
+.taskbar-group.active > .taskbar-icon::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #4a90e2;
+  transition: background 0.3s ease;
+}
+
+/* Stack List – Glassmorphique, texte agrandi, hover fluide */
+.taskbar-group .group-list {
+  display: none;
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-direction: column;
+  z-index: 1001;
+}
+.taskbar-group.expanded .group-list {
+  display: flex;
+}
+.group-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  font-size: 15px;
+  transition: background 0.3s ease;
+}
+.group-item:last-child {
+  border-bottom: none;
+}
+.group-item:hover {
+  background: rgba(255,255,255,0.35);
+}
+.group-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: rgba(255,255,255,0.8);
+  color: #000;
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 50%;
+}
+
+/* Task Manager Panel – inspiré du Start Menu */
+#task-manager {
+  position: fixed;
+  right: 15px;
+  bottom: 60px;
+  width: 360px;
+  max-height: 500px;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  overflow-y: auto;
+  z-index: 1100;
+  padding: 15px;
+  color: #fff;
+  font-size: 14px;
+}
+#task-manager.hidden {
+  display: none;
+}
+.task-manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.task-manager-header button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+}
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  transition: background 0.3s ease;
+}
+.task-item:hover {
+  background: rgba(255,255,255,0.15);
+}
+.task-item span {
+  font-size: 15px;
+}
+.close-task-btn {
+  background: transparent;
+  border: none;
+  color: #ff5f57;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Start Menu – Glassmorphique */
+#start-menu {
+  position: fixed;
+  bottom: 50px;
+  left: 0;
+  width: 360px;
+  max-height: 600px;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(15px);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  overflow: hidden;
+  z-index: 1001;
+}
+#start-menu.hidden {
+  display: none;
+}
+.start-menu-content {
+  padding: 15px;
+  color: #fff;
+}
+.start-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+.start-menu-header .account-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.start-menu-header .account-info a {
+  color: #fff;
+  text-decoration: none;
+}
+.start-menu-header .logout a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.start-menu-search {
+  margin-bottom: 15px;
+}
+.start-menu-search input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+.start-menu-apps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.start-app {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  padding: 10px;
+  border-radius: 6px;
+}
+.start-app:hover {
+  background: rgba(255,255,255,0.2);
+}
+.start-app img {
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+}
+.start-app span {
+  font-size: 16px;
+}
