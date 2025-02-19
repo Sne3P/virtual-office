@@ -1,13 +1,13 @@
 # virtual-office
 
 
-## Installation
+# Installation
 
 git clone https://github.com/votre-utilisateur/virtual-office.git
 cd virtual-office
 
 
-##Create and activate a virtual environment:
+## Create and activate a virtual environment:
 
 Linux/Mac:
 
@@ -21,7 +21,7 @@ Windows:
 python -m venv venv
 venv\Scripts\activate
 
-##Install dependencies:
+## Install dependencies:
 
 
 pip install -r requirements.txt
@@ -31,7 +31,7 @@ python manage.py migrate
 python manage.py createdemo
 
 
-##Start the server:
+## Start the server:
 
 
 python manage.py runserver
