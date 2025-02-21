@@ -124,28 +124,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Bouton maximiser/restaurer avec animation CSS
     btnMaximize.addEventListener('click', function(e) {
       e.stopPropagation();
-      if(win.classList.contains('maximized')){
-        win.classList.remove('maximized');
+      if (win.classList.contains('maximized')) {
+        // Restauration
         win.classList.add('restore-animation');
-        win.style.top = win.dataset.prevTop;
-        win.style.left = win.dataset.prevLeft;
-        win.style.width = win.dataset.prevWidth;
-        win.style.height = win.dataset.prevHeight;
-        setTimeout(() => { win.classList.remove('restore-animation'); }, 300);
+        setTimeout(() => {
+          win.classList.remove('maximized');
+          win.style.top = win.dataset.prevTop;
+          win.style.left = win.dataset.prevLeft;
+          win.style.width = win.dataset.prevWidth;
+          win.style.height = win.dataset.prevHeight;
+          win.classList.remove('restore-animation');
+        }, 300);
       } else {
+        // Maximisation
         win.dataset.prevTop = win.style.top;
         win.dataset.prevLeft = win.style.left;
         win.dataset.prevWidth = win.style.width;
         win.dataset.prevHeight = win.style.height;
-        win.classList.add('maximized');
         win.classList.add('enlarge-animation');
-        win.style.top = '0';
-        win.style.left = '0';
-        win.style.width = '100%';
-        win.style.height = '100%';
-        setTimeout(() => { win.classList.remove('enlarge-animation'); }, 300);
+        setTimeout(() => {
+          win.classList.add('maximized');
+          win.style.top = '0';
+          win.style.left = '0';
+          win.style.width = '100%';
+          win.style.height = '100%';
+          win.classList.remove('enlarge-animation');
+        }, 300);
       }
     });
+    
 
     // Ajoute la fenêtre dans le groupe de la barre des tâches
     addTaskbarIcon(windowId, appName);

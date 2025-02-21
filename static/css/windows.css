@@ -8,7 +8,7 @@
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   overflow: hidden;
   pointer-events: auto;
-  /* Suppression de la transition sur position et dimensions pour un comportement immédiat */
+  /* Suppression de la transition pour un déplacement/resizing immédiat */
   /* transition: top 0.3s ease, left 0.3s ease, width 0.3s ease, height 0.3s ease, transform 0.2s ease, opacity 0.3s ease; */
   z-index: 1;
   animation: windowOpen 0.3s ease-out;
