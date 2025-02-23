@@ -1,0 +1,134 @@
+/* Taskbar – Updated Style */
+#taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 55px; /* Slightly reduced height */
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    padding: 0 25px; /* Extra horizontal padding */
+    box-sizing: border-box;
+    z-index: 1000;
+    transition: background 0.3s ease;
+  }
+  
+  #start-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 22px;
+    transition: background 0.3s ease;
+    border-radius: 8px;
+    margin-right: 20px;
+  }
+  #start-button:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  #start-button span {
+    display: none;
+  }
+  
+  #taskbar-icons {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+  
+  .taskbar-group {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    margin: 0 3px;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+  }
+  .taskbar-group:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .taskbar-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  .taskbar-icon img {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 2px;
+  }
+  .taskbar-icon span {
+    display: none;
+  }
+  
+  /* Active state: same background as hover and a rounded blue bar underneath */
+  .taskbar-group.active > .taskbar-icon {
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    border-radius: 8px;
+  }
+  .taskbar-group.active > .taskbar-icon::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background: #4a90e2;
+    border-radius: 8px;
+  }
+  
+  /* Badge – small indicator bubble, hidden if only one window is open */
+  .group-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ff5f57;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 50%;
+    min-width: 16px;
+    text-align: center;
+    line-height: 1;
+  }
+  .group-count[data-count="1"] {
+    display: none;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 600px) {
+    #taskbar {
+      padding: 0 15px;
+      height: 50px;
+    }
+    #start-button {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    .taskbar-group {
+      width: 40px;
+      height: 40px;
+      margin: 0 2px;
+    }
+    .taskbar-icon img {
+      width: 22px;
+      height: 22px;
+    }
+  }
+  
