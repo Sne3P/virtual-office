@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
       let currentHandle = null;
       let startX, startY, startWidth, startHeight, startLeft, startTop;
       
-      // Si la fenêtre contient une iframe, on la désactive pendant le resize.
       const iframe = win.querySelector('iframe');
       
       handles.forEach(config => {
@@ -53,9 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
           startHeight = rect.height;
           startLeft = rect.left;
           startTop = rect.top;
-          if (iframe) {
-            iframe.style.pointerEvents = 'none';
-          }
+          if (iframe) { iframe.style.pointerEvents = 'none'; }
           document.addEventListener('mousemove', resize);
           document.addEventListener('mouseup', stopResize);
         });
@@ -91,9 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
       function stopResize() {
         document.removeEventListener('mousemove', resize);
         document.removeEventListener('mouseup', stopResize);
-        if (iframe) {
-          iframe.style.pointerEvents = 'auto';
-        }
+        if (iframe) { iframe.style.pointerEvents = 'auto'; }
         currentHandle = null;
       }
     }
