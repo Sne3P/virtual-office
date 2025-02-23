@@ -1,13 +1,12 @@
 import json
+from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 from .models import DesktopSetting
 
 @login_required
 def dashboard(request):
-    # Vous pouvez charger ici la configuration pour l'utilisateur si besoin
     return render(request, 'dashboard.html')
 
 @login_required

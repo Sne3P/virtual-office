@@ -1,36 +1,66 @@
 document.addEventListener('DOMContentLoaded', function() {
   let windowCounter = 0;
-  // stocke les IDs par application, ex: { terminal: [id1, id2], explorer: [id3] }
-  const taskbarGroups = {}; 
+  const taskbarGroups = {}; // ex: { terminal: [id1, id2], ... }
   const windowsContainer = document.getElementById('windows-container');
   const taskbarIconsContainer = document.getElementById('taskbar-icons');
   const startButton = document.getElementById('start-button');
   const startMenu = document.getElementById('start-menu');
-  const taskManagerButton = document.getElementById('task-manager-button');
-  const taskManagerPanel = document.getElementById('task-manager');
-  const taskList = document.getElementById('task-list');
+  const desktop = document.getElementById('desktop');
+  const startSearch = document.getElementById('start-search'); // Barre de recherche du Start Menu
 
-  // Déclare l'écouteur pour désactiver l'activité de toutes les fenêtres
-  function deactivateAllWindows() {
-    document.querySelectorAll('.app-window').forEach(win => {
-      win.classList.remove('active-window');
+  // Désactive le clic droit natif (hors context menu custom)
+  document.addEventListener('contextmenu', function(e) {
+    if (!e.target.closest('.context-menu')) {
+      e.preventDefault();
+    }
+  });
+  
+  function closeStartMenu() {
+    startMenu.classList.remove('active');
+  }
+  
+  if (startSearch) {
+    startSearch.addEventListener('click', function(e) {
+      e.stopPropagation();
     });
   }
-
-  // Met à jour le titre de la fenêtre (en-tête) en ajoutant la numérotation si nécessaire
-  function updateWindowTitle(win) {
-    const app = win.dataset.app;
-    let instances = taskbarGroups[app] || [];
-    if (instances.length > 1) {
-      // Trouve l'index de cette fenêtre dans le groupe
-      let index = instances.indexOf(win.id);
-      win.querySelector('.window-title').textContent = app.charAt(0).toUpperCase() + app.slice(1) + ' (' + (index+1) + ')';
-    } else {
-      win.querySelector('.window-title').textContent = app.charAt(0).toUpperCase() + app.slice(1);
+  
+  function openTaskManager() {
+    const taskManagerPanel = document.getElementById('task-manager');
+    if (taskManagerPanel) {
+      taskManagerPanel.classList.toggle('active');
     }
   }
-
-  // Crée et affiche une fenêtre d'application
+  
+  // Désélectionne uniquement les fenêtres actives (les icônes restent sélectionnables)
+  function deactivateAll() {
+    document.querySelectorAll('.app-window').forEach(win => win.classList.remove('active-window'));
+  }
+  
+  function activateDesktop() {
+    deactivateAll();
+    desktop.classList.add('active-desktop');
+  }
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.desktop-icon').forEach(icon => icon.classList.remove('selected'));
+    }
+  });
+  
+  function updateWindowTitle(win) {
+    const app = win.dataset.app;
+    const instances = taskbarGroups[app] || [];
+    if (instances.length > 1) {
+      const index = instances.indexOf(win.id);
+      win.querySelector('.window-title').textContent =
+        app.charAt(0).toUpperCase() + app.slice(1) + ' (' + (index + 1) + ')';
+    } else {
+      win.querySelector('.window-title').textContent =
+        app.charAt(0).toUpperCase() + app.slice(1);
+    }
+  }
+  
   function createAppWindow(appName) {
     windowCounter++;
     const windowId = 'app-window-' + windowCounter;
@@ -39,13 +69,11 @@ document.addEventListener('DOMContentLoaded', function() {
     win.id = windowId;
     win.dataset.app = appName;
     win.dataset.state = 'open';
-    // Position et taille par défaut
     win.style.top = '150px';
     win.style.left = '250px';
     win.style.width = '600px';
     win.style.height = '400px';
-
-    // Création de l'en‑tête
+    
     const header = document.createElement('div');
     header.className = 'window-header';
     const title = document.createElement('div');
@@ -65,52 +93,54 @@ document.addEventListener('DOMContentLoaded', function() {
     header.appendChild(title);
     header.appendChild(controls);
     win.appendChild(header);
-
-    // Création du contenu
+    
     const content = document.createElement('div');
     content.className = 'window-content';
-    if(appName === 'terminal'){
+    if (appName === 'terminal') {
       const iframe = document.createElement('iframe');
       iframe.src = '/terminal/';
       iframe.className = 'app-iframe';
       iframe.frameBorder = "0";
       content.appendChild(iframe);
-    } else if(appName === 'explorer'){
-      content.innerHTML = '<p>Contenu de l\'Explorer.</p>';
+    } else if (appName === 'explorer') {
+      // Correction : affichage d'une iframe pour l'explorer
+      const iframe = document.createElement('iframe');
+      iframe.src = '/explorer/'; // Assurez-vous que cette URL renvoie l'interface Explorer
+      iframe.className = 'app-iframe';
+      iframe.frameBorder = "0";
+      content.appendChild(iframe);
     } else {
       content.innerHTML = '<p>Application non définie.</p>';
     }
     win.appendChild(content);
     windowsContainer.appendChild(win);
-
-    // Appliquer les modules de déplacement et redimensionnement (inchangés)
+    
     window.dragManager.makeDraggable(win, header);
     window.resizeManager.makeResizable(win);
-
-    // Écouteur sur l'ensemble de la fenêtre (hors éléments interactifs comme boutons)
-    win.addEventListener('click', function(e) {
-      // On laisse passer si clic sur iframe ou sur la barre des tâches
-      if(e.target.closest('.window-btn')) return;
-      deactivateAllWindows();
-      win.classList.add('active-window');
-      window.dragManager.bringToFront(win);
-      markTaskbarActive(win.id);
+    
+    win.addEventListener('mousedown', function(e) {
+      if (!e.target.closest('.window-btn')) {
+        deactivateAll();
+        win.classList.add('active-window');
+        window.dragManager.bringToFront(win);
+        markTaskbarActive(win.id);
+      }
     });
-
-    // Bouton fermer
+    
     btnClose.addEventListener('click', function(e) {
       e.stopPropagation();
       win.classList.add('closing');
       setTimeout(() => {
         windowsContainer.removeChild(win);
         removeTaskbarIcon(windowId, appName);
+        updateTaskbarGroup(appName);
         updateTaskManager();
       }, 300);
     });
-    // Bouton minimiser (animation simple)
+    
     btnMinimize.addEventListener('click', function(e) {
       e.stopPropagation();
-      if(win.dataset.state !== 'minimized'){
+      if (win.dataset.state !== 'minimized') {
         win.dataset.state = 'minimized';
         win.classList.add('minimize-animation');
         setTimeout(() => {
@@ -121,11 +151,10 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTaskManager();
       }
     });
-    // Bouton maximiser/restaurer avec animation CSS
+    
     btnMaximize.addEventListener('click', function(e) {
       e.stopPropagation();
       if (win.classList.contains('maximized')) {
-        // Restauration
         win.classList.add('restore-animation');
         setTimeout(() => {
           win.classList.remove('maximized');
@@ -136,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
           win.classList.remove('restore-animation');
         }, 300);
       } else {
-        // Maximisation
         win.dataset.prevTop = win.style.top;
         win.dataset.prevLeft = win.style.left;
         win.dataset.prevWidth = win.style.width;
@@ -153,18 +181,37 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-
-    // Ajoute la fenêtre dans le groupe de la barre des tâches
     addTaskbarIcon(windowId, appName);
-    // Met à jour le titre avec la numérotation si nécessaire
     updateWindowTitle(win);
-    updateTaskManager();
+    closeStartMenu();
   }
-
-  // Gestion de la barre des tâches (fonctionne de manière centralisée)
+  
+  function addDesktopIcon(appName) {
+    let existing = document.querySelector(`.desktop-icon[data-app="${appName}"]`);
+    if (!existing) {
+      const container = document.querySelector('.desktop-icons');
+      const icon = document.createElement('div');
+      icon.className = 'desktop-icon';
+      icon.setAttribute('data-app', appName);
+      icon.dataset.pinned = "true";
+      const candidate = { left: 0, top: 0 };
+      const freeCell = window.iconManager.findEmptyCell(candidate.left, candidate.top);
+      icon.style.left = freeCell.left + 'px';
+      icon.style.top = freeCell.top + 'px';
+      icon.innerHTML = `<img src="${getAppIcon(appName)}" alt="${appName}"><span>${appName.charAt(0).toUpperCase() + appName.slice(1)}</span>`;
+      container.appendChild(icon);
+      window.iconManager.attachIconEvents(icon);
+      // Effectue le POST, puis le GET pour recharger dynamiquement la configuration
+      window.iconManager.saveIconPositions();
+      setTimeout(() => {
+        window.iconManager.loadIconPositions();
+      }, 100);
+    }
+  }
+  
   function addTaskbarIcon(windowId, appName) {
-    if(taskbarGroups[appName]){
-      if(taskbarGroups[appName].indexOf(windowId) === -1){
+    if (taskbarGroups[appName]) {
+      if (!taskbarGroups[appName].includes(windowId)) {
         taskbarGroups[appName].push(windowId);
       }
       updateTaskbarGroup(appName);
@@ -179,22 +226,37 @@ document.addEventListener('DOMContentLoaded', function() {
           <span>${appName}</span>
         </div>
         <div class="group-list"></div>
-        <div class="group-count"></div>
+        <div class="group-count" data-count="1"></div>
       `;
-      // Clic sur le groupe : si plusieurs instances, ouvre le stack
-      group.addEventListener('click', function(e){
+      group.addEventListener('click', function(e) {
         e.stopPropagation();
-        if(taskbarGroups[appName].length > 1){
-          group.classList.toggle('expanded');
+        if (taskbarGroups[appName].length > 1) {
+          const items = taskbarGroups[appName].map((winId, idx) => {
+            const win = document.getElementById(winId);
+            const label = win ? win.querySelector('.window-title').textContent : appName;
+            return {
+              label: label,
+              action: function() {
+                if (win) {
+                  win.dataset.state = 'open';
+                  win.classList.remove('minimized');
+                  win.style.display = 'block';
+                  window.dragManager.bringToFront(win);
+                  markTaskbarActive(win.id);
+                }
+              }
+            };
+          });
+          const menu = new ContextMenu(items, { animate: true });
+          menu.show(e.pageX, e.pageY);
         } else {
           const win = document.getElementById(taskbarGroups[appName][0]);
-          if(win && win.dataset.state === 'minimized'){
-            win.dataset.state = 'open';
-            win.classList.remove('minimized');
-            win.style.display = 'block';
-            window.dragManager.bringToFront(win);
-            markTaskbarActive(win.id);
-          } else if(win){
+          if (win) {
+            if (win.dataset.state === 'minimized') {
+              win.dataset.state = 'open';
+              win.classList.remove('minimized');
+              win.style.display = 'block';
+            }
             window.dragManager.bringToFront(win);
             markTaskbarActive(win.id);
           }
@@ -203,65 +265,49 @@ document.addEventListener('DOMContentLoaded', function() {
       taskbarIconsContainer.appendChild(group);
     }
   }
-
+  
   function updateTaskbarGroup(appName) {
     const group = document.querySelector(`.taskbar-group[data-app="${appName}"]`);
-    if(group){
-      const groupList = group.querySelector('.group-list');
-      groupList.innerHTML = '';
-      taskbarGroups[appName].forEach((winId, idx) => {
-        const item = document.createElement('div');
-        item.className = 'group-item';
-        item.dataset.windowId = winId;
-        let displayName = appName;
-        if(taskbarGroups[appName].length > 1){
-          displayName += ' (' + (idx+1) + ')';
-        }
-        item.textContent = displayName;
-        item.addEventListener('click', function(e){
-          e.stopPropagation();
-          const win = document.getElementById(winId);
-          if(win){
-            win.dataset.state = 'open';
-            win.classList.remove('minimized');
-            win.style.display = 'block';
-            window.dragManager.bringToFront(win);
-            markTaskbarActive(win.id);
-          }
-          group.classList.remove('expanded');
-          updateTaskManager();
-        });
-        groupList.appendChild(item);
-      });
+    if (group) {
       const countEl = group.querySelector('.group-count');
-      if(taskbarGroups[appName].length > 1){
+      if (taskbarGroups[appName].length > 1) {
         countEl.style.display = 'block';
         countEl.textContent = taskbarGroups[appName].length;
+        countEl.setAttribute('data-count', taskbarGroups[appName].length);
       } else {
         countEl.style.display = 'none';
+        countEl.setAttribute('data-count', '1');
       }
+      updateWindowTitles(appName);
     }
   }
-
+  
+  function updateWindowTitles(appName) {
+    const instances = taskbarGroups[appName] || [];
+    instances.forEach(winId => {
+      const win = document.getElementById(winId);
+      if (win) updateWindowTitle(win);
+    });
+  }
+  
   function removeTaskbarIcon(windowId, appName) {
-    if(taskbarGroups[appName]){
+    if (taskbarGroups[appName]) {
       taskbarGroups[appName] = taskbarGroups[appName].filter(id => id !== windowId);
-      if(taskbarGroups[appName].length === 0){
+      if (taskbarGroups[appName].length === 0) {
         const group = document.querySelector(`.taskbar-group[data-app="${appName}"]`);
-        if(group) taskbarIconsContainer.removeChild(group);
+        if (group) taskbarIconsContainer.removeChild(group);
         delete taskbarGroups[appName];
       } else {
         updateTaskbarGroup(appName);
       }
     }
   }
-
-  // Active l'indicateur bleu sur le groupe dont la fenêtre active est présente
+  
   function markTaskbarActive(activeWindowId) {
-    for(let app in taskbarGroups){
+    for (let app in taskbarGroups) {
       const group = document.querySelector(`.taskbar-group[data-app="${app}"]`);
-      if(group){
-        if(taskbarGroups[app].includes(activeWindowId)){
+      if (group) {
+        if (taskbarGroups[app].includes(activeWindowId)) {
           group.classList.add('active');
           group.querySelector('.taskbar-icon').classList.add('active');
         } else {
@@ -271,90 +317,100 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   }
-
+  
   function getAppIcon(appName) {
-    if(appName === 'terminal') return '/static/images/terminal.png';
-    if(appName === 'explorer') return '/static/images/explorer.png';
+    if (appName === 'terminal') return '/static/images/terminal.png';
+    if (appName === 'explorer') return '/static/images/explorer.png';
     return '/static/images/default.png';
   }
-
-  // Mise à jour du Task Manager (affiche les tâches par fenêtre)
-  function updateTaskManager() {
-    taskList.innerHTML = '';
-    for(let app in taskbarGroups){
-      taskbarGroups[app].forEach((winId, idx) => {
-        const win = document.getElementById(winId);
-        if(win){
-          let displayName = app;
-          if(taskbarGroups[app].length > 1){
-            displayName += ' (' + (idx+1) + ')';
-          }
-          const item = document.createElement('div');
-          item.className = 'task-item';
-          item.innerHTML = `<span>${displayName} - ${win.dataset.state}</span>
-                            <button data-window-id="${win.id}" class="close-task-btn"><i class="fa-solid fa-xmark"></i></button>`;
-          item.addEventListener('mouseover', function(){
-            item.style.background = 'rgba(255,255,255,0.15)';
-          });
-          item.addEventListener('mouseout', function(){
-            item.style.background = 'transparent';
-          });
-          item.querySelector('.close-task-btn').addEventListener('click', function(e){
-            e.stopPropagation();
-            const id = this.getAttribute('data-window-id');
-            const w = document.getElementById(id);
-            if(w){
-              w.classList.add('closing');
-              setTimeout(() => {
-                windowsContainer.removeChild(w);
-                removeTaskbarIcon(id, w.dataset.app);
-                updateTaskManager();
-              }, 300);
-            }
-          });
-          taskList.appendChild(item);
-        }
-      });
-    }
-  }
-
-  // Clic sur le bureau (élément #desktop) désactive toutes les fenêtres actives
-  document.getElementById('desktop').addEventListener('click', function(e){
-    if(!e.target.closest('.app-window')){
-      deactivateAllWindows();
+  
+  // Context Menu pour le bureau
+  desktop.addEventListener('contextmenu', function(e) {
+    if (e.target === desktop) {
+      e.preventDefault();
+      e.stopPropagation();
+      const menu = new ContextMenu([
+        { label: 'Options du bureau', action: () => { deactivateAll(); activateDesktop(); } }
+      ]);
+      menu.show(e.pageX, e.pageY);
     }
   });
-
-  // Initialisation du Start Menu et autres écouteurs
+  
+  // Context Menu pour la barre des tâches (hors icônes)
+  document.getElementById('taskbar').addEventListener('contextmenu', function(e) {
+    if (!e.target.closest('.taskbar-icon')) {
+      e.preventDefault();
+      e.stopPropagation();
+      const menu = new ContextMenu([
+        { label: 'Paramètres de la barre', action: () => { alert('Paramètres de la barre'); } },
+        { label: 'Ouvrir Gestionnaire de tâches', action: () => { openTaskManager(); } }
+      ], { animate: true });
+      menu.show(e.pageX, e.pageY);
+    }
+  });
+  
   function initDesktop() {
-    document.addEventListener('click', function(){
-      startMenu.classList.add('hidden');
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.app-window') &&
+          !e.target.closest('.desktop-icon') &&
+          !e.target.closest('#start-menu') &&
+          !e.target.closest('#taskbar') &&
+          !document.querySelector('.selection-box')) {
+        deactivateAll();
+        activateDesktop();
+      }
+      startMenu.classList.remove('active');
       document.querySelectorAll('.taskbar-group').forEach(group => group.classList.remove('expanded'));
     });
-    startButton.addEventListener('click', function(e){
+    
+    startButton.addEventListener('click', function(e) {
       e.stopPropagation();
-      startMenu.classList.toggle('hidden');
+      startMenu.classList.toggle('active');
     });
+    
     document.querySelectorAll('.start-app').forEach(app => {
-      app.addEventListener('click', function(e){
+      app.addEventListener('click', function(e) {
         e.stopPropagation();
         const appName = this.getAttribute('data-app');
         createAppWindow(appName);
-        startMenu.classList.add('hidden');
+        startMenu.classList.remove('active');
+      });
+      app.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const appName = this.getAttribute('data-app');
+        const menu = new ContextMenu([
+          { label: 'Épingler au bureau', action: () => { addDesktopIcon(appName); } }
+        ]);
+        menu.show(e.pageX, e.pageY);
       });
     });
+    
     document.querySelectorAll('.desktop-icon').forEach(icon => {
-      icon.addEventListener('dblclick', function(){
+      icon.addEventListener('dblclick', function() {
         const appName = this.getAttribute('data-app');
         createAppWindow(appName);
       });
-    });
-    taskManagerButton.addEventListener('click', function(e){
-      e.stopPropagation();
-      updateTaskManager();
-      taskManagerPanel.classList.toggle('hidden');
+      icon.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const menu = new ContextMenu([
+          { label: 'Ouvrir', action: () => { createAppWindow(icon.getAttribute('data-app')); } },
+          { label: 'Supprimer les icônes sélectionnées', action: () => {
+              const selectedIcons = document.querySelectorAll('.desktop-icon.selected');
+              if (selectedIcons.length > 0) {
+                selectedIcons.forEach(el => el.parentElement.removeChild(el));
+              } else {
+                icon.parentElement.removeChild(icon);
+              }
+              window.iconManager.saveIconPositions();
+            }
+          }
+        ]);
+        menu.show(e.pageX, e.pageY);
+      });
     });
   }
-
+  
   initDesktop();
 });
