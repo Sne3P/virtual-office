@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Explorer - Virtual Office{% endblock %}
+{% block content %}
+<div id="explorer" class="glassmorphic">
+  <!-- En-tête avec boutons d'action -->
+  <div id="explorer-header">
+    <div id="drive-selector">
+      {% for dt, drive in drives %}
+        <a href="{% url 'explorer:view_by_drive' dt %}" class="drive-link {% if dt == selected_drive_type %}active{% endif %}">
+          <i class="fa-solid {% if dt == 'personal' %}fa-user{% elif dt == 'common' %}fa-users{% else %}fa-shield-halved{% endif %}"></i>
+          {{ drive.name }}
+        </a>
+      {% endfor %}
+    </div>
+    <div id="explorer-actions">
+      <a href="{% url 'explorer:upload_file' current_directory.id %}" class="action-btn" title="Upload File">
+        <i class="fa-solid fa-upload"></i>
+      </a>
+      <a href="{% url 'explorer:create_directory' current_directory.id %}" class="action-btn" title="New Folder">
+        <i class="fa-solid fa-folder-plus"></i>
+      </a>
+      <a href="?sort=name" class="action-btn" title="Sort by Name">
+        <i class="fa-solid fa-sort-alpha-down"></i>
+      </a>
+      <a href="?sort=uploaded_at" class="action-btn" title="Sort by Date">
+        <i class="fa-solid fa-calendar"></i>
+      </a>
+    </div>
+  </div>
+  <!-- Corps de l'explorer -->
+  <div id="explorer-body">
+    <!-- Sidebar avec arborescence -->
+    <div id="explorer-sidebar">
+      <h3>{{ current_directory.name }}</h3>
+      {% if current_directory.parent %}
+        <a href="{% url 'explorer:view' current_directory.parent.id %}" class="btn-back">
+          <i class="fa-solid fa-arrow-left"></i> Parent
+        </a>
+      {% endif %}
+      <ul>
+        {% for sub in subdirectories %}
+          <li>
+            <a href="{% url 'explorer:view' sub.id %}">
+              <i class="fa-solid fa-folder"></i> {{ sub.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <!-- Zone principale affichant fichiers et dossiers -->
+    <div id="explorer-main">
+      <div class="explorer-content">
+        {% for sub in subdirectories %}
+          <div class="explorer-item folder-item" data-id="{{ sub.id }}">
+            <img src="{% static 'images/folder.png' %}" alt="{{ sub.name }}">
+            <span class="item-title">{{ sub.name }}</span>
+          </div>
+        {% endfor %}
+        {% for file in files %}
+          <div class="explorer-item file-item" data-id="{{ file.id }}">
+            <img src="{% static 'images/file.png' %}" alt="{{ file.name }}">
+            <span class="item-title">{{ file.name }}</span>
+            <span class="item-meta">{{ file.uploaded_at|date:"d/m/Y H:i" }} ({{ file.extension }})</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/explorer.js' %}"></script>
+{% endblock %}

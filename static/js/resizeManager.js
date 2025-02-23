@@ -13,12 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
       let currentHandle = null;
       let startX, startY, startWidth, startHeight, startLeft, startTop;
       
+      const iframe = win.querySelector('iframe');
+      
       handles.forEach(config => {
         const handle = document.createElement('div');
         handle.className = config.cls;
         handle.style.cursor = config.cursor;
         handle.style.position = 'absolute';
-        // Positionnement en fonction du handle
         if (config.cls.indexOf('bottom-right') > -1) {
           handle.style.right = '-5px';
           handle.style.bottom = '-5px';
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
           startHeight = rect.height;
           startLeft = rect.left;
           startTop = rect.top;
+          if (iframe) { iframe.style.pointerEvents = 'none'; }
           document.addEventListener('mousemove', resize);
           document.addEventListener('mouseup', stopResize);
         });
@@ -86,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
       function stopResize() {
         document.removeEventListener('mousemove', resize);
         document.removeEventListener('mouseup', stopResize);
+        if (iframe) { iframe.style.pointerEvents = 'auto'; }
         currentHandle = null;
       }
     }

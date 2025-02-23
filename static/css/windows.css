@@ -1,70 +1,90 @@
-/* Fenêtres d'application */
+/* Fenêtres d'application – Style Glassmorphic Modernisé */
 .app-window {
   position: absolute;
   width: 600px;
   height: 400px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  background: rgba(255, 255, 255, 0.1); /* Fond très léger transparent */
+  backdrop-filter: blur(10px); /* Effet de flou en arrière-plan */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Légère bordure */
+  border-radius: 12px; /* Bords arrondis */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   pointer-events: auto;
-  /* Suppression de la transition sur position et dimensions pour un comportement immédiat */
-  /* transition: top 0.3s ease, left 0.3s ease, width 0.3s ease, height 0.3s ease, transform 0.2s ease, opacity 0.3s ease; */
   z-index: 1;
   animation: windowOpen 0.3s ease-out;
   display: flex;
   flex-direction: column;
 }
+
 @keyframes windowOpen {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
 @keyframes windowClose {
   from { transform: scale(1); opacity: 1; }
   to { transform: scale(0.8); opacity: 0; }
 }
+
 .app-window.closing {
   animation: windowClose 0.3s ease-out;
 }
 
-/* En-tête et contrôles */
+/* Classe pour animer les changements de position/dimensions si nécessaire */
+.animating {
+  transition: top 0.3s ease, left 0.3s ease, width 0.3s ease, height 0.3s ease;
+}
+
+/* En-tête et contrôles – style épuré */
 .window-header {
-  background: #f0f0f0;
-  padding: 3px 8px;
+  background: rgba(240, 240, 240, 0.2); /* Légère transparence */
+  padding: 4px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: move;
-  border-bottom: 1px solid #ddd;
-  height: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  height: 35px;
   flex-shrink: 0;
+  backdrop-filter: blur(5px);
 }
+
 .window-title {
   flex: 1;
   text-align: center;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
   color: #333;
 }
+
 .window-controls {
   display: flex;
-  gap: 4px;
+  gap: 6px;
 }
+
 .window-controls .window-btn {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
   background: transparent;
-  margin-left: 4px;
+  margin-left: 6px;
+  transition: background 0.2s ease;
 }
+
+.window-controls .window-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 .window-btn.close {
   background: #ff5f57;
 }
+
 .window-btn.minimize {
   background: #ffbd2e;
 }
+
 .window-btn.maximize {
   background: #28c840;
 }
@@ -72,18 +92,20 @@
 /* Contenu de la fenêtre */
 .window-content {
   width: 100%;
-  height: calc(100% - 30px);
+  height: calc(100% - 35px);
   overflow: hidden;
   padding: 0;
   margin: 0;
+  background: transparent;
 }
+
 .app-iframe {
   width: 100%;
   height: 100%;
   border: none;
 }
 
-/* Resizers */
+/* Resizers – affichage subtil */
 .resizer {
   width: 10px;
   height: 10px;
@@ -91,44 +113,52 @@
   position: absolute;
   z-index: 10;
 }
+
 .resizer.top-left {
   top: -5px;
   left: -5px;
   cursor: nwse-resize;
 }
+
 .resizer.top-right {
   top: -5px;
   right: -5px;
   cursor: nesw-resize;
 }
+
 .resizer.bottom-right {
   bottom: -5px;
   right: -5px;
   cursor: nwse-resize;
 }
+
 .resizer.bottom-left {
   bottom: -5px;
   left: -5px;
   cursor: nesw-resize;
 }
+
 .resizer.top {
   top: -5px;
   left: 50%;
   transform: translateX(-50%);
   cursor: ns-resize;
 }
+
 .resizer.right {
   right: -5px;
   top: 50%;
   transform: translateY(-50%);
   cursor: ew-resize;
 }
+
 .resizer.bottom {
   bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
   cursor: ns-resize;
 }
+
 .resizer.left {
   left: -5px;
   top: 50%;
@@ -136,25 +166,12 @@
   cursor: ew-resize;
 }
 
-/* Animations */
+/* Animation de minimisation */
 .minimize-animation {
   animation: minimizeWindow 0.3s ease-out forwards;
 }
+
 @keyframes minimizeWindow {
   from { opacity: 1; transform: scale(1); }
   to { opacity: 0; transform: scale(0.5); }
-}
-.enlarge-animation {
-  animation: enlargeWindow 0.3s ease-out;
-}
-@keyframes enlargeWindow {
-  from { transform: scale(0.9); }
-  to { transform: scale(1); }
-}
-.restore-animation {
-  animation: restoreWindow 0.3s ease-out;
-}
-@keyframes restoreWindow {
-  from { transform: scale(1.1); }
-  to { transform: scale(1); }
 }
