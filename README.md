@@ -1,5 +1,6 @@
-# virtual-office
+# Virtual Office
 
+Pour installer et tester le projet, veuillez suivre les étapes suivantes.
 
 # Installation
 
@@ -28,7 +29,7 @@ venv\Scripts\activate
 ## Install dependencies:
 
 ```
-pip install -r requirements.txt
+pip install django
 ```
 Apply migrations:
 
