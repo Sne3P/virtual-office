@@ -1,0 +1,247 @@
+/* explorer/static/css/explorer.css */
+
+/* Explorer en plein écran sans fond blanc */
+#explorer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05); /* Légère teinte pour l'effet, ajustable */
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* En-tête supérieur pour drive et actions – effet glassmorphic */
+#explorer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Sélecteur de drive */
+#drive-selector {
+  display: flex;
+  gap: 10px;
+}
+
+#drive-selector .drive-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+#drive-selector .drive-link:hover,
+#drive-selector .drive-link.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Boutons d'action */
+#explorer-actions {
+  display: flex;
+  gap: 10px;
+}
+
+#explorer-actions .action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+#explorer-actions .action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Corps de l'explorer : Sidebar et zone principale */
+#explorer-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Sidebar avec arborescence – effet glassmorphic */
+#explorer-sidebar {
+  width: 250px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255,255,255,0.2);
+}
+
+#explorer-sidebar h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#explorer-sidebar a.btn-back {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#explorer-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#explorer-sidebar ul li {
+  margin: 5px 0;
+}
+
+#explorer-sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* Zone principale d'affichage – effet glassmorphic pour la zone */
+#explorer-main {
+  flex: 1;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.explorer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Style des éléments explorer (dossier et fichier) */
+.explorer-item {
+  width: 120px;
+  text-align: center;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+  transition: background 0.2s;
+}
+
+.explorer-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Pour les dossiers, on utilise toujours l'icône de dossier */
+.folder-item img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Pour les fichiers, on pourra différencier selon le type.
+   Exemple : pour les images, utiliser une prévisualisation, sinon une icône générique */
+.file-item img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Vous pouvez définir des classes spécifiques selon l'extension,
+   par exemple : .file-item.image { ... } pour les images, etc. */
+
+.item-title {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.item-meta {
+  font-size: 10px;
+  color: #ccc;
+}
+
+/* Formulaires de l'explorer */
+.explorer-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 15px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.explorer-form h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.explorer-form .form-group {
+  margin-bottom: 10px;
+}
+
+.explorer-form label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.explorer-form input[type="text"],
+.explorer-form input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.explorer-form button {
+  display: block;
+  width: 100%;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #fff;
+  font-size: 16px;
+}
+
+.explorer-form button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+a.btn-back {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}

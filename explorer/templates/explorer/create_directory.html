@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}New Folder{% endblock %}
+{% block content %}
+<div class="explorer-form glassmorphic">
+  <h2>Create New Folder in {{ current_directory.name }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_name">Folder Name</label>
+      {{ form.name }}
+    </div>
+    <button type="submit">Create</button>
+  </form>
+  <a href="{% url 'explorer:view' current_directory.id %}" class="btn-back">Back</a>
+</div>
+{% endblock %}

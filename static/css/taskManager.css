@@ -1,0 +1,53 @@
+/* Task Manager Panel – modern glassmorphic design */
+#task-manager {
+    position: fixed;
+    right: 20px;
+    bottom: 70px;
+    width: 360px;
+    max-height: 500px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    z-index: 1100;
+    padding: 20px;
+    color: #333;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  
+  #task-manager.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    transition: background 0.3s ease;
+  }
+  
+  .task-item:hover {
+    background: rgba(0,0,0,0.05);
+  }
+  
+  .task-item span {
+    font-size: 15px;
+  }
+  
+  .close-task-btn {
+    background: transparent;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
