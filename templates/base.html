@@ -6,13 +6,33 @@
     <title>{% block title %}Virtual Office{% endblock %}</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/windows.css' %}">
+    <link rel="stylesheet" href="{% static 'css/desktop.css' %}">
+    <link rel="stylesheet" href="{% static 'css/contextMenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/selectionManager.css' %}">
+    <link rel="stylesheet" href="{% static 'css/startMenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/taskbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/taskManager.css' %}">
+    <link rel="stylesheet" href="{% static 'css/explorer.css' %}">
 
 </head>
 <body>
     {% block content %}{% endblock %}
+    <script>
+      // Désactive le menu contextuel natif sur toute la page
+      document.addEventListener('contextmenu', function(e) {
+         e.preventDefault();
+      });
+    </script>
     <script src="{% static 'js/dragManager.js' %}"></script>
     <script src="{% static 'js/resizeManager.js' %}"></script>
     <script src="{% static 'js/desktop.js' %}"></script>
+    <script src="{% static 'js/iconManager.js' %}"></script>
+    <script src="{% static 'js/contextMenu.js' %}"></script>
+    <script src="{% static 'js/selectionManager.js' %}"></script>
+    <script src="{% static 'js/taskManager.js' %}"></script>
+    <script src="{% static 'js/explorer.js' %}"></script>
+
 </body>
 </html>

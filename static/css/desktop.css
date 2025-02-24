@@ -1,0 +1,55 @@
+/* Desktop – Fond d'écran et conteneur */
+#desktop {
+  width: 100vw;
+  height: calc(100vh - 55px); /* La hauteur du bureau exclut la barre des tâches (55px) */
+  background: url('../images/desktop-background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  padding: 20px;
+  padding-bottom: 20px; /* Espace interne supplémentaire */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Conteneur de positionnement des icônes */
+.desktop-icons {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Style des icônes du bureau */
+.desktop-icon {
+  position: absolute; /* Placées dynamiquement par iconManager */
+  width: 64px;
+  height: 80px;  /* 64px pour l'image + espace pour le texte */
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 5px;
+  transition: background 0.2s ease;
+  text-align: center; /* Centre le contenu (image et texte) */
+}
+
+/* Hover et sélection appliquent un fond éclairci */
+.desktop-icon:hover,
+.desktop-icon.selected {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Image de l'icône */
+.desktop-icon img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Texte de l'icône centré */
+.desktop-icon span {
+  display: block;
+  margin-top: 4px;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  font-size: 12px;
+  text-align: center;
+}
