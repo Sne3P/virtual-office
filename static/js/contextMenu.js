@@ -1,32 +1,24 @@
 class ContextMenu {
   /**
-   * @param {Array} items - Array of objects { label: string, action: function }
-   * @param {Object} options - Options, e.g. { animate: true }
+   * @param {Array} items - Tableau d'objets {label: string, action: function}
+   * @param {Object} options - Options de configuration, ex: { animate: true }
    */
   constructor(items = [], options = {}) {
-    // Ferme le contexte menu déjà ouvert, s'il existe
-    if (window.currentContextMenu) {
-      window.currentContextMenu.hide();
-    }
-    window.currentContextMenu = this;
     this.items = items;
     this.options = options;
-    this.menuEl = document.createElement('div');
-    this.menuEl.className = 'context-menu';
-    this.renderItems();
-    document.body.appendChild(this.menuEl);
-    
-    // Ferme le menu si on clique en dehors
-    this._onDocumentClick = (e) => {
-      if (!this.menuEl.contains(e.target)) {
-        this.hide();
-      }
-    };
-    document.addEventListener('click', this._onDocumentClick);
+    this.menuElement = null;
+    this._boundDocumentClick = this._handleDocumentClick.bind(this);
+    this._createMenu();
   }
   
-  renderItems() {
-    this.menuEl.innerHTML = '';
+  _createMenu() {
+    // Supprime tout menu existant
+    const existing = document.querySelector('.context-menu');
+    if (existing) existing.remove();
+    
+    this.menuElement = document.createElement('div');
+    this.menuElement.className = 'context-menu glassmorphic';
+    
     this.items.forEach(item => {
       const el = document.createElement('div');
       el.className = 'context-menu-item';
@@ -34,48 +26,59 @@ class ContextMenu {
       el.addEventListener('click', (e) => {
         e.stopPropagation();
         this.hide();
-        if (typeof item.action === 'function') {
-          item.action();
-        }
+        item.action();
       });
-      this.menuEl.appendChild(el);
+      this.menuElement.appendChild(el);
     });
+    
+    document.body.appendChild(this.menuElement);
+    // Ajoute un écouteur global pour fermer le menu dès qu'on clique en dehors
+    document.addEventListener('click', this._boundDocumentClick);
+  }
+  
+  _handleDocumentClick(e) {
+    if (!e.target.closest('.context-menu')) {
+      this.hide();
+    }
   }
   
   show(x, y) {
-    // Position initiale
-    this.menuEl.style.left = x + 'px';
-    this.menuEl.style.top = y + 'px';
-    // Ajuste la position pour rester dans l'écran
-    const menuRect = this.menuEl.getBoundingClientRect();
-    let adjustedX = x;
-    let adjustedY = y;
-    const margin = 10;
-    if (menuRect.right > window.innerWidth) {
-      adjustedX = window.innerWidth - menuRect.width - margin;
+    if (!this.menuElement) return;
+    
+    // Affiche temporairement le menu pour récupérer ses dimensions
+    this.menuElement.style.display = 'block';
+    const menuRect = this.menuElement.getBoundingClientRect();
+    const winWidth = window.innerWidth;
+    const winHeight = window.innerHeight;
+    
+    if (x + menuRect.width > winWidth) { x = winWidth - menuRect.width - 10; }
+    if (y + menuRect.height > winHeight) { y = winHeight - menuRect.height - 10; }
+    if (x < 10) { x = 10; }
+    if (y < 10) { y = 10; }
+    
+    this.menuElement.style.left = `${x}px`;
+    this.menuElement.style.top = `${y}px`;
+    
+    if (this.options.animate) {
+      this.menuElement.classList.remove('menu-exit');
+      this.menuElement.classList.add('menu-animate');
     }
-    if (menuRect.bottom > window.innerHeight) {
-      adjustedY = window.innerHeight - menuRect.height - margin;
-    }
-    this.menuEl.style.left = adjustedX + 'px';
-    this.menuEl.style.top = adjustedY + 'px';
-    // Animation d'apparition
-    setTimeout(() => {
-      this.menuEl.classList.add('active');
-    }, 10);
   }
   
   hide() {
-    this.menuEl.classList.remove('active');
-    setTimeout(() => {
-      if (this.menuEl.parentNode) {
-        this.menuEl.parentNode.removeChild(this.menuEl);
+    if (this.menuElement && this.menuElement.style.display !== 'none') {
+      if (this.options.animate) {
+        this.menuElement.classList.remove('menu-animate');
+        this.menuElement.classList.add('menu-exit');
+        this.menuElement.addEventListener('animationend', () => {
+          this.menuElement.style.display = 'none';
+          this.menuElement.classList.remove('menu-exit');
+        }, { once: true });
+      } else {
+        this.menuElement.style.display = 'none';
       }
-      document.removeEventListener('click', this._onDocumentClick);
-      if (window.currentContextMenu === this) {
-        window.currentContextMenu = null;
-      }
-    }, 300);
+      document.removeEventListener('click', this._boundDocumentClick);
+    }
   }
 }
 

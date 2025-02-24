@@ -9,12 +9,15 @@ html, body {
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   user-select: none;
-  background: #f5f5f500;
+  background: transparent; /* Fond transparent pour l'effet glass */
 }
 
-/* Conteneur principal (pour isoler nos styles) */
+/* Conteneur principal pour isoler nos styles */
 .vo-container {
   position: relative;
   width: 100%;
   height: 100%;
+  /* Optionnel : ajouter une légère teinte pour l'effet glassmorphic */
+  background: rgba(245, 245, 245, 0.05);
+  backdrop-filter: blur(10px);
 }
