@@ -9,4 +9,6 @@ urlpatterns = [
     path('explorer/', include('explorer.urls')),
     path('terminal/', include('terminal.urls')),
     path('desktop/', include('desktop.urls')),
+    path('clock/', include('clock.urls')),
+    path('chatbot/', include('chatbot.urls')),
 ]

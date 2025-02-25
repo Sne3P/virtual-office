@@ -5,7 +5,7 @@ Pour installer et tester le projet, veuillez suivre les étapes suivantes.
 # Installation
 
 ```
-git clone https://github.com/Sne3P/virtual-office.git    
+git clone https://github.com/votre-utilisateur/virtual-office.git    
 cd virtual-office
 ```
 
