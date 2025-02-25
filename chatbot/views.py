@@ -1,20 +1,14 @@
-import datetime
-from django.shortcuts import render
-from django.http import JsonResponse
-from openai import OpenAI
-
-client = OpenAI(api_key="")
-import os
+import json
+import cohere
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
-from django.conf import settings
+from django.shortcuts import render
+
+# Remplace par ta clé API Cohere (elle est gratuite t'es pas obligé de me voler la mienne fait pas le flemmard)
+cohere_client = cohere.Client("kWy6hVux38mEMUfUGhLaa6Z9GDKMwbbVvP1vaHR2")
+
 def chatbot_view(request):
     return render(request, 'chatbot/chatbot.html')
-
-
-# Configure OpenAI avec la clé API stockée en environnement
-# chatbot/views.py
 
 @csrf_exempt
 def chatbot_response(request):
@@ -26,11 +20,13 @@ def chatbot_response(request):
             if not user_message:
                 return JsonResponse({"error": "Message vide"}, status=400)
 
-            # Envoi du message à OpenAI
-            response = client.chat.completions.create(model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": user_message}])
+            # Envoi du message à Cohere
+            response = cohere_client.chat(
+                message=user_message,
+                model="command"  # Modèle gratuit
+            )
 
-            bot_message = response.choices[0].message.content
+            bot_message = response.text  # Récupère la réponse du chatbot
 
             return JsonResponse({"message": bot_message})
 
