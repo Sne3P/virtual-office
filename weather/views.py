@@ -8,7 +8,7 @@ def weather_view(request):
     return render(request, 'weather/weather.html')
 
 def get_weather(request):
-    city = 'Lille'  # Remplace par la ville souhaitée ou rend cela dynamique
+    city = request.GET.get('city', 'Lille')  # Récupère la ville passée en paramètre GET, sinon utilise 'Lille'
     url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric'
     response = requests.get(url)
     weather_data = response.json()
@@ -18,4 +18,4 @@ def get_weather(request):
 
     temp = weather_data['main']['temp']
     description = weather_data['weather'][0]['description']
-    return JsonResponse({'temp': temp, 'description': description})
+    return JsonResponse({'temp': temp, 'description': description, 'city': city})

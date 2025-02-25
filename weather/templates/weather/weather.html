@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Météo - Lille{% endblock %}
+{% block title %}Météo{% endblock %}
 {% block content %}
 <div class="weather-container">
-    <h2>Météo à Lille</h2>
+    <h2>Météo</h2>
+    <form id="city-search-form" class="weather-form">
+        <input type="text" id="city-input" placeholder="Entrez une ville" required class="input-city">
+        <button type="submit" class="btn-search">Rechercher</button>
+    </form>
     <div id="weather-display">
-        <div id="weather-location">📍 Lille</div>
+        <div id="weather-city">Lille</div>
         <div id="weather-temp">-- °C</div>
         <div id="weather-desc">--</div>
     </div>
