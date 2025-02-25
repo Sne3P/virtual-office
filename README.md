@@ -29,7 +29,7 @@ venv\Scripts\activate
 ## Install dependencies:
 
 ```
-pip install django openai requests
+pip install django cohere requests
 ```
 Apply migrations:
 

@@ -5,10 +5,15 @@
 <div class="chatbot-container">
     <h2>Chatbot</h2>
     <div id="chatbot-display"></div>
-    <input type="text" id="user-input" placeholder="Type your message here..." />
-    <button id="send-button">Send</button>
+
+    <!-- Conteneur pour l'input et le bouton -->
+    <div class="chatbot-input-container">
+        <input type="text" id="user-input" placeholder="Ecris ici !!" />
+        <button id="send-button">Envoyer</button>
+    </div>
 </div>
-<!-- Lien vers le fichier CSS -->
+
+<!-- Lien vers les fichiers CSS et JS -->
 <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
 <script src="{% static 'js/chatbot.js' %}"></script>
 {% endblock %}
