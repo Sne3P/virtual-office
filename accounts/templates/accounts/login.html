@@ -1,18 +1,17 @@
 {% extends "base.html" %}
-{% load static %}
-
 {% block title %}Connexion - Virtual Office{% endblock %}
 
 {% block content %}
 <style>
     body {
         font-family: 'Poppins', sans-serif;
-        background-color: #fce4ec; /* Rose pastel */
+        background: linear-gradient(135deg, #2196F3, #E3F2FD); /* Dégradé bleu */
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
         margin: 0;
+        overflow: hidden;
     }
 
     .login-container {
@@ -23,14 +22,16 @@
     }
 
     .login-box {
-        background: #fff;
+        background: rgba(255, 255, 255, 0.3);
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
         max-width: 400px;
         width: 100%;
         transition: 0.3s;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
     .login-box:hover {
@@ -38,51 +39,74 @@
     }
 
     h2 {
-        color: #d81b60; /* Rose foncé */
+        color: #212121; /* Noir foncé */
         font-size: 24px;
         margin-bottom: 20px;
     }
 
+    form {
+        width: 100%;
+    }
+
     form p {
         margin-bottom: 15px;
+        color: #333; /* Gris foncé */
+        text-align: left;
     }
 
     input {
-        width: 100%;
-        padding: 10px;
+        width: calc(100% - 20px); /* Ajustement pour être aligné avec le bouton */
+        padding: 12px;
         margin: 5px 0;
-        border: 2px solid #f8bbd0; /* Rose clair */
+        border: none;
         border-radius: 10px;
         font-size: 16px;
         outline: none;
+        background: rgba(255, 255, 255, 0.6);
+        color: #212121; /* Noir */
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input::placeholder {
+        color: rgba(0, 0, 0, 0.5);
     }
 
     input:focus {
-        border-color: #d81b60;
+        border-color: #1976d2;
     }
 
     .btn {
-        background-color: #d81b60;
-        color: white;
-        padding: 10px 15px;
+        width: calc(100% - 20px); /* Identique aux inputs */
+        padding: 12px;
+        background-color: rgba(255, 255, 255, 0.7);
+        color: #212121;
         border: none;
         border-radius: 10px;
         cursor: pointer;
         font-size: 16px;
-        width: 100%;
         transition: 0.3s;
+        font-weight: bold;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        display: block;
+        margin: 10px auto 0;
     }
 
     .btn:hover {
-        background-color: #c2185b;
+        background-color: rgba(255, 255, 255, 0.9);
     }
 
     p {
         margin-top: 15px;
+        color: #333; /* Gris foncé */
     }
 
     a {
-        color: #d81b60;
+        color: #1565c0; /* Bleu profond */
         text-decoration: none;
         font-weight: bold;
     }
