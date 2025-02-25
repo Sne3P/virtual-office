@@ -16,6 +16,31 @@ def get_weather(request):
     if weather_data.get('cod') != 200:
         return JsonResponse({'error': 'Impossible de récupérer la météo'}, status=400)
 
+    # Extraction des différents paramètres météorologiques
     temp = weather_data['main']['temp']
+    feels_like = weather_data['main']['feels_like']
+    temp_min = weather_data['main']['temp_min']
+    temp_max = weather_data['main']['temp_max']
+    pressure = weather_data['main']['pressure']
+    humidity = weather_data['main']['humidity']
+    wind_speed = weather_data['wind']['speed']
+    wind_deg = weather_data['wind']['deg']
     description = weather_data['weather'][0]['description']
-    return JsonResponse({'temp': temp, 'description': description, 'city': city})
+    icon = weather_data['weather'][0]['icon']
+    visibility = weather_data.get('visibility', 'Non disponible')  # Certains champs peuvent être absents
+
+    # Création d'une réponse JSON avec tous les paramètres
+    return JsonResponse({
+        'city': city,
+        'temp': temp,
+        'feels_like': feels_like,
+        'temp_min': temp_min,
+        'temp_max': temp_max,
+        'pressure': pressure,
+        'humidity': humidity,
+        'wind_speed': wind_speed,
+        'wind_deg': wind_deg,
+        'visibility': visibility,
+        'description': description,
+        'icon': icon
+    })

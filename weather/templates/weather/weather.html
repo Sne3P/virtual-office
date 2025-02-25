@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Météo{% endblock %}
+
 {% block content %}
 <div class="weather-container">
     <h2>Météo</h2>
@@ -8,12 +9,20 @@
         <input type="text" id="city-input" placeholder="Entrez une ville" required class="input-city">
         <button type="submit" class="btn-search">Rechercher</button>
     </form>
+
     <div id="weather-display">
         <div id="weather-city">Lille</div>
         <div id="weather-temp">-- °C</div>
+        <div id="weather-feels-like">Ressenti : -- °C</div>
+        <div id="weather-min-max">Min : -- °C | Max : -- °C</div>
+        <div id="weather-pressure">Pression : -- hPa</div>
+        <div id="weather-humidity">Humidité : --%</div>
+        <div id="weather-wind">Vent : -- m/s</div>
+        <div id="weather-visibility">Visibilité : -- m</div>
         <div id="weather-desc">--</div>
     </div>
 </div>
+
 <link rel="stylesheet" href="{% static 'css/weather.css' %}">
 <script src="{% static 'js/weather.js' %}"></script>
 {% endblock %}
