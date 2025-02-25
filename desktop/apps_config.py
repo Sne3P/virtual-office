@@ -24,12 +24,12 @@ APPS = [
         'name': 'Clock',
         'icon': 'images/clock.png',
         'url': '/clock/',
-    }
-    # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
-    # {
-    #     'id': 'notepad',
-    #     'name': 'Notepad',
-    #     'icon': 'images/notepad.png',
-    #     'url': '/notepad/',
-    # },
+    },
+    {
+        'id': 'weather',
+        'name': 'Weather',
+        'icon': 'images/weather.png',
+        'url': '/weather/',
+    },
+
 ]

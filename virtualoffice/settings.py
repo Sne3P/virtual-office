@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'terminal',
     'clock',
     'chatbot',
+    'weather',
 ]
 
 MIDDLEWARE = [
