@@ -3,116 +3,130 @@
 
 {% block content %}
 <style>
+    /* Fond identique au bureau */
     body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #2196F3, #E3F2FD); /* Dégradé bleu */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
         margin: 0;
-        overflow: hidden;
+        padding: 0;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background: url('/static/images/desktop-background.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: #fff;
     }
 
+    /* Container centré */
     .login-container {
         display: flex;
-        justify-content: center;
         align-items: center;
-        width: 100%;
+        justify-content: center;
+        height: 100vh;
     }
 
+    /* Carte glassmorphic avec espacements symétriques */
     .login-box {
-        background: rgba(255, 255, 255, 0.3);
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 2.5rem;
         max-width: 400px;
         width: 100%;
-        transition: 0.3s;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        margin: 0 auto;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
     }
 
-    .login-box:hover {
-        transform: scale(1.02);
+    /* Titre */
+    .login-box h2 {
+        font-size: 2rem;
+        margin-bottom: 1.8rem;
+        letter-spacing: 1px;
     }
 
-    h2 {
-        color: #212121; /* Noir foncé */
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    form {
-        width: 100%;
-    }
-
-    form p {
-        margin-bottom: 15px;
-        color: #333; /* Gris foncé */
+    /* Groupes de formulaire */
+    .form-group {
+        margin-bottom: 1.5rem;
         text-align: left;
     }
 
-    input {
-        width: calc(100% - 20px); /* Ajustement pour être aligné avec le bouton */
-        padding: 12px;
-        margin: 5px 0;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Inputs glassmorphic transparents */
+    .form-group input {
+        width: 90%;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 1rem;
         outline: none;
-        background: rgba(255, 255, 255, 0.6);
-        color: #212121; /* Noir */
-        backdrop-filter: blur(5px);
+        transition: border 0.3s, box-shadow 0.3s;
+        background-clip: padding-box;
+    }
+
+    .form-group input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .form-group input:focus {
         border: 1px solid rgba(255, 255, 255, 0.5);
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
     }
 
-    input::placeholder {
-        color: rgba(0, 0, 0, 0.5);
-    }
-
-    input:focus {
-        border-color: #1976d2;
-    }
-
+    /* Bouton glassmorphic transparent */
     .btn {
-        width: calc(100% - 20px); /* Identique aux inputs */
-        padding: 12px;
-        background-color: rgba(255, 255, 255, 0.7);
-        color: #212121;
-        border: none;
-        border-radius: 10px;
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 16px;
-        transition: 0.3s;
-        font-weight: bold;
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        display: block;
-        margin: 10px auto 0;
+        transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+        margin-top: 1.5rem;
     }
 
     .btn:hover {
-        background-color: rgba(255, 255, 255, 0.9);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.1);
     }
 
-    p {
-        margin-top: 15px;
-        color: #333; /* Gris foncé */
+    /* Texte d'inscription */
+    .register-text {
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
     }
 
-    a {
-        color: #1565c0; /* Bleu profond */
+    .register-text a {
+        color: #00ccff;
         text-decoration: none;
-        font-weight: bold;
+        border-bottom: 1px solid transparent;
+        transition: border-bottom 0.2s;
     }
 
-    a:hover {
-        text-decoration: underline;
+    .register-text a:hover {
+        border-bottom: 1px solid #00ccff;
+    }
+
+    /* Animation d'apparition */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 </style>
 
@@ -121,10 +135,12 @@
         <h2>Connexion</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
             <button type="submit" class="btn">Se connecter</button>
         </form>
-        <p>Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
+        <p class="register-text">Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
     </div>
 </div>
 

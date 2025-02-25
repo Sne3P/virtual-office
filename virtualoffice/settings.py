@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'clock',
     'chatbot',
     'weather',
+    'agenda',
 ]
 
 MIDDLEWARE = [
