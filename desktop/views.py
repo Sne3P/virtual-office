@@ -4,10 +4,12 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from .models import DesktopSetting
+from .apps_config import APPS  # Import de la configuration des apps
 
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    # Passage de la configuration des applications au template
+    return render(request, 'dashboard.html', {'apps': APPS})
 
 @login_required
 @require_http_methods(["GET"])

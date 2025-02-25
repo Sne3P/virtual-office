@@ -3,7 +3,7 @@
 {% block title %}Explorer - Virtual Office{% endblock %}
 {% block content %}
 <div id="explorer" class="glassmorphic">
-  <!-- En-tête avec boutons d'action -->
+  <!-- En-tête supérieur avec drive et actions -->
   <div id="explorer-header">
     <div id="drive-selector">
       {% for dt, drive in drives %}
@@ -28,7 +28,23 @@
       </a>
     </div>
   </div>
-  <!-- Corps de l'explorer -->
+  
+<!-- Breadcrumbs améliorés -->
+<div id="explorer-breadcrumbs">
+  <span class="breadcrumb-driver">{{ current_directory.drive.name }}</span>
+  &gt;
+  {% if current_directory.drive.root and current_directory.drive.root.id %}
+    <a href="{% url 'explorer:view' current_directory.drive.root.id %}">Root</a>
+  {% else %}
+    <span>Root</span>
+  {% endif %}
+  {% for crumb in current_directory.get_ancestors %}
+    &gt; <a href="{% url 'explorer:view' crumb.id %}">{{ crumb.name }}</a>
+  {% endfor %}
+  &gt; <span class="breadcrumb-current">{{ current_directory.name }}</span>
+</div>
+
+  
   <div id="explorer-body">
     <!-- Sidebar avec arborescence -->
     <div id="explorer-sidebar">
@@ -48,18 +64,18 @@
         {% endfor %}
       </ul>
     </div>
-    <!-- Zone principale affichant fichiers et dossiers -->
+    <!-- Zone principale affichant dossiers et fichiers -->
     <div id="explorer-main">
       <div class="explorer-content">
         {% for sub in subdirectories %}
           <div class="explorer-item folder-item" data-id="{{ sub.id }}">
-            <img src="{% static 'images/folder.png' %}" alt="{{ sub.name }}">
+            <i class="fa-solid fa-folder explorer-icon"></i>
             <span class="item-title">{{ sub.name }}</span>
           </div>
         {% endfor %}
         {% for file in files %}
           <div class="explorer-item file-item" data-id="{{ file.id }}">
-            <img src="{% static 'images/file.png' %}" alt="{{ file.name }}">
+            <i class="fa-solid fa-file explorer-icon"></i>
             <span class="item-title">{{ file.name }}</span>
             <span class="item-meta">{{ file.uploaded_at|date:"d/m/Y H:i" }} ({{ file.extension }})</span>
           </div>

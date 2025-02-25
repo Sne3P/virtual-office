@@ -1,31 +1,30 @@
 /* explorer/static/css/explorer.css */
 
-/* Explorer en plein écran sans fond blanc */
+/* Explorer – Style Glassmorphic complet */
 #explorer {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.05); /* Légère teinte pour l'effet, ajustable */
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
   overflow: hidden;
   margin: 0;
   padding: 0;
 }
 
-/* En-tête supérieur pour drive et actions – effet glassmorphic */
+/* En-tête supérieur */
 #explorer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 123, 255, 0.3);
+  backdrop-filter: blur(5px);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Sélecteur de drive */
 #drive-selector {
   display: flex;
   gap: 10px;
@@ -47,7 +46,6 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Boutons d'action */
 #explorer-actions {
   display: flex;
   gap: 10px;
@@ -69,17 +67,31 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Corps de l'explorer : Sidebar et zone principale */
+/* Breadcrumbs */
+#explorer-breadcrumbs {
+  padding: 5px 20px;
+  background: rgba(0, 123, 255, 0.2);
+  backdrop-filter: blur(5px);
+  font-size: 14px;
+  color: #fff;
+}
+
+#explorer-breadcrumbs a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Corps de l'explorer */
 #explorer-body {
   flex: 1;
   display: flex;
   overflow: hidden;
 }
 
-/* Sidebar avec arborescence – effet glassmorphic */
+/* Sidebar */
 #explorer-sidebar {
   width: 250px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 123, 255, 0.2);
   color: #fff;
   padding: 10px;
   box-sizing: border-box;
@@ -118,7 +130,7 @@
   font-size: 14px;
 }
 
-/* Zone principale d'affichage – effet glassmorphic pour la zone */
+/* Zone principale */
 #explorer-main {
   flex: 1;
   padding: 10px;
@@ -134,7 +146,7 @@
   gap: 10px;
 }
 
-/* Style des éléments explorer (dossier et fichier) */
+/* Éléments explorer */
 .explorer-item {
   width: 120px;
   text-align: center;
@@ -142,35 +154,21 @@
   padding: 8px;
   border-radius: 6px;
   background: rgba(255,255,255,0.05);
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
 }
 
 .explorer-item:hover {
   background: rgba(255,255,255,0.1);
+  transform: scale(1.02);
 }
 
-/* Pour les dossiers, on utilise toujours l'icône de dossier */
-.folder-item img {
-  width: 64px;
-  height: 64px;
-  display: block;
-  margin: 0 auto;
+.explorer-icon {
+  font-size: 48px;
+  margin-bottom: 6px;
+  color: #fff;
 }
-
-/* Pour les fichiers, on pourra différencier selon le type.
-   Exemple : pour les images, utiliser une prévisualisation, sinon une icône générique */
-.file-item img {
-  width: 64px;
-  height: 64px;
-  display: block;
-  margin: 0 auto;
-}
-
-/* Vous pouvez définir des classes spécifiques selon l'extension,
-   par exemple : .file-item.image { ... } pour les images, etc. */
 
 .item-title {
-  margin-top: 6px;
   font-size: 14px;
   color: #fff;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
@@ -181,7 +179,7 @@
   color: #ccc;
 }
 
-/* Formulaires de l'explorer */
+/* Formulaires dans l'explorer */
 .explorer-form {
   width: 100%;
   max-width: 400px;
