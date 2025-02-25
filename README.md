@@ -29,7 +29,7 @@ venv\Scripts\activate
 ## Install dependencies:
 
 ```
-pip install django
+pip install django openai requests
 ```
 Apply migrations:
 

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Météo - Lille{% endblock %}
+{% block content %}
+<div class="weather-container">
+    <h2>Météo à Lille</h2>
+    <div id="weather-display">
+        <div id="weather-location">📍 Lille</div>
+        <div id="weather-temp">-- °C</div>
+        <div id="weather-desc">--</div>
+    </div>
+</div>
+<link rel="stylesheet" href="{% static 'css/weather.css' %}">
+<script src="{% static 'js/weather.js' %}"></script>
+{% endblock %}
