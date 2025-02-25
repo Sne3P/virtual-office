@@ -20,6 +20,8 @@ INSTALLED_APPS = [
     'desktop',
     'explorer',
     'terminal',
+    'clock',
+    'chatbot',
 ]
 
 MIDDLEWARE = [

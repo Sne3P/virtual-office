@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Horloge - Virtual Office{% endblock %}
+{% block content %}
+<div class="clock-container">
+    <h2>Horloge</h2>
+    <div id="clock-display">--:--:--</div>
+</div>
+<link rel="stylesheet" href="{% static 'css/clock.css' %}">
+<script src="{% static 'js/clock.js' %}"></script>
+{% endblock %}

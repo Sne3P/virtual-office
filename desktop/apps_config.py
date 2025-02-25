@@ -13,6 +13,18 @@ APPS = [
         'icon': 'images/explorer.png',
         'url': '/explorer/',
     },
+    {
+        'id': 'chatbot',
+        'name': 'Chatbot',
+        'icon': 'images/chatbot.png',
+        'url': '/chatbot/',
+    },
+    {
+        'id': 'clock',
+        'name': 'Clock',
+        'icon': 'images/clock.png',
+        'url': '/clock/',
+    }
     # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
     # {
     #     'id': 'notepad',
