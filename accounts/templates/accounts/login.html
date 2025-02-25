@@ -2,14 +2,23 @@
 {% block title %}Connexion - Virtual Office{% endblock %}
 {% block content %}
 <div class="login-container">
-    <div class="login-box">
-        <h2>Connexion</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn">Se connecter</button>
-        </form>
-        <p>Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
-    </div>
+  <div class="login-box">
+    <h2>Connexion</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </div>
+      <div class="form-group">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </div>
+      <button type="submit" class="btn">Se connecter</button>
+    </form>
+    <p class="register-text">
+      Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a>
+    </p>
+  </div>
 </div>
 {% endblock %}
