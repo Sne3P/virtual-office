@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.desktop-icon').forEach(icon => {
         this.attachIconEvents(icon);
       });
+      // Désélectionner les icônes si on clique ailleurs
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.desktop-icon')) {
+          document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+        }
+      });
     },
     attachIconEvents: function(icon) {
       icon.style.position = 'absolute';
@@ -18,13 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
           // Si Ctrl est pressé, on bascule la sélection sur cette icône sans toucher aux autres
           this.classList.toggle('selected');
         } else {
-          // Sinon, on désélectionne toutes et on sélectionne uniquement cette icône
+          // Désélectionne toutes et sélectionne uniquement cette icône
           document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
           this.classList.add('selected');
         }
       });
       icon.style.cursor = 'move';
-      icon.addEventListener('mousedown', this.startDrag.bind(this, icon));
+      icon.addEventListener('mousedown', window.iconManager.startDrag.bind(window.iconManager, icon));
     },
     startDrag: function(icon, e) {
       e.preventDefault();
@@ -187,5 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
       return cookieValue;
     }
   };
+  
   window.iconManager.init();
 });

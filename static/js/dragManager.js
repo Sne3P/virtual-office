@@ -1,43 +1,56 @@
-document.addEventListener('DOMContentLoaded', function() {
-  window.dragManager = {
-    makeDraggable: function(win, handle) {
-      let offsetX = 0, offsetY = 0, startX = 0, startY = 0;
-      let iframe = win.querySelector('iframe');
-      handle.style.cursor = 'move';
-      handle.addEventListener('mousedown', dragMouseDown);
-      
-      function dragMouseDown(e) {
-        e.preventDefault();
-        startX = e.clientX;
-        startY = e.clientY;
-        if (iframe) { iframe.style.pointerEvents = 'none'; }
-        document.addEventListener('mousemove', elementDrag);
-        document.addEventListener('mouseup', stopDragging);
-      }
-      
-      function elementDrag(e) {
-        e.preventDefault();
-        offsetX = e.clientX - startX;
-        offsetY = e.clientY - startY;
-        startX = e.clientX;
-        startY = e.clientY;
-        win.style.top = (win.offsetTop + offsetY) + 'px';
-        win.style.left = (win.offsetLeft + offsetX) + 'px';
-      }
-      
-      function stopDragging() {
-        document.removeEventListener('mousemove', elementDrag);
-        document.removeEventListener('mouseup', stopDragging);
-        if (iframe) { iframe.style.pointerEvents = 'auto'; }
-      }
-    },
-    bringToFront: function(win) {
-      let maxZ = 0;
-      document.querySelectorAll('.app-window').forEach(w => {
-        const z = parseInt(window.getComputedStyle(w).zIndex) || 0;
-        if (z > maxZ) maxZ = z;
-      });
-      win.style.zIndex = maxZ + 1;
+(function() {
+  class DragManager {
+    constructor() {
+      this.dragItem = null;
+      this.offsetX = 0;
+      this.offsetY = 0;
+      this.currentZIndex = 1000;
+      this.mouseMoveHandler = this.mouseMove.bind(this);
+      this.mouseUpHandler = this.mouseUp.bind(this);
+      this.disabledIframes = [];
     }
-  };
-});
+    
+    makeDraggable(element, handle) {
+      handle = handle || element;
+      handle.style.cursor = 'move';
+      handle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        // Mettre l'élément au premier plan
+        element.style.zIndex = ++this.currentZIndex;
+        this.dragItem = element;
+        this.offsetX = e.clientX - element.offsetLeft;
+        this.offsetY = e.clientY - element.offsetTop;
+        // Désactiver temporairement les pointer-events sur les iframes enfants
+        this.disabledIframes = [];
+        element.querySelectorAll('iframe').forEach((iframe) => {
+          this.disabledIframes.push({ iframe: iframe, original: iframe.style.pointerEvents });
+          iframe.style.pointerEvents = 'none';
+        });
+        document.addEventListener('mousemove', this.mouseMoveHandler);
+        document.addEventListener('mouseup', this.mouseUpHandler);
+      });
+    }
+    
+    mouseMove(e) {
+      if (this.dragItem) {
+        this.dragItem.style.left = (e.clientX - this.offsetX) + 'px';
+        this.dragItem.style.top = (e.clientY - this.offsetY) + 'px';
+      }
+    }
+    
+    mouseUp() {
+      if (this.dragItem) {
+        // Restaurer les pointer-events des iframes
+        this.disabledIframes.forEach(({ iframe, original }) => {
+          iframe.style.pointerEvents = original || 'auto';
+        });
+        this.disabledIframes = [];
+      }
+      this.dragItem = null;
+      document.removeEventListener('mousemove', this.mouseMoveHandler);
+      document.removeEventListener('mouseup', this.mouseUpHandler);
+    }
+  }
+  
+  window.dragManager = new DragManager();
+})();

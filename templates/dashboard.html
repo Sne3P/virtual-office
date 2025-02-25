@@ -4,14 +4,12 @@
 {% block content %}
 <div id="desktop">
   <div class="desktop-icons">
-    <div class="desktop-icon" data-app="terminal">
-      <img src="{% static 'images/terminal.png' %}" alt="Terminal">
-      <span>Terminal</span>
+    {% for app in apps %}
+    <div class="desktop-icon" data-app="{{ app.id }}">
+      <img src="{% static app.icon %}" alt="{{ app.name }}">
+      <span>{{ app.name }}</span>
     </div>
-    <div class="desktop-icon" data-app="explorer">
-      <img src="{% static 'images/explorer.png' %}" alt="Explorer">
-      <span>Explorer</span>
-    </div>
+    {% endfor %}
   </div>
   <div id="windows-container"></div>
   <div id="taskbar">
@@ -35,16 +33,28 @@
         <input type="text" id="start-search" placeholder="Rechercher des applications...">
       </div>
       <div class="start-menu-apps">
-        <div class="start-app" data-app="terminal">
-          <img src="{% static 'images/terminal.png' %}" alt="Terminal">
-          <span>Terminal</span>
+        {% for app in apps %}
+        <div class="start-app" data-app="{{ app.id }}">
+          <img src="{% static app.icon %}" alt="{{ app.name }}">
+          <span>{{ app.name }}</span>
         </div>
-        <div class="start-app" data-app="explorer">
-          <img src="{% static 'images/explorer.png' %}" alt="Explorer">
-          <span>Explorer</span>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
+<script>
+  window.appsConfig = {
+    {% for app in apps %}
+    "{{ app.id }}": {
+      id: "{{ app.id }}",
+      name: "{{ app.name }}",
+      icon: "{% static app.icon %}",
+      url: "{{ app.url }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  };
+  </script>
+  
+
 {% endblock %}
