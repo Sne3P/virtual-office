@@ -1,0 +1,126 @@
+/* Fond identique au bureau */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: url('/static/images/desktop-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+  }
+  
+  /* Container centré */
+  .login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Carte glassmorphic avec espacements symétriques */
+  .login-box {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Titre */
+  .login-box h2 {
+    font-size: 2rem;
+    margin-bottom: 1.8rem;
+    letter-spacing: 1px;
+  }
+  
+  /* Groupes de formulaire */
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  /* Inputs glassmorphic transparents */
+  .form-group input {
+    width: 90%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+    background-clip: padding-box;
+  }
+  
+  .form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .form-group input:focus {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Bouton glassmorphic transparent */
+  .btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+    margin-top: 1.5rem;
+  }
+  
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Texte d'inscription */
+  .register-text {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .register-text a {
+    color: #00ccff;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.2s;
+  }
+  
+  .register-text a:hover {
+    border-bottom: 1px solid #00ccff;
+  }
+  
+  /* Animation d'apparition */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
