@@ -1,114 +1,130 @@
 /* explorer/static/css/explorer.css */
 
-/* Explorer – Style Glassmorphic complet */
+/* Conteneur global – fond transparent et flou léger */
 #explorer {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
+  background: transparent;
+  backdrop-filter: blur(4px); /* Flou réduit */
   overflow: hidden;
   margin: 0;
   padding: 0;
 }
 
-/* En-tête supérieur */
+/* En-tête supérieur – barre horizontale avec fond légèrement foncé */
 #explorer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background: rgba(0, 123, 255, 0.3);
-  backdrop-filter: blur(5px);
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   box-sizing: border-box;
 }
 
+/* Sélecteur de drive */
 #drive-selector {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 #drive-selector .drive-link {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   color: #fff;
   text-decoration: none;
-  padding: 8px 10px;
-  border-radius: 6px;
-  transition: background 0.2s;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.3s, transform 0.3s;
 }
 
 #drive-selector .drive-link:hover,
 #drive-selector .drive-link.active {
   background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
+/* Actions de l'en-tête */
 #explorer-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
-#explorer-actions .action-btn {
-  background: rgba(255, 255, 255, 0.1);
+#explorer-actions .action-btn,
+#explorer-actions button#toggle-view {
+  background: rgba(0, 0, 0, 0.18);
   border: none;
   padding: 8px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s, transform 0.3s;
   color: #fff;
   font-size: 16px;
-  text-decoration: none;
 }
 
-#explorer-actions .action-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+#explorer-actions .action-btn:hover,
+#explorer-actions button#toggle-view:hover {
+  background: rgba(0, 0, 0, 0.28);
+  transform: translateY(-1px);
 }
 
-/* Breadcrumbs */
+/* Breadcrumbs – positionnés en haut à gauche de la zone principale, sans fond */
 #explorer-breadcrumbs {
-  padding: 5px 20px;
-  background: rgba(0, 123, 255, 0.2);
-  backdrop-filter: blur(5px);
+  margin: 12px 24px 0 24px;
   font-size: 14px;
   color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 #explorer-breadcrumbs a {
   color: #fff;
   text-decoration: none;
+  transition: color 0.2s;
 }
 
-/* Corps de l'explorer */
+#explorer-breadcrumbs a:hover {
+  color: #00ccff;
+}
+
+.breadcrumb-sep {
+  margin: 0 4px;
+}
+
+/* Corps de l'explorer : Sidebar + Zone principale */
 #explorer-body {
   flex: 1;
   display: flex;
   overflow: hidden;
 }
 
-/* Sidebar */
+/* Sidebar – barre latérale fixe, fond légèrement opaque */
 #explorer-sidebar {
-  width: 250px;
-  background: rgba(0, 123, 255, 0.2);
-  color: #fff;
-  padding: 10px;
+  width: 260px;
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(2px);
+  padding: 16px;
   box-sizing: border-box;
   height: 100%;
   overflow-y: auto;
-  border-right: 1px solid rgba(255,255,255,0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #explorer-sidebar h3 {
-  margin: 0 0 10px 0;
-  font-size: 18px;
-  font-weight: bold;
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
 }
 
 #explorer-sidebar a.btn-back {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   color: #fff;
   text-decoration: none;
   font-size: 14px;
@@ -121,57 +137,73 @@
 }
 
 #explorer-sidebar ul li {
-  margin: 5px 0;
+  margin-bottom: 12px;
 }
 
 #explorer-sidebar ul li a {
   color: #fff;
   text-decoration: none;
   font-size: 14px;
+  transition: color 0.2s;
 }
 
-/* Zone principale */
+#explorer-sidebar ul li a:hover {
+  color: #00ccff;
+}
+
+/* Zone principale – sans fond pour laisser apparaître le background global */
 #explorer-main {
   flex: 1;
-  padding: 10px;
+  padding: 16px;
   box-sizing: border-box;
   overflow-y: auto;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  background: transparent;
 }
 
+/* Contenu explorer – vue en grille par défaut */
 .explorer-content {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 16px;
 }
 
-/* Éléments explorer */
+/* Éléments explorer : dossiers et fichiers */
 .explorer-item {
-  width: 120px;
+  width: 130px;
   text-align: center;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.05);
-  transition: background 0.2s, transform 0.2s;
+  padding: 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 0.3s, transform 0.3s, border-color 0.3s;
 }
 
 .explorer-item:hover {
-  background: rgba(255,255,255,0.1);
-  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .explorer-icon {
   font-size: 48px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   color: #fff;
+}
+
+/* Pour les dossiers, une touche de couleur */
+.folder-item .explorer-icon {
+  color: #ffdd57;
 }
 
 .item-title {
   font-size: 14px;
   color: #fff;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  margin-top: 4px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-meta {
@@ -179,14 +211,33 @@
   color: #ccc;
 }
 
+/* Mode liste (activé via JS si nécessaire) */
+.list-view .explorer-content {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list-view .explorer-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+.list-view .explorer-icon {
+  font-size: 32px;
+  margin-right: 12px;
+}
+
 /* Formulaires dans l'explorer */
 .explorer-form {
   width: 100%;
   max-width: 400px;
   margin: 20px auto;
-  padding: 15px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
+  padding: 16px;
+  background: transparent;
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   color: #fff;
   box-sizing: border-box;
@@ -198,22 +249,23 @@
 }
 
 .explorer-form .form-group {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .explorer-form label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: 14px;
+  color: #fff;
 }
 
 .explorer-form input[type="text"],
 .explorer-form input[type="file"] {
   width: 100%;
   padding: 8px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  background: rgba(255,255,255,0.1);
+  background: transparent;
   color: #fff;
   box-sizing: border-box;
 }
@@ -221,20 +273,21 @@
 .explorer-form button {
   display: block;
   width: 100%;
-  background: rgba(255,255,255,0.1);
-  border: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 10px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s, transform 0.3s;
   color: #fff;
   font-size: 16px;
 }
 
 .explorer-form button:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.05);
 }
 
+/* Bouton de retour */
 a.btn-back {
   display: block;
   margin-top: 10px;
@@ -242,4 +295,16 @@ a.btn-back {
   color: #fff;
   text-decoration: none;
   font-size: 14px;
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

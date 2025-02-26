@@ -14,7 +14,7 @@ class Drive(models.Model):
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        null=True, 
+        null=True,
         blank=True,
         related_name='drives',
         help_text="Obligatoire pour un drive personnel."
@@ -47,6 +47,14 @@ class Directory(models.Model):
     def __str__(self):
         return self.name
 
+    def get_full_path(self):
+        parts = []
+        directory = self
+        while directory:
+            parts.insert(0, directory.name)
+            directory = directory.parent
+        return os.path.join(*parts)
+
 class File(models.Model):
     name = models.CharField(max_length=255)
     directory = models.ForeignKey(
@@ -59,7 +67,7 @@ class File(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='files',
-        null=True,  # Permettre temporairement null pour la migration
+        null=True,
         blank=True
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
