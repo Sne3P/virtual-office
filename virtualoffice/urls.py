@@ -13,4 +13,5 @@ urlpatterns = [
     path('chatbot/', include('chatbot.urls')),
     path('weather/', include('weather.urls')),
     path('agenda/', include('agenda.urls')),
+    path('calculator/', include('calculator.urls')),
 ]
