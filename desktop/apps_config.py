@@ -38,6 +38,12 @@ APPS = [
         'icon': 'images/agenda.png',
         'url': '/agenda/',
     },
+    {
+        'id': 'calculator',
+        'name': 'Calculator',
+        'icon': 'images/calculator.png',
+        'url': '/calculator/',
+    },
     # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
     # {
     #     'id': 'notepad',
