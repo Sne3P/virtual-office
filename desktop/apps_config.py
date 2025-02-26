@@ -44,6 +44,12 @@ APPS = [
         'icon': 'images/calculator.png',
         'url': '/calculator/',
     },
+    {
+        'id': 'rpc',
+        'name': 'Rock Paper Scissors',
+        'icon': 'images/rpc.png',
+        'url': '/rpc/',
+    },
     # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
     # {
     #     'id': 'notepad',

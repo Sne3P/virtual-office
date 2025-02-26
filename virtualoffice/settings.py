@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'weather',
     'agenda',
     'calculator',
+    'rpc',
 ]
 
 MIDDLEWARE = [
