@@ -3,7 +3,7 @@
 {% block title %}Explorer - Virtual Office{% endblock %}
 {% block content %}
 <div id="explorer" class="glassmorphic">
-  <!-- En-tête supérieur avec drive et actions -->
+  <!-- En-tête supérieur -->
   <div id="explorer-header">
     <div id="drive-selector">
       {% for dt, drive in drives %}
@@ -20,35 +20,35 @@
       <a href="{% url 'explorer:create_directory' current_directory.id %}" class="action-btn" title="New Folder">
         <i class="fa-solid fa-folder-plus"></i>
       </a>
+      <!-- Toggle view button -->
+      <button id="toggle-view" class="action-btn" title="Toggle View">
+        {% if view_type == "list" %}
+          <i class="fa-solid fa-list"></i>
+        {% else %}
+          <i class="fa-solid fa-th"></i>
+        {% endif %}
+      </button>
       <a href="?sort=name" class="action-btn" title="Sort by Name">
         <i class="fa-solid fa-sort-alpha-down"></i>
       </a>
       <a href="?sort=uploaded_at" class="action-btn" title="Sort by Date">
         <i class="fa-solid fa-calendar"></i>
       </a>
+      <!-- Delete Selected -->
+      <form id="delete-selected-form" action="{% url 'explorer:delete_selected' current_directory.id %}" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="selected" id="delete-selected-input">
+      </form>
+      <button id="delete-selected-btn" class="action-btn" title="Delete Selected">
+        <i class="fa-solid fa-trash"></i>
+      </button>
     </div>
   </div>
-  
-<!-- Breadcrumbs améliorés -->
-<div id="explorer-breadcrumbs">
-  <span class="breadcrumb-driver">{{ current_directory.drive.name }}</span>
-  &gt;
-  {% if current_directory.drive.root and current_directory.drive.root.id %}
-    <a href="{% url 'explorer:view' current_directory.drive.root.id %}">Root</a>
-  {% else %}
-    <span>Root</span>
-  {% endif %}
-  {% for crumb in current_directory.get_ancestors %}
-    &gt; <a href="{% url 'explorer:view' crumb.id %}">{{ crumb.name }}</a>
-  {% endfor %}
-  &gt; <span class="breadcrumb-current">{{ current_directory.name }}</span>
-</div>
 
-  
   <div id="explorer-body">
-    <!-- Sidebar avec arborescence -->
+    <!-- Sidebar -->
     <div id="explorer-sidebar">
-      <h3>{{ current_directory.name }}</h3>
+      <h3>{{ current_directory.drive.name }}</h3>
       {% if current_directory.parent %}
         <a href="{% url 'explorer:view' current_directory.parent.id %}" class="btn-back">
           <i class="fa-solid fa-arrow-left"></i> Parent
@@ -58,26 +58,50 @@
         {% for sub in subdirectories %}
           <li>
             <a href="{% url 'explorer:view' sub.id %}">
-              <i class="fa-solid fa-folder"></i> {{ sub.name }}
+              <i class="fa-solid fa-folder"></i>
+              <span>{{ sub.name }}</span>
             </a>
           </li>
         {% endfor %}
       </ul>
     </div>
-    <!-- Zone principale affichant dossiers et fichiers -->
-    <div id="explorer-main">
+
+    <!-- Zone principale -->
+    <div id="explorer-main" class="{{ view_type }}-view">
+      <!-- Breadcrumbs placés en haut à gauche de la zone principale -->
+      <div id="explorer-breadcrumbs">
+        <a href="#" class="breadcrumb-root">{{ current_directory.drive.name }}</a>
+        {% for crumb in current_directory.get_ancestors %}
+          <span class="breadcrumb-sep">&gt;</span>
+          <a href="{% url 'explorer:view' crumb.id %}" class="breadcrumb-link">{{ crumb.name }}</a>
+        {% endfor %}
+        <span class="breadcrumb-sep">&gt;</span>
+        <span class="breadcrumb-current">{{ current_directory.name }}</span>
+      </div>
+      
+      <!-- Contenu explorer -->
       <div class="explorer-content">
         {% for sub in subdirectories %}
-          <div class="explorer-item folder-item" data-id="{{ sub.id }}">
+          <div class="explorer-item folder-item" data-id="{{ sub.id }}" data-type="directory" draggable="true">
             <i class="fa-solid fa-folder explorer-icon"></i>
-            <span class="item-title">{{ sub.name }}</span>
+            <div class="item-title">{{ sub.name }}</div>
           </div>
         {% endfor %}
         {% for file in files %}
-          <div class="explorer-item file-item" data-id="{{ file.id }}">
-            <i class="fa-solid fa-file explorer-icon"></i>
-            <span class="item-title">{{ file.name }}</span>
-            <span class="item-meta">{{ file.uploaded_at|date:"d/m/Y H:i" }} ({{ file.extension }})</span>
+          <div class="explorer-item file-item" data-id="{{ file.id }}" data-type="file" draggable="true">
+            {% if file.extension == ".txt" %}
+              <i class="fa-solid fa-file-lines explorer-icon"></i>
+            {% elif file.extension == ".pdf" %}
+              <i class="fa-solid fa-file-pdf explorer-icon"></i>
+            {% elif file.extension == ".jpg" or file.extension == ".jpeg" or file.extension == ".png" or file.extension == ".gif" %}
+              <i class="fa-solid fa-file-image explorer-icon"></i>
+            {% elif file.extension == ".mp4" or file.extension == ".avi" or file.extension == ".mov" %}
+              <i class="fa-solid fa-file-video explorer-icon"></i>
+            {% else %}
+              <i class="fa-solid fa-file explorer-icon"></i>
+            {% endif %}
+            <div class="item-title">{{ file.name }}</div>
+            <div class="item-meta">{{ file.uploaded_at|date:"d/m/Y H:i" }} ({{ file.extension }})</div>
           </div>
         {% endfor %}
       </div>
