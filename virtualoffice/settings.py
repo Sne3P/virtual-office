@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'chatbot',
     'weather',
     'agenda',
+    'calculator',
 ]
 
 MIDDLEWARE = [
