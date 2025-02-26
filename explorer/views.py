@@ -1,6 +1,6 @@
-import json
+import os, json
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from .models import Drive, Directory, File
 from .forms import FileUploadForm, DirectoryCreationForm, RenameForm, MoveForm, DeleteSelectedForm
@@ -38,7 +38,6 @@ def explorer_view(request, directory_id=None, drive_type=None):
         admin_drive = get_or_create_admin_drive()
         drives.append(('admin', admin_drive))
     
-    # Sélection du drive selon le paramètre drive_type
     if drive_type is None:
         selected_drive = personal_drive
         selected_drive_type = 'personal'
@@ -52,7 +51,6 @@ def explorer_view(request, directory_id=None, drive_type=None):
         root_directory = Directory.objects.create(name='Root', drive=selected_drive)
     current_directory = get_object_or_404(Directory, id=directory_id) if directory_id else root_directory
 
-    # Tri et mode de vue (grid ou list)
     sort_field = request.GET.get('sort', 'name')
     view_type = request.GET.get('view', 'grid')
     files = current_directory.files.all().order_by(sort_field)
@@ -71,21 +69,37 @@ def explorer_view(request, directory_id=None, drive_type=None):
 
 @login_required
 def upload_file(request, directory_id):
+    """
+    Upload de fichier.
+    Le nom du fichier sera celui de l'upload.
+    Si la requête est AJAX, renvoie un JSON.
+    """
     current_directory = get_object_or_404(Directory, id=directory_id)
     if request.method == 'POST':
-        form = FileUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            file_obj = form.save(commit=False)
-            file_obj.directory = current_directory
-            file_obj.owner = request.user
-            file_obj.save()
-            return redirect('explorer:view', directory_id=directory_id)
+        uploaded_file = request.FILES.get('file')
+        if uploaded_file:
+            new_file = File(
+                name=uploaded_file.name,
+                directory=current_directory,
+                owner=request.user,
+                file=uploaded_file
+            )
+            new_file.save()
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'file_id': new_file.id, 'name': new_file.name})
+            return redirect('explorer:view', directory_id=current_directory.id)
+        else:
+            return HttpResponseBadRequest("No file uploaded.")
     else:
         form = FileUploadForm()
     return render(request, 'explorer/upload_file.html', {'form': form, 'current_directory': current_directory})
 
 @login_required
 def create_directory(request, directory_id):
+    """
+    Création de dossier inline.
+    Si la requête est AJAX, renvoie un JSON indiquant le succès.
+    """
     current_directory = get_object_or_404(Directory, id=directory_id)
     if request.method == 'POST':
         form = DirectoryCreationForm(request.POST)
@@ -94,7 +108,12 @@ def create_directory(request, directory_id):
             dir_obj.parent = current_directory
             dir_obj.drive = current_directory.drive
             dir_obj.save()
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'directory_id': dir_obj.id, 'name': dir_obj.name})
             return redirect('explorer:view', directory_id=current_directory.id)
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = DirectoryCreationForm()
     return render(request, 'explorer/create_directory.html', {'form': form, 'current_directory': current_directory})
@@ -169,7 +188,7 @@ def delete_selected(request, directory_id):
     if request.method == 'POST':
         form = DeleteSelectedForm(request.POST)
         if form.is_valid():
-            selected_str = form.cleaned_data['selected']  # expected format: "file-12,directory-3,..."
+            selected_str = form.cleaned_data['selected']  # Format "file-12,directory-3,..."
             if selected_str:
                 entries = selected_str.split(',')
                 for entry in entries:

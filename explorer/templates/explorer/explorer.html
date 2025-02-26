@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% url 'explorer:create_directory' current_directory.id as create_directory_url %}
+{% url 'explorer:upload_file' current_directory.id as upload_file_url %}
+{% url 'explorer:delete_item' "TYPE_PLACEHOLDER" "ID_PLACEHOLDER" as delete_url_template %}
+{% url 'explorer:rename_item' "TYPE_PLACEHOLDER" "ID_PLACEHOLDER" as rename_url_template %}
+{% url 'explorer:move_item' "TYPE_PLACEHOLDER" "ID_PLACEHOLDER" as move_url_template %}
+
 {% block title %}Explorer - Virtual Office{% endblock %}
 {% block content %}
 <div id="explorer" class="glassmorphic">
@@ -14,12 +20,17 @@
       {% endfor %}
     </div>
     <div id="explorer-actions">
-      <a href="{% url 'explorer:upload_file' current_directory.id %}" class="action-btn" title="Upload File">
+      <a href="{{ upload_file_url }}" class="action-btn" title="Upload File">
         <i class="fa-solid fa-upload"></i>
       </a>
-      <a href="{% url 'explorer:create_directory' current_directory.id %}" class="action-btn" title="New Folder">
+      <!-- Bouton pour créer un dossier inline -->
+      <button id="new-folder-btn" class="action-btn" title="New Folder">
         <i class="fa-solid fa-folder-plus"></i>
-      </a>
+      </button>
+      <!-- Bouton pour créer un fichier inline -->
+      <button id="new-file-btn" class="action-btn" title="New File">
+        <i class="fa-solid fa-file-upload"></i>
+      </button>
       <!-- Toggle view button -->
       <button id="toggle-view" class="action-btn" title="Toggle View">
         {% if view_type == "list" %}
@@ -67,8 +78,8 @@
     </div>
 
     <!-- Zone principale -->
-    <div id="explorer-main" class="{{ view_type }}-view">
-      <!-- Breadcrumbs placés en haut à gauche de la zone principale -->
+    <div id="explorer-main" class="{{ view_type }}-view" data-create-directory-url="{{ create_directory_url }}" data-upload-file-url="{{ upload_file_url }}">
+      <!-- Breadcrumbs en haut à gauche, sans fond -->
       <div id="explorer-breadcrumbs">
         <a href="#" class="breadcrumb-root">{{ current_directory.drive.name }}</a>
         {% for crumb in current_directory.get_ancestors %}
@@ -108,5 +119,10 @@
     </div>
   </div>
 </div>
+<script>
+  var deleteUrlTemplate = "{{ delete_url_template }}";
+  var renameUrlTemplate = "{{ rename_url_template }}";
+  var moveUrlTemplate = "{{ move_url_template }}";
+</script>
 <script src="{% static 'js/explorer.js' %}"></script>
 {% endblock %}
