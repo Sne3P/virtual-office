@@ -46,7 +46,7 @@ APPS = [
     },
     {
       'id': 'musicplayer',
-      'name': 'Music Player',
+      'name': 'Music',
       'icon': 'images/musicplayer.png',
       'url': '/musicplayer/',
       
