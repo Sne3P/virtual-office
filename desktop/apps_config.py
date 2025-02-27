@@ -49,7 +49,12 @@ APPS = [
       'name': 'Music',
       'icon': 'images/musicplayer.png',
       'url': '/musicplayer/',
-      
+    },
+    {
+      'id': 'notepad',
+      'name': 'Notes',
+      'icon': 'images/notepad.png',
+      'url': '/notepad/',
     },
     # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
     # {

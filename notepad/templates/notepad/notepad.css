@@ -1,0 +1,46 @@
+.notepad-container {
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+#notes-list {
+    margin-top: 20px;
+}
+
+.note {
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.note-title {
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+}
+
+.note-content {
+    width: 100%;
+    height: 80px;
+    border: none;
+    background: transparent;
+    resize: none;
+}
+
+.delete-note {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
