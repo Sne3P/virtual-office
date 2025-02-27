@@ -56,11 +56,20 @@ APPS = [
       'icon': 'images/notepad.png',
       'url': '/notepad/',
     },
-    # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
-    # {
-    #     'id': 'notepad',
-    #     'name': 'Notepad',
-    #     'icon': 'images/notepad.png',
-    #     'url': '/notepad/',
-    # },
+    {
+      'id': 'gaming',
+      'name': 'Spacegame',
+      'icon': 'images/gaming.png',
+      'url': '/gaming/',
+      
+    },
+    {
+      'id': 'notepad',
+      'name': 'Notepad',
+      'icon': 'images/notepad.png',
+      'url': '/notepad/',
+              
+    },
+    
+    
 ]

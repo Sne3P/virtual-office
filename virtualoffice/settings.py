@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'agenda',
     'calculator',
     'musicplayer',
+    'gaming',
     'notepad',
 ]
 
