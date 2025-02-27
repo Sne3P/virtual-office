@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Bloc-notes{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/notepad.css' %}">
+<script src="{% static 'js/notepad.js' %}" defer></script>
+
+<div class="notepad-container">
+    <h1>📝 Bloc-notes</h1>
+    <button id="new-note-btn">Nouvelle Note</button>
+    
+    <div id="notes-list">
+        {% for note in notes %}
+        <div class="note" data-id="{{ note.id }}">
+            <input class="note-title" value="{{ note.title }}">
+            <textarea class="note-content">{{ note.content }}</textarea>
+            <button class="delete-note">🗑 Supprimer</button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

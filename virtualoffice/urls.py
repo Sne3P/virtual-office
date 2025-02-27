@@ -15,4 +15,6 @@ urlpatterns = [
     path('agenda/', include('agenda.urls')),
     path('calculator/', include('calculator.urls')),
     path('musicplayer/', include('musicplayer.urls')),
+    path('gaming/', include('gaming.urls')),
+    path('notepad/', include('notepad.urls')),
 ]
