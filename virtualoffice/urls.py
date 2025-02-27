@@ -6,7 +6,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/desktop/', permanent=False)),  # Redirige la racine vers /desktop/
     path('accounts/', include('accounts.urls')),
-    path('explorer/', include('explorer.urls')),
+    path('explorer/', include('explorer.urls', namespace='explorer')),
     path('terminal/', include('terminal.urls')),
     path('desktop/', include('desktop.urls')),
     path('clock/', include('clock.urls')),

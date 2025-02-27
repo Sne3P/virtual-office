@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% url 'explorer:create_directory' current_directory.id as create_directory_url %}
 {% url 'explorer:upload_file' current_directory.id as upload_file_url %}
-{% url 'explorer:delete_item' "TYPE_PLACEHOLDER" "ID_PLACEHOLDER" as delete_url_template %}
-{% url 'explorer:rename_item' "TYPE_PLACEHOLDER" "ID_PLACEHOLDER" as rename_url_template %}
-{% url 'explorer:move_item' "TYPE_PLACEHOLDER" "ID_PLACEHOLDER" as move_url_template %}
+{% url 'explorer:delete_item' "__TYPE__" "__ID__" as delete_url_template %}
+{% url 'explorer:rename_item' "__TYPE__" "__ID__" as rename_url_template %}
+{% url 'explorer:move_item' "__TYPE__" "__ID__" as move_url_template %}
 
 {% block title %}Explorer - Virtual Office{% endblock %}
 {% block content %}
 <div id="explorer" class="glassmorphic">
-  <!-- En-tête supérieur -->
+  <!-- Header -->
   <div id="explorer-header">
     <div id="drive-selector">
       {% for dt, drive in drives %}
-        <a href="{% url 'explorer:view_by_drive' dt %}" class="drive-link {% if dt == selected_drive_type %}active{% endif %}">
+        <a href="{% url 'explorer:explorer_view' dt %}" class="drive-link {% if dt == drive_type %}active{% endif %}">
           <i class="fa-solid {% if dt == 'personal' %}fa-user{% elif dt == 'common' %}fa-users{% else %}fa-shield-halved{% endif %}"></i>
           {{ drive.name }}
         </a>
@@ -23,15 +24,13 @@
       <a href="{{ upload_file_url }}" class="action-btn" title="Upload File">
         <i class="fa-solid fa-upload"></i>
       </a>
-      <!-- Bouton pour créer un dossier inline -->
+      <!-- Bouton pour lancer la création inline -->
       <button id="new-folder-btn" class="action-btn" title="New Folder">
         <i class="fa-solid fa-folder-plus"></i>
       </button>
-      <!-- Bouton pour créer un fichier inline -->
       <button id="new-file-btn" class="action-btn" title="New File">
         <i class="fa-solid fa-file-upload"></i>
       </button>
-      <!-- Toggle view button -->
       <button id="toggle-view" class="action-btn" title="Toggle View">
         {% if view_type == "list" %}
           <i class="fa-solid fa-list"></i>
@@ -45,7 +44,6 @@
       <a href="?sort=uploaded_at" class="action-btn" title="Sort by Date">
         <i class="fa-solid fa-calendar"></i>
       </a>
-      <!-- Delete Selected -->
       <form id="delete-selected-form" action="{% url 'explorer:delete_selected' current_directory.id %}" method="post" style="display:none;">
         {% csrf_token %}
         <input type="hidden" name="selected" id="delete-selected-input">
@@ -55,20 +53,20 @@
       </button>
     </div>
   </div>
-
+  <!-- Conteneur principal -->
   <div id="explorer-body">
     <!-- Sidebar -->
     <div id="explorer-sidebar">
       <h3>{{ current_directory.drive.name }}</h3>
       {% if current_directory.parent %}
-        <a href="{% url 'explorer:view' current_directory.parent.id %}" class="btn-back">
+        <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type current_directory.parent.id %}" class="btn-back">
           <i class="fa-solid fa-arrow-left"></i> Parent
         </a>
       {% endif %}
       <ul>
         {% for sub in subdirectories %}
           <li>
-            <a href="{% url 'explorer:view' sub.id %}">
+            <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type sub.id %}">
               <i class="fa-solid fa-folder"></i>
               <span>{{ sub.name }}</span>
             </a>
@@ -76,37 +74,46 @@
         {% endfor %}
       </ul>
     </div>
-
     <!-- Zone principale -->
-    <div id="explorer-main" class="{{ view_type }}-view" data-create-directory-url="{{ create_directory_url }}" data-upload-file-url="{{ upload_file_url }}">
-      <!-- Breadcrumbs en haut à gauche, sans fond -->
+    <div id="explorer-main" class="{{ view_type }}-view"
+         data-create-directory-url="{{ create_directory_url }}"
+         data-upload-file-url="{{ upload_file_url }}"
+         data-drive-type="{{ drive_type }}">
+      <!-- Breadcrumbs -->
       <div id="explorer-breadcrumbs">
-        <a href="#" class="breadcrumb-root">{{ current_directory.drive.name }}</a>
+        <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type %}" class="breadcrumb-root">{{ current_directory.drive.name }}</a>
         {% for crumb in current_directory.get_ancestors %}
           <span class="breadcrumb-sep">&gt;</span>
-          <a href="{% url 'explorer:view' crumb.id %}" class="breadcrumb-link">{{ crumb.name }}</a>
+          <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type crumb.id %}" class="breadcrumb-link">{{ crumb.name }}</a>
         {% endfor %}
         <span class="breadcrumb-sep">&gt;</span>
         <span class="breadcrumb-current">{{ current_directory.name }}</span>
       </div>
-      
-      <!-- Contenu explorer -->
+      <!-- Contenu de l'explorer -->
       <div class="explorer-content">
         {% for sub in subdirectories %}
-          <div class="explorer-item folder-item" data-id="{{ sub.id }}" data-type="directory" draggable="true">
+          <div class="explorer-item folder-item" 
+               data-id="{{ sub.id }}" 
+               data-type="directory"
+               data-rename-url="{% url 'explorer:rename_item' 'directory' sub.id %}"
+               draggable="true">
             <i class="fa-solid fa-folder explorer-icon"></i>
             <div class="item-title">{{ sub.name }}</div>
           </div>
         {% endfor %}
         {% for file in files %}
-          <div class="explorer-item file-item" data-id="{{ file.id }}" data-type="file" draggable="true">
-            {% if file.extension == ".txt" %}
+          <div class="explorer-item file-item" 
+               data-id="{{ file.id }}" 
+               data-type="file"
+               data-rename-url="{% url 'explorer:rename_item' 'file' file.id %}"
+               draggable="true">
+            {% if file.extension|lower == ".txt" %}
               <i class="fa-solid fa-file-lines explorer-icon"></i>
-            {% elif file.extension == ".pdf" %}
+            {% elif file.extension|lower == ".pdf" %}
               <i class="fa-solid fa-file-pdf explorer-icon"></i>
-            {% elif file.extension == ".jpg" or file.extension == ".jpeg" or file.extension == ".png" or file.extension == ".gif" %}
+            {% elif file.extension|lower in ".jpg .jpeg .png .gif" %}
               <i class="fa-solid fa-file-image explorer-icon"></i>
-            {% elif file.extension == ".mp4" or file.extension == ".avi" or file.extension == ".mov" %}
+            {% elif file.extension|lower in ".mp4 .avi .mov" %}
               <i class="fa-solid fa-file-video explorer-icon"></i>
             {% else %}
               <i class="fa-solid fa-file explorer-icon"></i>

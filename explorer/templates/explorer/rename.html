@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Renommer l'{{ item_type }}{% endblock %}
+{% block content %}
+  <h1>Renommer {{ item_type }}: {{ item.name }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Valider</button>
+    <a href="{% url 'explorer:explorer_view' item.directory.drive.drive_type item.directory.id %}">Annuler</a>
+  </form>
+{% endblock %}

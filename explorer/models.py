@@ -55,6 +55,19 @@ class Directory(models.Model):
             directory = directory.parent
         return os.path.join(*parts)
 
+    def get_url_path(self):
+        # Pour notre système, on renvoie simplement l'ID sous forme de chaîne.
+        return str(self.id)
+
+    def get_ancestors_list(self):
+        """Retourne la liste des ancêtres depuis la racine jusqu'à ce répertoire."""
+        ancestors = []
+        current = self
+        while current:
+            ancestors.insert(0, current)
+            current = current.parent
+        return ancestors
+
 class File(models.Model):
     name = models.CharField(max_length=255)
     directory = models.ForeignKey(

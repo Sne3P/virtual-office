@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Toggle view: grid <-> list via URL redirection
-  const toggleViewBtn = document.getElementById('toggle-view');
   const explorerMain = document.getElementById('explorer-main');
+  const driveType = explorerMain.getAttribute('data-drive-type');
+
+  // Toggle view
+  const toggleViewBtn = document.getElementById('toggle-view');
   toggleViewBtn.addEventListener('click', function() {
     const url = new URL(window.location.href);
     if (explorerMain.classList.contains('grid-view')) {
@@ -14,21 +16,75 @@ document.addEventListener('DOMContentLoaded', function() {
     window.location.href = url.toString();
   });
 
-  // Bouton "New Folder" déclenche la création inline d'un dossier
+  // New Folder button: déclenche la création inline
   const newFolderBtn = document.getElementById('new-folder-btn');
   newFolderBtn.addEventListener('click', function(e) {
     e.preventDefault();
     createInlineFolder();
   });
 
-  // Bouton "New File" déclenche la création inline d'un fichier
+  // New File button
   const newFileBtn = document.getElementById('new-file-btn');
   newFileBtn.addEventListener('click', function(e) {
     e.preventDefault();
     createInlineFile();
   });
 
-  // Fonction de création inline d'un dossier
+  // Fonction de renommage inline
+  function inlineRename(item) {
+    const titleElem = item.querySelector('.item-title');
+    const currentName = titleElem.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentName;
+    input.className = 'inline-rename-input';
+    titleElem.innerHTML = '';
+    titleElem.appendChild(input);
+    input.focus();
+
+    function submitRename() {
+      const newName = input.value.trim();
+      // Si vide ou inchangé, on restaure l'ancien nom
+      if(newName === '' || newName === currentName) {
+        titleElem.textContent = currentName;
+        return;
+      }
+      const formData = new FormData();
+      formData.append('new_name', newName);
+      formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+      const renameUrl = item.getAttribute('data-rename-url');
+      fetch(renameUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.success){
+          titleElem.textContent = data.new_name;
+        } else {
+          alert('Erreur de renommage: ' + JSON.stringify(data.errors));
+          titleElem.textContent = currentName;
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        titleElem.textContent = currentName;
+      });
+    }
+
+    input.addEventListener('keydown', function(e) {
+      if(e.key === 'Enter'){
+        submitRename();
+      }
+      if(e.key === 'Escape'){
+        titleElem.textContent = currentName;
+      }
+    });
+    input.addEventListener('blur', submitRename);
+  }
+
+  // Création inline d'un dossier (envoi via fetch)
   function createInlineFolder() {
     if (document.querySelector('.explorer-item.new-folder')) return;
     const explorerContent = document.querySelector('#explorer-main .explorer-content');
@@ -46,12 +102,12 @@ document.addEventListener('DOMContentLoaded', function() {
     explorerContent.appendChild(newFolderDiv);
     input.focus();
 
+    let submitted = false;
     function finishFolderCreation() {
+      if (submitted) return;
+      submitted = true;
       const name = input.value.trim();
-      if (name === '') {
-        newFolderDiv.remove();
-        return;
-      }
+      if (!name) { newFolderDiv.remove(); return; }
       const formData = new FormData();
       formData.append('name', name);
       formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
@@ -66,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data.success) {
           window.location.reload();
         } else {
-          alert('Error creating folder.');
+          alert('Error creating folder: ' + JSON.stringify(data.errors));
           newFolderDiv.remove();
         }
       })
@@ -81,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     input.addEventListener('blur', finishFolderCreation);
   }
 
-  // Fonction de création inline d'un fichier
+  // Création inline d'un fichier
   function createInlineFile() {
     if (document.querySelector('.explorer-item.new-file')) return;
     const explorerContent = document.querySelector('#explorer-main .explorer-content');
@@ -98,12 +154,9 @@ document.addEventListener('DOMContentLoaded', function() {
     explorerContent.appendChild(newFileDiv);
     input.focus();
 
-    input.addEventListener('change', function(e) {
+    input.addEventListener('change', function() {
       const file = input.files[0];
-      if (!file) {
-        newFileDiv.remove();
-        return;
-      }
+      if (!file) { newFileDiv.remove(); return; }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
@@ -115,12 +168,8 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
-          window.location.reload();
-        } else {
-          alert('Error uploading file.');
-          newFileDiv.remove();
-        }
+        if (data.success) { window.location.reload(); }
+        else { alert('Error uploading file.'); newFileDiv.remove(); }
       })
       .catch(error => {
         console.error(error);
@@ -128,20 +177,18 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
     input.addEventListener('blur', function() {
-      if (!input.files || !input.files[0]) {
-        newFileDiv.remove();
-      }
+      if (!input.files || !input.files[0]) { newFileDiv.remove(); }
     });
   }
 
-  // Utility: obtenir le CSRF token depuis les cookies
+  // Utilitaire: récupérer le CSRF token depuis les cookies
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
       const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
           break;
         }
@@ -150,20 +197,18 @@ document.addEventListener('DOMContentLoaded', function() {
     return cookieValue;
   }
 
-  // Initialiser le SelectionManager sur toute la zone principale
+  // Initialisation du SelectionManager (assurez-vous que la classe SelectionManager est disponible)
   const explorerMainEl = document.getElementById('explorer-main');
-  if (explorerMainEl) {
+  if (explorerMainEl && window.SelectionManager) {
     window.explorerSelectionManager = new SelectionManager(
       explorerMainEl,
       '.explorer-item',
-      function(selectedItems) {
-        console.log('Selected items:', selectedItems);
-      },
+      function(selectedItems) { console.log('Selected items:', selectedItems); },
       { exclusionSelectors: ['#explorer-actions', '#drive-selector', '#explorer-breadcrumbs'] }
     );
   }
 
-  // Drag & Drop pour réarranger les éléments
+  // Drag & Drop
   let dragSrcEl = null;
   function handleDragStart(e) {
     dragSrcEl = this;
@@ -176,12 +221,8 @@ document.addEventListener('DOMContentLoaded', function() {
     e.dataTransfer.dropEffect = 'move';
     return false;
   }
-  function handleDragEnter(e) {
-    this.classList.add('over');
-  }
-  function handleDragLeave(e) {
-    this.classList.remove('over');
-  }
+  function handleDragEnter(e) { this.classList.add('over'); }
+  function handleDragLeave(e) { this.classList.remove('over'); }
   function handleDrop(e) {
     if (e.stopPropagation) e.stopPropagation();
     if (dragSrcEl !== this) {
@@ -189,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
       dragSrcEl.outerHTML = this.outerHTML;
       this.outerHTML = srcHTML;
       initDraggableItems();
-      // Optionnel : envoyer l'ordre mis à jour au backend
     }
     return false;
   }
@@ -210,27 +250,28 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   initDraggableItems();
 
-  // URL templates pour actions contextuelles (injectées depuis le template)
+  // URL templates pour les menus contextuels (définis dans le template)
   var deleteUrlTemplate = window.deleteUrlTemplate || "";
   var renameUrlTemplate = window.renameUrlTemplate || "";
   var moveUrlTemplate = window.moveUrlTemplate || "";
 
-  // Attacher les menus contextuels aux items et au fond
+  // Attacher les menus contextuels
   function attachContextMenus() {
     document.querySelectorAll('.explorer-item').forEach(item => {
       item.addEventListener('contextmenu', function(e) {
         e.preventDefault();
         e.stopPropagation();
         document.querySelectorAll('.context-menu').forEach(menu => menu.remove());
-        const itemTitle = item.querySelector('.item-title').textContent;
-        const itemType = item.getAttribute('data-type');
+        const title = item.querySelector('.item-title').textContent;
+        const type = item.getAttribute('data-type');
+        const itemId = item.getAttribute('data-id');
         const menuItems = [
           {
             label: 'Delete',
             action: function() {
-              if (confirm('Delete "' + itemTitle + '"?')) {
-                var url = deleteUrlTemplate.replace("TYPE_PLACEHOLDER", itemType)
-                                             .replace("ID_PLACEHOLDER", item.getAttribute('data-id'));
+              if (confirm('Delete "' + title + '"?')) {
+                var url = deleteUrlTemplate.replace("__TYPE__", type)
+                                             .replace("__ID__", itemId);
                 window.location.href = url;
               }
             }
@@ -238,59 +279,45 @@ document.addEventListener('DOMContentLoaded', function() {
           {
             label: 'Rename',
             action: function() {
-              window.location.href = renameUrlTemplate.replace("TYPE_PLACEHOLDER", itemType)
-                                                      .replace("ID_PLACEHOLDER", item.getAttribute('data-id'));
+              inlineRename(item);
             }
           }
         ];
-        if (itemType === 'directory') {
+        if (type === 'directory') {
           menuItems.push({
             label: 'Open Folder',
             action: function() {
-              window.location.href = "directory/" + item.getAttribute('data-id') + "/";
+              window.location.href = "/drive/" + driveType + "/directory/" + itemId + "/";
             }
           });
         }
         menuItems.push({
           label: 'Move',
           action: function() {
-            window.location.href = moveUrlTemplate.replace("TYPE_PLACEHOLDER", itemType)
-                                                  .replace("ID_PLACEHOLDER", item.getAttribute('data-id'));
+            window.location.href = moveUrlTemplate.replace("__TYPE__", type)
+                                                  .replace("__ID__", itemId);
           }
         });
         const menu = new ContextMenu(menuItems, { animate: true });
         menu.show(e.pageX, e.pageY);
       });
     });
-
-    // Menu contextuel sur le fond de la zone principale
+    // Menu contextuel sur le fond
     explorerMainEl.addEventListener('contextmenu', function(e) {
       if (e.target.closest('.explorer-item')) return;
       e.preventDefault();
       e.stopPropagation();
       document.querySelectorAll('.context-menu').forEach(menu => menu.remove());
       const menuItems = [
-        {
-          label: 'Deselect All',
-          action: function() {
+        { label: 'Deselect All', action: function() {
             if (window.explorerSelectionManager) {
               window.explorerSelectionManager._clearSelection();
               window.explorerSelectionManager.onSelect([]);
             }
           }
         },
-        {
-          label: 'New Folder',
-          action: function() {
-            createInlineFolder();
-          }
-        },
-        {
-          label: 'New File',
-          action: function() {
-            createInlineFile();
-          }
-        }
+        { label: 'New Folder', action: createInlineFolder },
+        { label: 'New File', action: createInlineFile }
       ];
       const menu = new ContextMenu(menuItems, { animate: true });
       menu.show(e.pageX, e.pageY);
@@ -298,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   attachContextMenus();
 
-  // Global click: fermer les context menus et désélectionner si clic en dehors
+  // Fermeture globale des menus contextuels et réinitialisation de la sélection
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.context-menu')) {
       document.querySelectorAll('.context-menu').forEach(menu => menu.remove());
@@ -311,27 +338,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Double-clic pour ouvrir un dossier (redirige vers "directory/<id>/")
+  // Double-click pour ouvrir un dossier
   explorerMainEl.addEventListener('dblclick', function(e) {
     const item = e.target.closest('.explorer-item');
     if (item && item.getAttribute('data-type') === 'directory') {
-      window.location.href = "directory/" + item.getAttribute('data-id') + "/";
+      window.location.href = "/drive/" + driveType + "/directory/" + item.getAttribute('data-id') + "/";
     }
   });
 
-  // Delete Selected: soumettre le formulaire caché avec les IDs sélectionnés
+  // Bouton Delete Selected: envoi via fetch
   const deleteSelectedBtn = document.getElementById('delete-selected-btn');
   deleteSelectedBtn.addEventListener('click', function() {
     if (window.explorerSelectionManager) {
-      const selectedItems = Array.from(window.explorerSelectionManager.selectedElements);
-      if (selectedItems.length === 0) {
-        alert('No items selected.');
-        return;
-      }
-      if (!confirm('Delete ' + selectedItems.length + ' selected item(s)?')) return;
-      const selectedStr = selectedItems.map(el => el.getAttribute('data-type') + '-' + el.getAttribute('data-id')).join(',');
-      document.getElementById('delete-selected-input').value = selectedStr;
-      document.getElementById('delete-selected-form').submit();
+      const selected = Array.from(window.explorerSelectionManager.selectedElements);
+      if (selected.length === 0) { alert('No items selected.'); return; }
+      if (!confirm('Delete ' + selected.length + ' selected item(s)?')) return;
+      const selStr = selected.map(el => el.getAttribute('data-type') + '-' + el.getAttribute('data-id')).join(',');
+      const formData = new FormData();
+      formData.append('selected', selStr);
+      formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+      const deleteUrl = document.getElementById('delete-selected-form').action;
+      fetch(deleteUrl, {
+         method: 'POST',
+         body: formData,
+         headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(response => response.json())
+      .then(data => {
+         if (data.success) {
+             window.location.reload();
+         } else {
+             alert('Error deleting selected items.');
+         }
+      })
+      .catch(error => console.error(error));
     }
   });
 });

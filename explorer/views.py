@@ -1,210 +1,184 @@
-import os, json
+import os
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import Drive, Directory, File
 from .forms import FileUploadForm, DirectoryCreationForm, RenameForm, MoveForm, DeleteSelectedForm
 
-def get_or_create_personal_drive(user):
-    drive, _ = Drive.objects.get_or_create(
-        owner=user, drive_type='personal',
-        defaults={'name': f"{user.username}'s Drive"}
-    )
+def get_or_create_drive(user, drive_type):
+    if drive_type == 'personal':
+        drive, _ = Drive.objects.get_or_create(
+            drive_type='personal', owner=user,
+            defaults={'name': f"{user.username}'s Drive"}
+        )
+    elif drive_type == 'common':
+        drive, _ = Drive.objects.get_or_create(
+            drive_type='common',
+            defaults={'name': 'Common Drive'}
+        )
+    elif drive_type == 'admin':
+        if not user.is_staff:
+            return None
+        drive, _ = Drive.objects.get_or_create(
+            drive_type='admin',
+            defaults={'name': 'Admin Drive'}
+        )
+    else:
+        drive = None
     return drive
 
-def get_or_create_common_drive():
-    drive, _ = Drive.objects.get_or_create(
-        drive_type='common',
-        defaults={'name': 'Common Drive'}
-    )
-    return drive
-
-def get_or_create_admin_drive():
-    drive, _ = Drive.objects.get_or_create(
-        drive_type='admin',
-        defaults={'name': 'Admin Drive'}
-    )
-    return drive
+def get_root_directory(drive):
+    root = drive.directories.filter(parent__isnull=True).first()
+    if not root:
+        root = Directory.objects.create(name='Root', drive=drive)
+    return root
 
 @login_required
-def explorer_view(request, directory_id=None, drive_type=None):
-    user = request.user
-    drives = []
-    personal_drive = get_or_create_personal_drive(user)
-    common_drive = get_or_create_common_drive()
-    drives.append(('personal', personal_drive))
-    drives.append(('common', common_drive))
-    if user.is_staff:
-        admin_drive = get_or_create_admin_drive()
-        drives.append(('admin', admin_drive))
-    
-    if drive_type is None:
-        selected_drive = personal_drive
-        selected_drive_type = 'personal'
-    else:
-        selected_drive = next((d for dt, d in drives if dt == drive_type), personal_drive)
-        selected_drive_type = drive_type
+def explorer_view(request, drive_type, directory_id=None):
+    drive = get_or_create_drive(request.user, drive_type)
+    if drive is None:
+        return HttpResponseBadRequest("Drive inaccessible.")
+    root = get_root_directory(drive)
+    current = get_object_or_404(Directory, id=directory_id) if directory_id else root
 
-    # Récupération ou création du dossier racine pour le drive sélectionné
-    root_directory = Directory.objects.filter(drive=selected_drive, parent__isnull=True).first()
-    if not root_directory:
-        root_directory = Directory.objects.create(name='Root', drive=selected_drive)
-    current_directory = get_object_or_404(Directory, id=directory_id) if directory_id else root_directory
+    # Génère les URL en passant uniquement l'argument 'directory_id'
+    create_directory_url = reverse('explorer:create_directory', kwargs={'directory_id': current.id})
+    upload_file_url = reverse('explorer:upload_file', kwargs={'directory_id': current.id})
 
     sort_field = request.GET.get('sort', 'name')
     view_type = request.GET.get('view', 'grid')
-    files = current_directory.files.all().order_by(sort_field)
-    subdirectories = current_directory.subdirectories.all().order_by('name')
-    
     context = {
-        'current_directory': current_directory,
-        'subdirectories': subdirectories,
-        'files': files,
-        'drives': drives,
-        'selected_drive_type': selected_drive_type,
-        'sort_field': sort_field,
+        'current_directory': current,
+        'subdirectories': current.subdirectories.all().order_by('name'),
+        'files': current.files.all().order_by(sort_field),
+        'drive_type': drive_type,
         'view_type': view_type,
+        'create_directory_url': create_directory_url,
+        'upload_file_url': upload_file_url,
+        # Veillez à fournir "drives" dans le contexte (via context processor ou ajout ici)
     }
     return render(request, 'explorer/explorer.html', context)
 
 @login_required
-def upload_file(request, directory_id):
-    """
-    Upload de fichier.
-    Le nom du fichier sera celui de l'upload.
-    Si la requête est AJAX, renvoie un JSON.
-    """
-    current_directory = get_object_or_404(Directory, id=directory_id)
-    if request.method == 'POST':
-        uploaded_file = request.FILES.get('file')
-        if uploaded_file:
-            new_file = File(
-                name=uploaded_file.name,
-                directory=current_directory,
-                owner=request.user,
-                file=uploaded_file
-            )
-            new_file.save()
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'file_id': new_file.id, 'name': new_file.name})
-            return redirect('explorer:view', directory_id=current_directory.id)
-        else:
-            return HttpResponseBadRequest("No file uploaded.")
-    else:
-        form = FileUploadForm()
-    return render(request, 'explorer/upload_file.html', {'form': form, 'current_directory': current_directory})
-
-@login_required
 def create_directory(request, directory_id):
-    """
-    Création de dossier inline.
-    Si la requête est AJAX, renvoie un JSON indiquant le succès.
-    """
-    current_directory = get_object_or_404(Directory, id=directory_id)
+    current = get_object_or_404(Directory, id=directory_id)
     if request.method == 'POST':
         form = DirectoryCreationForm(request.POST)
         if form.is_valid():
-            dir_obj = form.save(commit=False)
-            dir_obj.parent = current_directory
-            dir_obj.drive = current_directory.drive
-            dir_obj.save()
+            new_dir = form.save(commit=False)
+            new_dir.parent = current
+            new_dir.drive = current.drive
+            new_dir.save()
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'directory_id': dir_obj.id, 'name': dir_obj.name})
-            return redirect('explorer:view', directory_id=current_directory.id)
+                return JsonResponse({'success': True, 'directory_id': new_dir.id, 'name': new_dir.name})
+            return redirect('explorer:explorer_view', drive_type=current.drive.drive_type, directory_id=current.id)
         else:
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = DirectoryCreationForm()
-    return render(request, 'explorer/create_directory.html', {'form': form, 'current_directory': current_directory})
+    return render(request, 'explorer/create_directory.html', {'form': form, 'current_directory': current})
+
+@login_required
+def upload_file(request, directory_id):
+    current = get_object_or_404(Directory, id=directory_id)
+    if request.method == 'POST':
+        f = request.FILES.get('file')
+        if f:
+            new_file = File.objects.create(
+                name=f.name,
+                directory=current,
+                owner=request.user,
+                file=f
+            )
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'file_id': new_file.id, 'name': new_file.name})
+            return redirect('explorer:explorer_view', drive_type=current.drive.drive_type, directory_id=current.id)
+        return HttpResponseBadRequest("Aucun fichier envoyé.")
+    form = FileUploadForm()
+    return render(request, 'explorer/upload_file.html', {'form': form, 'current_directory': current})
 
 @login_required
 def rename_item(request, item_type, item_id):
+    # Renommage inline : on ne gère que POST
     if item_type == 'directory':
         item = get_object_or_404(Directory, id=item_id)
-        redirect_dir = item.parent.id if item.parent else item.drive.directories.filter(parent__isnull=True).first().id
     elif item_type == 'file':
         item = get_object_or_404(File, id=item_id)
-        redirect_dir = item.directory.id
     else:
-        return HttpResponseBadRequest("Invalid item type.")
-    
+        return HttpResponseBadRequest("Type d'item invalide.")
     if request.method == 'POST':
         form = RenameForm(request.POST)
         if form.is_valid():
             item.name = form.cleaned_data['new_name']
             item.save()
-            return redirect('explorer:view', directory_id=redirect_dir)
-    else:
-        form = RenameForm(initial={'new_name': item.name})
-    return render(request, 'explorer/rename_item.html', {'form': form, 'item': item, 'item_type': item_type})
+            return JsonResponse({'success': True, 'new_name': item.name})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    return HttpResponseBadRequest("GET non autorisé pour le renommage.")
 
 @login_required
 def delete_item(request, item_type, item_id):
     if item_type == 'directory':
         item = get_object_or_404(Directory, id=item_id)
-        parent_dir = item.parent if item.parent else item.drive.directories.filter(parent__isnull=True).first()
+        parent = item.parent if item.parent else get_root_directory(item.drive)
     elif item_type == 'file':
         item = get_object_or_404(File, id=item_id)
-        parent_dir = item.directory
+        parent = item.directory
     else:
-        return HttpResponseBadRequest("Invalid item type.")
-    
-    if request.method == 'POST':
-        item.delete()
-        return redirect('explorer:view', directory_id=parent_dir.id if parent_dir else None)
-    return render(request, 'explorer/delete_item.html', {'item': item, 'item_type': item_type})
+        return HttpResponseBadRequest("Type d'item invalide.")
+    item.delete()
+    return redirect('explorer:explorer_view', drive_type=parent.drive.drive_type, directory_id=parent.id)
 
 @login_required
 def move_item(request, item_type, item_id):
     if item_type == 'directory':
         item = get_object_or_404(Directory, id=item_id)
         drive = item.drive
-        redirect_dir = item.parent.id if item.parent else item.drive.directories.filter(parent__isnull=True).first().id
+        redirect_id = item.parent.id if item.parent else get_root_directory(drive).id
     elif item_type == 'file':
         item = get_object_or_404(File, id=item_id)
         drive = item.directory.drive
-        redirect_dir = item.directory.id
+        redirect_id = item.directory.id
     else:
-        return HttpResponseBadRequest("Invalid item type.")
-    
+        return HttpResponseBadRequest("Type d'item invalide.")
     if request.method == 'POST':
         form = MoveForm(drive, request.POST)
         if form.is_valid():
-            target_directory = form.cleaned_data['target_directory']
+            target = form.cleaned_data['target_directory']
             if item_type == 'directory':
-                item.parent = target_directory
+                item.parent = target
             else:
-                item.directory = target_directory
+                item.directory = target
             item.save()
-            return redirect('explorer:view', directory_id=target_directory.id)
+            return redirect('explorer:explorer_view', drive_type=drive.drive_type, directory_id=target.id)
     else:
         form = MoveForm(drive)
     return render(request, 'explorer/move_item.html', {'form': form, 'item': item, 'item_type': item_type})
 
 @login_required
 def delete_selected(request, directory_id):
-    current_directory = get_object_or_404(Directory, id=directory_id)
+    current = get_object_or_404(Directory, id=directory_id)
     if request.method == 'POST':
         form = DeleteSelectedForm(request.POST)
         if form.is_valid():
-            selected_str = form.cleaned_data['selected']  # Format "file-12,directory-3,..."
-            if selected_str:
-                entries = selected_str.split(',')
-                for entry in entries:
-                    try:
-                        item_type, item_id = entry.split('-')
-                        if item_type == 'file':
-                            item = File.objects.filter(id=item_id, directory=current_directory).first()
-                        elif item_type == 'directory':
-                            item = Directory.objects.filter(id=item_id, parent=current_directory).first()
-                        else:
-                            continue
-                        if item:
-                            item.delete()
-                    except Exception as ex:
-                        print("Error deleting", entry, ex)
-            return redirect('explorer:view', directory_id=directory_id)
+            for entry in form.cleaned_data['selected'].split(','):
+                try:
+                    item_type, item_id = entry.split('-')
+                    if item_type == 'file':
+                        obj = File.objects.filter(id=item_id, directory=current).first()
+                    elif item_type == 'directory':
+                        obj = Directory.objects.filter(id=item_id, parent=current).first()
+                    else:
+                        continue
+                    if obj:
+                        obj.delete()
+                except Exception as ex:
+                    print("Erreur lors de la suppression de", entry, ex)
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True})
+            return redirect('explorer:explorer_view', drive_type=current.drive.drive_type, directory_id=current.id)
     else:
         form = DeleteSelectedForm()
-    return render(request, 'explorer/delete_selected.html', {'form': form, 'current_directory': current_directory})
+    return render(request, 'explorer/delete_selected.html', {'form': form, 'current_directory': current})
