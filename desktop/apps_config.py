@@ -49,7 +49,12 @@ APPS = [
       'name': 'Music',
       'icon': 'images/musicplayer.png',
       'url': '/musicplayer/',
-      
+    },
+    {
+      'id': 'notepad',
+      'name': 'Notes',
+      'icon': 'images/notepad.png',
+      'url': '/notepad/',
     },
     {
       'id': 'gaming',
