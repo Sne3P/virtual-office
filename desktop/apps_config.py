@@ -44,6 +44,13 @@ APPS = [
         'icon': 'images/calculator.png',
         'url': '/calculator/',
     },
+    {
+      'id': 'musicplayer',
+      'name': 'Music Player',
+      'icon': 'images/musicplayer.png',
+      'url': '/musicplayer/',
+      
+    },
     # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
     # {
     #     'id': 'notepad',

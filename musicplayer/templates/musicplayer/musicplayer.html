@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Music Player{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="title">🎵 Music Player 🎵</h1>
+
+    <form method="GET" class="search-form">
+        <div class="input-group">
+            {{ form.query }}
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </div>
+    </form>
+
+    {% if tracks is not None %}
+        <ul class="track-list">
+            {% if tracks %}
+                {% for track in tracks %}
+                    <li class="track-item">
+                        <img src="{{ track.cover_url }}" class="track-image" alt="Cover">
+                        <div class="track-info">
+                            <div class="track-title">{{ track.title }}</div>
+                            <div class="track-artist">{{ track.artist }}</div>
+                        </div>
+                        <button class="btn btn-success play-button" data-preview="{{ track.preview_url }}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p class="no-results">😢 Aucune musique trouvée...</p>
+            {% endif %}
+        </ul>
+    {% else %}
+        <p class="welcome-message">✨ Cherche une musique pour commencer ✨</p>
+    {% endif %}
+</div>
+
+<!-- Lecteur audio en bas -->
+<div class="audio-container">
+    <audio id="audio-player" controls></audio>
+</div>
+
+<!-- FontAwesome pour les icônes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/musicplayer.css' %}">
+<script src="{% static 'js/musicplayer.js' %}"></script>
+{% endblock %}

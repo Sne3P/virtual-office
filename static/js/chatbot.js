@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const message = input.value.trim();
         if (message === "") return;
 
-        displayMessage("You: " + message, "user-message");
+        displayMessage(message, "user-message");
 
         try {
             const response = await fetch('/chatbot/response/', {
@@ -27,9 +27,10 @@ document.addEventListener("DOMContentLoaded", function() {
             });
 
             const data = await response.json();
-            displayMessage("Chatbot: " + (data.error || data.message), "bot-message");
+            displayMessage(data.error || data.message, "bot-message");
         } catch (error) {
             console.error("Erreur lors de la requête:", error);
+            displayMessage("❌ Erreur de connexion", "bot-message");
         }
 
         input.value = ''; // Vide l'input après l'envoi
@@ -40,6 +41,8 @@ document.addEventListener("DOMContentLoaded", function() {
         messageElement.className = className;
         messageElement.textContent = text;
         chatbotDisplay.appendChild(messageElement);
+
+        // Scroll vers le bas après ajout d'un message
         chatbotDisplay.scrollTop = chatbotDisplay.scrollHeight;
     }
 });
