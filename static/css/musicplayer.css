@@ -201,3 +201,6 @@ body {
     border-left: 5px solid #e50914; /* Accent rouge */
     transition: background 0.3s ease;
 }
+.track-list {
+    overflow: visible;
+}
