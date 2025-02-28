@@ -56,11 +56,9 @@ class Directory(models.Model):
         return os.path.join(*parts)
 
     def get_url_path(self):
-        # Pour notre système, on renvoie simplement l'ID sous forme de chaîne.
         return str(self.id)
 
     def get_ancestors_list(self):
-        """Retourne la liste des ancêtres depuis la racine jusqu'à ce répertoire."""
         ancestors = []
         current = self
         while current:

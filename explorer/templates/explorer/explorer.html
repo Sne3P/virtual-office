@@ -3,33 +3,37 @@
 
 {% url 'explorer:create_directory' current_directory.id as create_directory_url %}
 {% url 'explorer:upload_file' current_directory.id as upload_file_url %}
-{% url 'explorer:delete_item' "__TYPE__" "__ID__" as delete_url_template %}
+{% url 'explorer:delete_selected' current_directory.id as delete_selected_url %}
 {% url 'explorer:rename_item' "__TYPE__" "__ID__" as rename_url_template %}
 {% url 'explorer:move_item' "__TYPE__" "__ID__" as move_url_template %}
 
 {% block title %}Explorer - Virtual Office{% endblock %}
 {% block content %}
 <div id="explorer" class="glassmorphic">
-  <!-- Header -->
+  <!-- En-tête -->
   <div id="explorer-header">
     <div id="drive-selector">
-      {% for dt, drive in drives %}
-        <a href="{% url 'explorer:explorer_view' dt %}" class="drive-link {% if dt == drive_type %}active{% endif %}">
-          <i class="fa-solid {% if dt == 'personal' %}fa-user{% elif dt == 'common' %}fa-users{% else %}fa-shield-halved{% endif %}"></i>
+      {% for drive in drives %}
+        <a href="{% url 'explorer:explorer_view' drive.drive_type %}" class="drive-link {% if drive.drive_type == drive_type %}active{% endif %}">
+          <i class="fa-solid 
+            {% if drive.drive_type == 'personal' %}fa-user
+            {% elif drive.drive_type == 'common' %}fa-users
+            {% elif drive.drive_type == 'admin' %}fa-shield-halved
+            {% endif %}"></i>
           {{ drive.name }}
         </a>
       {% endfor %}
     </div>
     <div id="explorer-actions">
-      <a href="{{ upload_file_url }}" class="action-btn" title="Upload File">
-        <i class="fa-solid fa-upload"></i>
-      </a>
-      <!-- Bouton pour lancer la création inline -->
+      <!-- Ordre des boutons : New Folder, New File, Reload, Toggle View, Sort by Name, Sort by Date, Delete Selected -->
       <button id="new-folder-btn" class="action-btn" title="New Folder">
         <i class="fa-solid fa-folder-plus"></i>
       </button>
       <button id="new-file-btn" class="action-btn" title="New File">
         <i class="fa-solid fa-file-upload"></i>
+      </button>
+      <button id="reload-btn" class="action-btn" title="Reload">
+        <i class="fa-solid fa-rotate-right"></i>
       </button>
       <button id="toggle-view" class="action-btn" title="Toggle View">
         {% if view_type == "list" %}
@@ -38,22 +42,18 @@
           <i class="fa-solid fa-th"></i>
         {% endif %}
       </button>
-      <a href="?sort=name" class="action-btn" title="Sort by Name">
+      <button id="sort-name-btn" class="action-btn" title="Sort by Name">
         <i class="fa-solid fa-sort-alpha-down"></i>
-      </a>
-      <a href="?sort=uploaded_at" class="action-btn" title="Sort by Date">
+      </button>
+      <button id="sort-date-btn" class="action-btn" title="Sort by Date">
         <i class="fa-solid fa-calendar"></i>
-      </a>
-      <form id="delete-selected-form" action="{% url 'explorer:delete_selected' current_directory.id %}" method="post" style="display:none;">
-        {% csrf_token %}
-        <input type="hidden" name="selected" id="delete-selected-input">
-      </form>
+      </button>
       <button id="delete-selected-btn" class="action-btn" title="Delete Selected">
-        <i class="fa-solid fa-trash"></i>
+        <i class="fa-solid fa-trash"></i> (0)
       </button>
     </div>
   </div>
-  <!-- Conteneur principal -->
+  <!-- Corps de l'explorer -->
   <div id="explorer-body">
     <!-- Sidebar -->
     <div id="explorer-sidebar">
@@ -78,13 +78,20 @@
     <div id="explorer-main" class="{{ view_type }}-view"
          data-create-directory-url="{{ create_directory_url }}"
          data-upload-file-url="{{ upload_file_url }}"
-         data-drive-type="{{ drive_type }}">
+         data-drive-type="{{ drive_type }}"
+         data-delete-url="{{ delete_selected_url }}"
+         data-rename-url-template="{{ rename_url_template }}"
+         data-move-url-template="{{ move_url_template }}">
       <!-- Breadcrumbs -->
       <div id="explorer-breadcrumbs">
-        <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type %}" class="breadcrumb-root">{{ current_directory.drive.name }}</a>
+        <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type %}" class="breadcrumb-root">
+          {{ current_directory.drive.name }}
+        </a>
         {% for crumb in current_directory.get_ancestors %}
           <span class="breadcrumb-sep">&gt;</span>
-          <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type crumb.id %}" class="breadcrumb-link">{{ crumb.name }}</a>
+          <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type crumb.id %}" class="breadcrumb-link">
+            {{ crumb.name }}
+          </a>
         {% endfor %}
         <span class="breadcrumb-sep">&gt;</span>
         <span class="breadcrumb-current">{{ current_directory.name }}</span>
@@ -126,10 +133,5 @@
     </div>
   </div>
 </div>
-<script>
-  var deleteUrlTemplate = "{{ delete_url_template }}";
-  var renameUrlTemplate = "{{ rename_url_template }}";
-  var moveUrlTemplate = "{{ move_url_template }}";
-</script>
 <script src="{% static 'js/explorer.js' %}"></script>
 {% endblock %}
