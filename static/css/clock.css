@@ -1,11 +1,101 @@
-.clock-container {
+.clock-container { 
     text-align: center;
     font-size: 24px;
     padding: 20px;
     color: white;
+    background: linear-gradient(135deg, #1e1e1e, #292929);
+    border-radius: 15px;
+    width: 500px; /* Augmenté pour rendre l'horloge plus large */
+    margin: auto;
+    box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.7);
 }
+
 #clock-display {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: bold;
-    margin-top: 10px;
+    margin: 10px 0;
+    color: #00ffff;
+}
+
+.controls button {
+    background-color: #00ffff;
+    color: black;
+    padding: 6px 10px; /* Réduit la taille des boutons */
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px; /* Réduit la taille de la police des boutons */
+    width: 120px; /* Largeur réduite pour les boutons */
+    height: 35px; /* Hauteur réduite pour les boutons */
+}
+
+.controls button:hover {
+    background-color: #00cccc;
+}
+
+.hidden {
+    display: none;
+}
+
+#chrono-container, #timer-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #00ffff;
+    border-radius: 10px;
+}
+
+#chrono-display, #timer-display {
+    font-size: 30px;
+    font-weight: bold;
+    color: #00ffff;
+}
+
+/* Réorganisation de l'input et des boutons du minuteur */
+#timer-container input {
+    margin-bottom: 15px; /* Ajoute un espace entre l'input et les boutons */
+    padding: 8px;
+    font-size: 16px;
+    width: 180px; /* Largeur de l'input */
+    border-radius: 5px;
+    border: 1px solid #00ffff;
+    background-color: #292929;
+    color: white;
+}
+
+#timer-container button {
+    background-color: #00ffff;
+    color: black;
+    padding: 6px 10px; /* Réduit la taille des boutons */
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px; /* Réduit la taille de la police des boutons */
+    width: 120px; /* Largeur réduite pour les boutons */
+    height: 35px; /* Hauteur réduite pour les boutons */
+}
+
+#timer-container button:hover {
+    background-color: #00cccc;
+}
+
+/* Style spécifique pour les boutons "Démarrer", "Arrêter", "Réinitialiser" */
+#start-chrono, #stop-chrono, #reset-chrono,
+#start-timer, #stop-timer, #reset-timer {
+    background-color: #00ffff;
+    color: black;
+    padding: 6px 10px; /* Réduit la taille des boutons */
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px; /* Réduit la taille de la police des boutons */
+    width: 120px; /* Largeur réduite pour ces boutons spécifiques */
+    height: 35px; /* Hauteur réduite pour ces boutons spécifiques */
+}
+
+#start-chrono:hover, #stop-chrono:hover, #reset-chrono:hover,
+#start-timer:hover, #stop-timer:hover, #reset-timer:hover {
+    background-color: #00cccc;
 }

@@ -8,3 +8,7 @@ def clock_view(request):
 def get_time(request):
     now = datetime.datetime.now()
     return JsonResponse({'time': now.strftime('%H:%M:%S')})
+
+def start_timer(request):
+    duration = int(request.GET.get('duration', 0))  # Récupération du temps en secondes
+    return JsonResponse({'message': 'Minuteur démarré', 'end_time': datetime.datetime.now().timestamp() + duration})
