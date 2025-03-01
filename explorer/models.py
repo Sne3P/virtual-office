@@ -89,3 +89,13 @@ class File(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def delete(self, *args, **kwargs):
+        # Supprime le fichier du système de fichiers
+        if self.file:
+            try:
+                if os.path.isfile(self.file.path):
+                    os.remove(self.file.path)
+            except Exception as e:
+                print("Erreur lors de la suppression du fichier:", e)
+        super().delete(*args, **kwargs)

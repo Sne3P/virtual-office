@@ -1,0 +1,216 @@
+/* Conteneur de la galerie (sans cadre ni ombre) */
+.photo-container {
+  padding: 20px 30px;
+  margin: 20px auto;
+  max-width: 1200px;
+  color: #fff;
+}
+
+/* Titre de la galerie */
+.gallery-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+/* Zone d'actions avec recherche et boutons */
+.photo-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Input de recherche épuré */
+.glass-input {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: background 0.3s;
+}
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Bouton glassmorphic épuré */
+.glass-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Grille de la galerie, plus serrée */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 0 10px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Items photo */
+.photo-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.photo-item:hover {
+  transform: scale(1.02);
+}
+.photo-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.photo-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 6px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  transition: background 0.3s;
+}
+.photo-item:hover .photo-title {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Bouton de suppression (applicable uniquement dans l'app Photo) */
+.delete-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(255, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  color: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.photo-item:hover .delete-btn {
+  opacity: 1;
+}
+
+/* Modals sans ombre excessive */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+}
+.modal-content {
+  position: relative;
+  margin: 5% auto;
+  padding: 20px;
+  max-width: 90%;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  animation: fadeIn 0.3s ease-in-out;
+}
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Form modal */
+.form-modal {
+  max-width: 400px;
+}
+.form-modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Styles des formulaires */
+.form-group {
+  margin-bottom: 12px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s;
+}
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #00ccff;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .photo-item img {
+    height: 150px;
+  }
+  .gallery-title {
+    font-size: 1.8rem;
+  }
+}

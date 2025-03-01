@@ -64,6 +64,12 @@ APPS = [
       'url': '/notepad/',
               
     },
-    
+        {
+      'id': 'photo',
+      'name': 'Photo',
+      'icon': 'images/photo.png',
+      'url': '/photo/',
+              
+    },
     
 ]

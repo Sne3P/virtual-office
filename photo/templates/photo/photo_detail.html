@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="photo-detail-container">
+  <h1>{{ photo.title|default_if_none:photo.file.name }}</h1>
+  <img src="{{ photo.file.file.url }}" alt="{{ photo.title|default_if_none:photo.file.name }}" class="photo-detail-image">
+  <a href="{% url 'photo:photo_list' %}" class="glass-btn">Retour à la galerie</a>
+{% endblock %}

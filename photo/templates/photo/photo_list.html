@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/photo.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="photo-container">
+  <h1 class="gallery-title">Ma Galerie de Photos</h1>
+  <div class="photo-actions">
+    <input type="text" id="searchBar" placeholder="Rechercher par titre..." class="glass-input">
+    <button id="refreshBtn" class="glass-btn">Refresh</button>
+    <button id="uploadPhotoBtn" class="glass-btn">Uploader une photo</button>
+  </div>
+  <div class="photo-gallery">
+    {% for photo in photos %}
+      <div class="photo-item"
+           data-id="{{ photo.pk }}"
+           data-title="{{ photo.title|default:photo.file.name }}"
+           data-image="{{ photo.file.file.url }}">
+        <img src="{{ photo.file.file.url }}" alt="{{ photo.title|default:photo.file.name }}">
+        <div class="photo-title">{{ photo.title|default:photo.file.name }}</div>
+        <button class="delete-btn" data-id="{{ photo.pk }}">&#128465;</button>
+      </div>
+    {% empty %}
+      <p class="no-photo">Aucune photo disponible.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Modal pour visualiser une photo -->
+<div id="photoModal" class="modal">
+  <div class="modal-content modal-small">
+    <span class="close" id="modalClose">&times;</span>
+    <img id="modalImage" src="" alt="">
+    <h2 id="modalTitle"></h2>
+  </div>
+</div>
+
+<!-- Modal pour uploader une photo -->
+<div id="uploadModal" class="modal">
+  <div class="modal-content form-modal">
+    <span class="close" id="uploadClose">&times;</span>
+    <h2>Uploader une Photo</h2>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_title">Titre :</label>
+        {{ upload_form.title }}
+      </div>
+      <div class="form-group">
+        <label for="id_image">Photo :</label>
+        {{ upload_form.image }}
+      </div>
+      <div class="form-group">
+        <label for="id_drive">Drive :</label>
+        {{ upload_form.drive }}
+      </div>
+      <button type="submit" class="glass-btn">Uploader</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Bouton Refresh
+  document.getElementById("refreshBtn").onclick = () => location.reload();
+
+  // Filtrage dynamique par titre
+  document.getElementById("searchBar").addEventListener("input", function() {
+    const filter = this.value.toLowerCase();
+    document.querySelectorAll(".photo-item").forEach(item => {
+      const title = item.getAttribute("data-title").toLowerCase();
+      item.style.display = title.includes(filter) ? "" : "none";
+    });
+  });
+
+  // Modal pour visualiser la photo
+  const photoModal = document.getElementById("photoModal");
+  const modalImg = document.getElementById("modalImage");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalClose = document.getElementById("modalClose");
+
+  document.querySelectorAll(".photo-item").forEach(item => {
+    item.addEventListener("click", function(e) {
+      if(e.target.classList.contains("delete-btn")) return;
+      modalImg.src = item.getAttribute("data-image");
+      modalTitle.textContent = item.getAttribute("data-title");
+      photoModal.style.display = "block";
+    });
+  });
+  modalClose.onclick = () => photoModal.style.display = "none";
+  window.onclick = (e) => { if(e.target === photoModal) photoModal.style.display = "none"; };
+
+  // Modal pour uploader une photo
+  const uploadModal = document.getElementById("uploadModal");
+  const uploadBtn = document.getElementById("uploadPhotoBtn");
+  const uploadClose = document.getElementById("uploadClose");
+
+  uploadBtn.onclick = () => uploadModal.style.display = "block";
+  uploadClose.onclick = () => uploadModal.style.display = "none";
+  window.onclick = (e) => { if(e.target === uploadModal) uploadModal.style.display = "none"; };
+
+  // Soumission AJAX du formulaire d'upload
+  const uploadForm = document.getElementById("uploadForm");
+  uploadForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const formData = new FormData(uploadForm);
+    fetch("{% url 'photo:photo_upload' %}", {
+      method: "POST",
+      body: formData,
+      headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert("Erreur lors de l'upload: " + JSON.stringify(data.errors));
+      }
+    })
+    .catch(err => console.error(err));
+  });
+
+  // Suppression AJAX d'une photo
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      const photoId = this.getAttribute("data-id");
+      if(confirm("Voulez-vous supprimer cette photo ?")) {
+        fetch("{% url 'photo:photo_delete' 0 %}".replace("0", photoId), {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "X-Requested-With": "XMLHttpRequest"
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if(data.success) {
+            this.closest(".photo-item").remove();
+          } else {
+            alert("Erreur lors de la suppression.");
+          }
+        })
+        .catch(err => console.error(err));
+      }
+    });
+  });
+</script>
+{% endblock %}
