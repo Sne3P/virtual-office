@@ -109,4 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
     audioPlayer.addEventListener("ended", () => {
         playTrack(currentTrackIndex + 1);
     });
+
+    // S'assurer que les musiques ne dépassent pas le rectangle d'affichage en bas
+    const trackListContainer = document.querySelector(".track-list");
+    trackListContainer.style.overflowY = "auto";
+    trackListContainer.style.maxHeight = "calc(100vh - 200px)"; // Ajustez cette valeur en fonction de la hauteur de votre lecteur
 });
