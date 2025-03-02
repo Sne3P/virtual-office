@@ -56,11 +56,9 @@ class Directory(models.Model):
         return os.path.join(*parts)
 
     def get_url_path(self):
-        # Pour notre système, on renvoie simplement l'ID sous forme de chaîne.
         return str(self.id)
 
     def get_ancestors_list(self):
-        """Retourne la liste des ancêtres depuis la racine jusqu'à ce répertoire."""
         ancestors = []
         current = self
         while current:
@@ -91,3 +89,13 @@ class File(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def delete(self, *args, **kwargs):
+        # Supprime le fichier du système de fichiers
+        if self.file:
+            try:
+                if os.path.isfile(self.file.path):
+                    os.remove(self.file.path)
+            except Exception as e:
+                print("Erreur lors de la suppression du fichier:", e)
+        super().delete(*args, **kwargs)

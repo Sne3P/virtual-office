@@ -320,3 +320,9 @@ a.btn-back {
     transform: scale(1);
   }
 }
+
+
+.drag-over {
+  background-color: rgba(0, 150, 0, 0.2);
+  border: 2px dashed #009600;
+}

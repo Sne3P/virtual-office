@@ -1,38 +1,117 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const audioPlayer = document.getElementById("audio-player");
-    let currentPlaying = null;
+    const audioPlayer = new Audio();
+    let currentTrackIndex = 0;
+    let tracks = Array.from(document.querySelectorAll(".track-item"));
 
-    // Gestion des boutons play pour la recherche de musiques
-    document.querySelectorAll(".play-button").forEach(button => {
-        button.addEventListener("click", function () {
-            const previewUrl = this.getAttribute("data-preview");
+    const playPauseButton = document.getElementById("play-pause-button");
+    const prevButton = document.getElementById("prev-button");
+    const nextButton = document.getElementById("next-button");
+    const progressBar = document.querySelector(".progress");
+    const progressContainer = document.querySelector(".progress-container");
+    const volumeSlider = document.getElementById("volume-slider");
 
-            if (currentPlaying === previewUrl) {
-                audioPlayer.pause();
-                currentPlaying = null;
-                this.innerText = "▶";  // Réinitialiser le bouton à "play"
-                return;
-            }
-
-            if (previewUrl) {
-                audioPlayer.src = previewUrl;
-                audioPlayer.play();
-                currentPlaying = previewUrl;
-
-                // Mettre à jour tous les boutons play
-                document.querySelectorAll(".play-button").forEach(btn => btn.innerText = "▶");
-                this.innerText = "⏸";  // Changer le bouton en "pause"
+    // Fonction pour mettre à jour les icônes et l'effet visuel du morceau en lecture
+    function updatePlayButtons() {
+        tracks.forEach((track, index) => {
+            const playButton = track.querySelector(".play-button i");
+            if (index === currentTrackIndex && !audioPlayer.paused) {
+                playButton.classList.remove("fa-play");
+                playButton.classList.add("fa-stop");
+                track.classList.add("playing"); // Ajoute la classe rouge clair
             } else {
-                alert("Aucun aperçu audio disponible !");
+                playButton.classList.remove("fa-stop");
+                playButton.classList.add("fa-play");
+                track.classList.remove("playing"); // Supprime l'effet visuel
             }
+        });
+
+        // Mettre à jour le bouton de la barre du lecteur
+        if (audioPlayer.paused) {
+            playPauseButton.innerHTML = `<i class="fas fa-play"></i>`;
+        } else {
+            playPauseButton.innerHTML = `<i class="fas fa-pause"></i>`;
+        }
+    }
+
+    // Fonction pour jouer un morceau
+    function playTrack(index) {
+        if (index < 0 || index >= tracks.length) return;
+
+        const track = tracks[index];
+        if (!track) return;
+
+        // Vérifie si on clique sur le même morceau pour l'arrêter
+        if (currentTrackIndex === index && !audioPlayer.paused) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0; // Remettre à 0 quand on stop
+            updatePlayButtons();
+            return;
+        }
+
+        audioPlayer.src = track.getAttribute("data-preview");
+        audioPlayer.play();
+        currentTrackIndex = index;
+
+        updatePlayButtons();
+    }
+
+    // Play / Pause général (barre de lecture)
+    playPauseButton.addEventListener("click", function () {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+        } else {
+            audioPlayer.pause();
+        }
+        updatePlayButtons();
+    });
+
+    // Changer de musique avec prev et next
+    prevButton.addEventListener("click", () => {
+        playTrack(currentTrackIndex - 1);
+    });
+
+    nextButton.addEventListener("click", () => {
+        playTrack(currentTrackIndex + 1);
+    });
+
+    // Mettre à jour la barre de progression
+    audioPlayer.addEventListener("timeupdate", () => {
+        if (audioPlayer.duration) {
+            const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.style.width = percent + "%";
+        }
+    });
+
+    // Rendre la barre cliquable pour avancer
+    progressContainer.addEventListener("click", (event) => {
+        const rect = progressContainer.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const width = rect.width;
+        const percent = clickX / width;
+        audioPlayer.currentTime = percent * audioPlayer.duration;
+    });
+
+    // Volume
+    volumeSlider.addEventListener("input", function () {
+        audioPlayer.volume = this.value;
+    });
+
+    // Clic sur un bouton play d'un morceau pour le jouer/stopper
+    tracks.forEach((track, index) => {
+        const playButton = track.querySelector(".play-button");
+        playButton.addEventListener("click", (event) => {
+            event.stopPropagation(); // Empêcher le clic sur l'élément parent
+            playTrack(index);
         });
     });
 
-    // Gestion de l'événement "ended" pour réinitialiser le bouton après la fin du morceau
+    // Quand la musique se termine, passer à la suivante
     audioPlayer.addEventListener("ended", () => {
-        currentPlaying = null;
-        document.querySelectorAll(".play-button").forEach(btn => btn.innerText = "▶");
+        playTrack(currentTrackIndex + 1);
     });
 
-
+    // S'assurer que les musiques ne dépassent pas le rectangle d'affichage en bas
+    const trackListContainer = document.querySelector(".track-list");
+    trackListContainer.style.overflowY = "auto";
+    trackListContainer.style.maxHeight = "calc(100vh - 200px)"; // Ajustez cette valeur en fonction de la hauteur de votre lecteur
 });

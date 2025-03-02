@@ -7,7 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'votre-cle-secrete-a-changer'
 DEBUG = True
 ALLOWED_HOSTS = []
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,6 +29,10 @@ INSTALLED_APPS = [
     'musicplayer',
     'news',
     'stocks',
+    'gaming',
+    'notepad',
+    'photo',
+
 ]
 
 MIDDLEWARE = [

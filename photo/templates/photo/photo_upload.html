@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/photo.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-modal glassmorphic">
+  <h1>Uploader une Photo</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_title">Titre :</label>
+      {{ form.title }}
+    </div>
+    <div class="form-group">
+      <label for="id_image">Photo :</label>
+      {{ form.image }}
+    </div>
+    <div class="form-group">
+      <label for="id_drive">Drive :</label>
+      {{ form.drive }}
+    </div>
+    <button type="submit" class="glass-btn">Uploader</button>
+  </form>
+</div>
+{% endblock %}

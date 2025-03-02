@@ -1,11 +1,109 @@
-.clock-container {
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.container {
     text-align: center;
     font-size: 24px;
     padding: 20px;
     color: white;
+    background: #2c2c2e;
+    border-radius: 15px;
+    width: 400px;
+    margin: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
-#clock-display {
-    font-size: 36px;
+
+#clock-display, #chrono-display, #timer-display {
+    font-size: 40px;
     font-weight: bold;
-    margin-top: 10px;
+    margin: 10px 0;
+    color: #ff9500;
+}
+
+.controls button, .navigation button {
+    background-color: #ff9500;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.controls button:hover, .navigation button:hover {
+    background-color: #ff8500;
+}
+
+.hidden {
+    display: none;
+}
+
+#chrono-container, #timer-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ff9500;
+    border-radius: 10px;
+    background: #2c2c2e;
+}
+
+#chrono-display, #timer-display {
+    font-size: 30px;
+    font-weight: bold;
+    color: #ff9500;
+}
+
+#timer-container input {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    width: 180px;
+    border-radius: 5px;
+    border: 1px solid #ff9500;
+    background-color: #1e1e1e;
+    color: white;
+}
+
+#timer-container button {
+    background-color: #ff9500;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#timer-container button:hover {
+    background-color: #ff8500;
+}
+
+#start-chrono, #stop-chrono, #reset-chrono,
+#start-timer, #stop-timer, #reset-timer {
+    background-color: #ff9500;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#start-chrono:hover, #stop-chrono:hover, #reset-chrono:hover,
+#start-timer:hover, #stop-timer:hover, #reset-timer:hover {
+    background-color: #ff8500;
+}
+
+.navigation {
+    margin-top: 20px;
 }

@@ -1,128 +1,153 @@
-/* Style Futuriste - Bleu Ciel */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
 
 body {
     font-family: 'Inter', sans-serif;
-    color: #1a237e;
     margin: 0;
-    padding: 20px;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background: radial-gradient(circle at top, #1b2a4d, #0a1533); /* Fond un peu plus clair */
+    color: white;
 }
 
+/* Conteneur principal du chatbot */
 .chatbot-container {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
-    width: 90%;
-    padding: 20px;
-    animation: fadeIn 0.6s ease-in-out;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
 }
 
+/* Titre du chatbot */
 h2 {
     text-align: center;
-    color: #1565c0;
     font-weight: 700;
-    font-size: 24px;
-    margin-bottom: 15px;
+    font-size: 22px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* Chat Display */
+/* Zone d'affichage du chat (transparence totale) */
 #chatbot-display {
-    border-radius: 8px;
-    height: 400px;
+    flex: 1;
     overflow-y: auto;
     padding: 15px;
-    background: #e3f2fd;
-    border: 1px solid #bbdefb;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    background: none; /* Suppression complète du fond */
 }
 
-/* Permet de coller les messages en bas et scroller naturellement */
+/* Scrollbar design épuré */
 #chatbot-display::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 #chatbot-display::-webkit-scrollbar-thumb {
-    background-color: #90caf9;
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
 }
 
 /* Messages */
+.user-message, .bot-message {
+    padding: 12px 16px;
+    border-radius: 16px;
+    max-width: 75%;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    animation: fadeInMessage 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 .user-message {
-    background: #bbdefb;
-    color: #0d47a1;
-    padding: 8px 12px;
-    border-radius: 8px;
-    display: inline-block;
-    max-width: 80%;
     align-self: flex-end;
-    margin-bottom: 8px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #021024;
+    font-weight: 500;
 }
 
 .bot-message {
-    background: #1565c0;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    display: inline-block;
-    max-width: 80%;
     align-self: flex-start;
-    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
 }
 
-/* Input & Button */
+/* Animation d’apparition des messages */
+@keyframes fadeInMessage {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Barre d'entrée et bouton */
 .chatbot-input-container {
     display: flex;
-    gap: 10px;
+    gap: 12px;
+    padding-top: 10px;
 }
 
 input[type="text"] {
     flex: 1;
     padding: 12px;
-    background: white;
-    color: #0d47a1;
-    border: 1px solid #bbdefb;
     border-radius: 8px;
-    outline: none;
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    backdrop-filter: blur(8px);
     font-size: 16px;
+    outline: none;
     transition: 0.3s ease-in-out;
+}
+
+input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 input[type="text"]:focus {
-    border-color: #1565c0;
-    box-shadow: 0 0 8px rgba(21, 101, 192, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
+/* Bouton d’envoi */
 button {
-    padding: 12px 18px;
-    background: #1565c0;
-    color: white;
-    border: none;
+    padding: 12px 15px;
     border-radius: 8px;
-    cursor: pointer;
+    border: none;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #021024;
     font-size: 16px;
     font-weight: 500;
-    transition: 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(21, 101, 192, 0.2);
+    cursor: pointer;
+    transition: 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 button:hover {
-    background: #0d47a1;
-    box-shadow: 0 6px 12px rgba(21, 101, 192, 0.3);
+    box-shadow: 0 0 15px rgba(79, 172, 254, 0.5);
 }
 
-/* Animation d'apparition */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+button:active {
+    transform: scale(0.95);
+}
+
+/* Effet néon léger au focus */
+input[type="text"]:focus, button:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(79, 172, 254, 0.6);
 }

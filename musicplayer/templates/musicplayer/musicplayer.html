@@ -4,13 +4,13 @@
 {% block title %}Music Player{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="title">🎵 Music Player 🎵</h1>
+<div class="container mt-5 music-player">
+    <h1 class="title"> Music </h1>
 
     <form method="GET" class="search-form">
         <div class="input-group">
             {{ form.query }}
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary search-btn">
                 <i class="fas fa-search"></i> Rechercher
             </button>
         </div>
@@ -20,33 +20,41 @@
         <ul class="track-list">
             {% if tracks %}
                 {% for track in tracks %}
-                    <li class="track-item">
+                    <li class="track-item" data-preview="{{ track.preview_url }}">
                         <img src="{{ track.cover_url }}" class="track-image" alt="Cover">
                         <div class="track-info">
                             <div class="track-title">{{ track.title }}</div>
                             <div class="track-artist">{{ track.artist }}</div>
                         </div>
-                        <button class="btn btn-success play-button" data-preview="{{ track.preview_url }}">
+                        <button class="btn play-button">
                             <i class="fas fa-play"></i>
                         </button>
                     </li>
                 {% endfor %}
             {% else %}
-                <p class="no-results">😢 Aucune musique trouvée...</p>
+                <p class="no-results">Aucune musique trouvée...</p>
             {% endif %}
         </ul>
     {% else %}
-        <p class="welcome-message">✨ Cherche une musique pour commencer ✨</p>
+        <p class="welcome-message">Cherche une musique pour commencer 🎧</p>
     {% endif %}
 </div>
 
-<!-- Lecteur audio en bas -->
-<div class="audio-container">
-    <audio id="audio-player" controls></audio>
+<!-- Nouveau lecteur audio custom -->
+<div class="custom-audio-player">
+    <button id="prev-button"><i class="fas fa-step-backward"></i></button>
+    <button id="play-pause-button"><i class="fas fa-play"></i></button>
+    <button id="next-button"><i class="fas fa-step-forward"></i></button>
+    
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+    </div>
+
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01">
 </div>
 
-<!-- FontAwesome pour les icônes -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="{% static 'css/musicplayer.css' %}">
 <script src="{% static 'js/musicplayer.js' %}"></script>
 {% endblock %}

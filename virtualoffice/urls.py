@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -17,4 +21,8 @@ urlpatterns = [
     path('musicplayer/', include('musicplayer.urls')),
     path('news/', include('news.urls')),
     path('stocks/', include('stocks.urls')),
-]
+    path('gaming/', include('gaming.urls')),
+    path('notepad/', include('notepad.urls')),
+    path('photo/', include('photo.urls', namespace='photo')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

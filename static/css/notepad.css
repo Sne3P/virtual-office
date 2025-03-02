@@ -1,0 +1,177 @@
+/* ===== Apple Notes Inspired Style ===== */
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Assurer que l'élément reste centré */
+    padding: 0; /* Éviter que ça touche les bords */
+    overflow: hidden; /* Empêcher le scroll */
+    margin: 0; /* Enlever les marges */
+}
+
+.notepad-container {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1); /* Légère transparence */
+    backdrop-filter: blur(15px);
+    border-radius: 0; /* Pas de bordure arrondie */
+    display: flex;
+    box-shadow: none; /* Suppression de l'ombre */
+    overflow: hidden;
+    border: none; /* Suppression de la bordure */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 30%;
+    background: rgba(255, 255, 255, 0.484);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #E5E5E5;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #222; /* Couleur plus foncée pour une meilleure visibilité */
+}
+
+#new-note-btn {
+    background: #FFD56B;
+    color: #000; /* Couleur noire pour une meilleure visibilité */
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    transition: background 0.2s ease, transform 0.1s;
+}
+
+#new-note-btn:hover {
+    background: #FFC843;
+    transform: scale(1.03);
+}
+
+/* Notes list */
+#notes-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 450px;
+    padding-right: 5px;
+    padding-bottom: 10px; /* Ajout de padding en bas pour éviter que le hover soit coupé */
+    padding-left: 5px; /* Ajout de padding à gauche pour éviter que le hover soit coupé */
+}
+
+/* Style des notes dans la liste */
+.note-title-item {
+    background: rgba(255, 255, 255, 0.2); /* Légère transparence */
+    padding: 12px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s;
+    font-size: 14px;
+    font-weight: 500;
+    color: #222; /* Couleur plus foncée pour une meilleure visibilité */
+    border: 1px solid transparent;
+}
+
+.note-title-item:hover {
+    background: #FFFAE5;
+    transform: scale(1.02);
+}
+
+/* Note active */
+.note-title-item.active {
+    background: #FFD56B;
+    color: black;
+    border: 1px solid #FFC843;
+}
+
+/* Scroll personnalisé */
+#notes-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#notes-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+/* Éditeur */
+.editor {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Légère transparence */
+}
+
+.note-title {
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #222; /* Couleur plus foncée pour une meilleure visibilité */
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.note-content {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #333; /* Couleur plus foncée pour une meilleure visibilité */
+    font-size: 16px;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* Scroll personnalisé pour le contenu */
+.note-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.note-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+/* Bouton Supprimer */
+.delete-note-btn {
+    background: rgba(255, 59, 48, 0.2);
+    color: #D32F2F;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.delete-note-btn:hover {
+    background: rgba(255, 59, 48, 0.3);
+}
