@@ -1,0 +1,119 @@
+/* Styles pour l'application d'actualités */
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 25px;
+    background: #f4f9ff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 255, 0.1);
+}
+
+.scroll-container {
+    max-height: 500px; /* Augmenter la hauteur pour plus de contenu visible */
+    overflow-y: auto;
+    padding-right: 15px;
+    margin-top: 30px;
+    border: 1px solid #e0e0e0; /* Légère bordure pour distinguer la section */
+    border-radius: 10px;
+}
+
+.title {
+    font-size: 2.8rem;
+    color: #003d99;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    width: 60%;
+    padding: 10px;
+    border-radius: 5px 0 0 5px;
+    border: 1px solid #007bff;
+}
+
+.input-group .btn {
+    padding: 10px 20px;
+    border-radius: 0 5px 5px 0;
+}
+
+.news-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.news-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.news-title {
+    font-size: 1.5rem;
+    color: #003366;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.news-description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.news-published {
+    font-size: 0.9rem;
+    color: #007bff;
+    font-weight: 400;
+}
+
+.no-results {
+    font-size: 1.2rem;
+    color: #ff6f61;
+    text-align: center;
+}
+
+.welcome-message {
+    font-size: 1.5rem;
+    color: #5c5c5c;
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* Boutons */
+.btn-success {
+    background: #28a745;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}

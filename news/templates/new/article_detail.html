@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Détails de l'actualité{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="title">{{ article.title }}</h1>
+    <p class="news-description">{{ article.description }}</p>
+    <p class="news-published">Publié le : {{ article.published_at }}</p>
+
+    <!-- Lien pour voir l'article original -->
+    <a href="{{ article.url }}" class="btn btn-primary" target="_blank">Voir l'article original</a>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/newsapp.css' %}">
+{% endblock %}
