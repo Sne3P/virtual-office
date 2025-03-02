@@ -29,7 +29,7 @@ venv\Scripts\activate
 ## Install dependencies:
 
 ```
-pip install django cohere requests Pillow
+pip install django cohere requests Pillow Plotly
 ```
 Apply migrations:
 

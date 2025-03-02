@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="title">📈 Stock Market Tracker 📉</h1>
+    <h1 class="title">Stock Market Tracker</h1>
 
     <!-- Formulaire de recherche -->
     <form method="GET" class="search-form mb-5">
@@ -17,13 +17,16 @@
         </div>
     </form>
 
+    <!-- Affichage du message d'erreur -->
+    {% if error_message %}
+        <p class="no-results text-center">{{ error_message }}</p>
+    {% endif %}
+
     <!-- Affichage du graphique Plotly -->
     {% if chart %}
         <div class="stock-chart">
             {{ chart|safe }}
         </div>
-    {% else %}
-        <p class="no-results text-center">🔍 Aucun résultat pour cette recherche...</p>
     {% endif %}
 </div>
 

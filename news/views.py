@@ -4,9 +4,9 @@ from .forms import NewsSearchForm
 from .models import NewsArticle
 import urllib.parse
 
-# Fonction pour récupérer les nouvelles par défaut (par exemple, des articles populaires)
+# Fonction pour récupérer les nouvelles par défaut (par exemple, des articles de Lille)
 def fetch_default_news():
-    url = "https://newsapi.org/v2/top-headlines?country=fr&apiKey=d37c4ac4b97f4dd5bea2dd70035b7e0c"
+    url = "https://newsapi.org/v2/everything?q=Lille&apiKey=d37c4ac4b97f4dd5bea2dd70035b7e0c"
     response = requests.get(url)
     
     if response.status_code == 200:
@@ -55,7 +55,7 @@ def news_view(request):
 
     # Si aucune recherche n'a été effectuée ou si le formulaire n'est pas valide
     if articles is None:
-        # Charger les nouvelles par défaut (c'est-à-dire les nouvelles du jour ou populaires)
+        # Charger les nouvelles par défaut (c'est-à-dire les nouvelles de Lille)
         articles = fetch_default_news()
 
     return render(request, 'new/news.html', {'form': form, 'articles': articles})

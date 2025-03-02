@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="title">📰 Daily News Portal 📰</h1>
+    <h1 class="title">News Portal</h1>
 
     <!-- Formulaire de recherche -->
     <form method="GET" class="search-form mb-5">
@@ -36,7 +36,7 @@
         </ul>
     </div>
     {% else %}
-        <p class="welcome-message text-center">✨ Cherche des actualités ou consulte les articles du jour ✨</p>
+        <p class="no-results text-center">Aucun résultat trouvé pour cette recherche.</p>
     {% endif %}
 </div>
 
