@@ -56,7 +56,14 @@ APPS = [
         'name': 'News',
         'icon': 'images/news.jpg',
         'url': '/news/',
+    },
+    {
+        'id': 'stock_view',
+        'name': 'Stock',
+        'icon': 'images/bourse.png',
+        'url': '/stocks/',
     }
+
     # Pour ajouter une nouvelle application, il suffit d'ajouter un dictionnaire ici, par exemple :
     # {
     #     'id': 'notepad',

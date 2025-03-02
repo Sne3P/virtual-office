@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     'agenda',
     'calculator',
     'musicplayer',
-    'news'
+    'news',
+    'stocks',
 ]
 
 MIDDLEWARE = [

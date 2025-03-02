@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Stock Market{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="title">📈 Stock Market Tracker 📉</h1>
+
+    <!-- Formulaire de recherche -->
+    <form method="GET" class="search-form mb-5">
+        <div class="input-group">
+            {{ form.symbol }}
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </div>
+    </form>
+
+    <!-- Affichage du graphique Plotly -->
+    {% if chart %}
+        <div class="stock-chart">
+            {{ chart|safe }}
+        </div>
+    {% else %}
+        <p class="no-results text-center">🔍 Aucun résultat pour cette recherche...</p>
+    {% endif %}
+</div>
+
+<link rel="stylesheet" href="{% static 'css/stockapp.css' %}">
+{% endblock %}

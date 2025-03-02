@@ -16,4 +16,5 @@ urlpatterns = [
     path('calculator/', include('calculator.urls')),
     path('musicplayer/', include('musicplayer.urls')),
     path('news/', include('news.urls')),
+    path('stocks/', include('stocks.urls')),
 ]
