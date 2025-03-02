@@ -3,7 +3,6 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #1e1e1e;
     font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -12,6 +11,7 @@ body {
     font-size: 24px;
     padding: 20px;
     color: white;
+    background: #2c2c2e;
     border-radius: 15px;
     width: 400px;
     margin: auto;
