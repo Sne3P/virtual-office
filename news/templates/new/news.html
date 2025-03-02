@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}News{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="title">📰 Daily News Portal 📰</h1>
+
+    <!-- Formulaire de recherche -->
+    <form method="GET" class="search-form mb-5">
+        <div class="input-group">
+            {{ form.query }}
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </div>
+    </form>
+
+    <!-- Conteneur pour afficher les nouvelles -->
+    {% if articles %}
+    <div class="scroll-container">
+        <ul class="news-list">
+            {% for article in articles %}
+                <li class="news-item">
+                    <div class="news-info">
+                        <h2 class="news-title">{{ article.title }}</h2>
+                        <p class="news-description">{{ article.description }}</p>
+                        <p class="news-published">Publié le : {{ article.published_at }}</p>
+                    </div>
+                    <a href="{% url 'article_detail' article.title|urlencode %}" class="btn btn-success">
+                        Lire plus
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+        <p class="welcome-message text-center">✨ Cherche des actualités ou consulte les articles du jour ✨</p>
+    {% endif %}
+</div>
+
+<link rel="stylesheet" href="{% static 'css/newsapp.css' %}">
+{% endblock %}

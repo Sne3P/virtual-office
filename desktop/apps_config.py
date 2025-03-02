@@ -58,6 +58,19 @@ APPS = [
       
     },
     {
+        'id': 'news',
+        'name': 'News',
+        'icon': 'images/news.jpg',
+        'url': '/news/',
+    },
+    {
+        'id': 'stock_view',
+        'name': 'Stock',
+        'icon': 'images/bourse.png',
+        'url': '/stocks/',
+    },
+
+    {
       'id': 'notepad',
       'name': 'Notepad',
       'icon': 'images/notepad.png',

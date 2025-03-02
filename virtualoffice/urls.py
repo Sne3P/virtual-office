@@ -19,7 +19,10 @@ urlpatterns = [
     path('agenda/', include('agenda.urls')),
     path('calculator/', include('calculator.urls')),
     path('musicplayer/', include('musicplayer.urls')),
+    path('news/', include('news.urls')),
+    path('stocks/', include('stocks.urls')),
     path('gaming/', include('gaming.urls')),
     path('notepad/', include('notepad.urls')),
     path('photo/', include('photo.urls', namespace='photo')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

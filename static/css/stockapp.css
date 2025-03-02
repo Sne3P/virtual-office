@@ -1,0 +1,135 @@
+/* ----- Fond général ----- */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    text-align: center;
+}
+
+/* ----- Conteneur principal ----- */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ----- Titre ----- */
+.title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+/* ----- Barre de recherche ----- */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.input-group {
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+    background: #f0f0f0;
+    border-radius: 25px;
+    padding: 5px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.input-group input {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    border-radius: 25px;
+}
+
+.input-group button {
+    background: #28a745;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.input-group button:hover {
+    background: #218838;
+}
+
+/* ----- Tableau des données boursières ----- */
+.table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.table thead {
+    background: #28a745;
+    color: white;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: center;
+}
+
+.no-results {
+    margin-top: 20px;
+    color: #dc3545;
+    font-size: 1.2rem;
+}
+/* Style pour la section des résultats avec une hauteur limitée et scroll */
+.stock-data-list {
+    max-height: 60vh; /* Hauteur maximale pour le conteneur */
+    overflow-y: auto; /* Active le défilement vertical */
+    padding-right: 10px; /* Espace pour éviter que le scroll soit caché */
+}
+
+/* Personnalisation de la barre de défilement */
+.stock-data-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.stock-data-list::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 10px;
+}
+
+.stock-data-list::-webkit-scrollbar-thumb:hover {
+    background: #aaaaaa;
+}
+
+.scroll-container {
+    max-height: 400px; /* Hauteur maximale avant de commencer à scroller */
+    overflow-y: auto;  /* Ajoute la barre de défilement verticale */
+    margin-top: 20px;  /* Espacement avec le formulaire */
+    border: 1px solid #ddd; /* Optionnel: bordure pour délimiter le conteneur */
+    padding: 10px; /* Optionnel: espacement intérieur */
+}
+
+.table {
+    width: 100%;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+.scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.stock-chart {
+    width: 100%;
+    height: 600px;
+}
