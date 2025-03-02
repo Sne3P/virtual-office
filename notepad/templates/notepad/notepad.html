@@ -8,17 +8,21 @@
 <script src="{% static 'js/notepad.js' %}" defer></script>
 
 <div class="notepad-container">
-    <h1>📝 Bloc-notes</h1>
-    <button id="new-note-btn">Nouvelle Note</button>
-    
-    <div id="notes-list">
-        {% for note in notes %}
-        <div class="note" data-id="{{ note.id }}">
-            <input class="note-title" value="{{ note.title }}">
-            <textarea class="note-content">{{ note.content }}</textarea>
-            <button class="delete-note">🗑 Supprimer</button>
+    <div class="sidebar">
+        <h2>Notes</h2>
+        <button id="new-note-btn">Nouvelle Note</button>
+        <div id="notes-list">
+            {% for note in notes %}
+            <div class="note-title-item" data-id="{{ note.id }}">
+                {{ note.title }}
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+    </div>
+    <div class="editor">
+        <input type="text" id="note-title" class="note-title" placeholder="Titre de la note" disabled>
+        <textarea id="note-content" class="note-content" placeholder="Contenu de la note" disabled></textarea>
+        <button id="delete-note-btn" class="delete-note-btn" disabled>Supprimer</button>
     </div>
 </div>
 {% endblock %}

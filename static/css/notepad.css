@@ -1,148 +1,178 @@
-/* ===== Glassmorphic Notepad Style ===== */
+/* ===== Apple Notes Inspired Style ===== */
 
-/* Fond général */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 body {
-    font-family: 'Poppins', sans-serif;
-    background: rgba(255, 255, 255, 0.1);
-    background-size: cover;
-    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    height: 100vh; /* Assurer que l'élément reste centré */
+    padding: 20px; /* Éviter que ça touche les bords */
+    overflow: auto; /* Permettre le scroll si nécessaire */
 }
 
-/* Conteneur principal */
 .notepad-container {
     width: 90%;
-    max-width: 800px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
+    max-width: 1000px;
+    height: 600px;
+    background: #FFFDF5;
     border-radius: 16px;
+    display: flex;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    border: 1px solid #DDD;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 30%;
+    background: #FAFAFA;
     padding: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    animation: fadeIn 0.6s ease-in-out;
+    border-right: 1px solid #E5E5E5;
 }
 
-/* Titre */
-h1 {
-    font-size: 24px;
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 22px;
     font-weight: 600;
-    color: #ffffff;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
+    color: #555;
 }
 
-/* Liste des notes */
+#new-note-btn {
+    background: #FFD56B;
+    color: black;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    transition: background 0.2s ease, transform 0.1s;
+}
+
+#new-note-btn:hover {
+    background: #FFC843;
+    transform: scale(1.03);
+}
+
+/* Notes list */
 #notes-list {
-    width: 100%;
-    max-height: 400px;
+    flex-grow: 1;
     overflow-y: auto;
+    max-height: 450px;
+    padding-right: 5px;
+}
+
+/* Style des notes dans la liste */
+.note-title-item {
+    background: white;
+    padding: 12px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    border: 1px solid transparent;
+}
+
+.note-title-item:hover {
+    background: #FFFAE5;
+    transform: scale(1.02);
+}
+
+/* Note active */
+.note-title-item.active {
+    background: #FFD56B;
+    color: black;
+    border: 1px solid #FFC843;
+}
+
+/* Scroll personnalisé */
+#notes-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#notes-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+/* Éditeur */
+.editor {
+    width: 70%;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    padding-right: 10px;
+    padding: 20px;
+    background: white;
 }
 
-/* Style des notes */
-.note {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    padding: 15px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s, background 0.3s;
-}
-
-.note:hover {
-    transform: scale(1.02);
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* Titre de la note */
 .note-title {
     width: 100%;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 600;
     background: transparent;
     border: none;
     outline: none;
-    color: #fff;
-    padding: 5px;
+    color: #333;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Contenu de la note */
 .note-content {
     width: 100%;
-    height: 100px;
+    height: 100%;
     resize: none;
     background: transparent;
     border: none;
     outline: none;
-    color: #fff;
+    color: #444;
     font-size: 16px;
-    padding: 5px;
-    margin-top: 8px;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    font-weight: 400;
+    line-height: 1.6;
 }
 
-/* Bouton de suppression */
-.delete-note {
-    background: rgba(255, 0, 0, 0.3);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s ease;
-    margin-top: 10px;
-    display: block;
+/* Scroll personnalisé pour le contenu */
+.note-content::-webkit-scrollbar {
+    width: 6px;
 }
 
-.delete-note:hover {
-    background: rgba(255, 0, 0, 0.5);
-}
-
-/* Bouton ajouter une note */
-#new-note-btn {
-    background: rgba(0, 255, 127, 0.3);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background 0.3s ease, transform 0.2s;
-    margin-top: 15px;
-}
-
-#new-note-btn:hover {
-    background: rgba(0, 255, 127, 0.5);
-    transform: scale(1.05);
-}
-
-/* Animation d’apparition */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Personnalisation du scroll */
-#notes-list::-webkit-scrollbar {
-    width: 8px;
-}
-
-#notes-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
+.note-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }
 
-#notes-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+/* Bouton Supprimer */
+.delete-note-btn {
+    background: rgba(255, 59, 48, 0.2);
+    color: #D32F2F;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.delete-note-btn:hover {
+    background: rgba(255, 59, 48, 0.3);
+}
+.notepad-container {
+    max-height: 90vh; /* Limiter la hauteur pour ne pas couper */
 }

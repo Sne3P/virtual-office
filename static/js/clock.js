@@ -79,12 +79,18 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('timer-input').value = '';
     });
 
-    // Affichage des sections
-    document.getElementById('toggle-chrono').addEventListener('click', () => {
-        document.getElementById('chrono-container').classList.toggle('hidden');
-    });
+    // Navigation entre les sections
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.add('hidden');
+        });
+        document.getElementById(sectionId).classList.remove('hidden');
+    }
 
-    document.getElementById('toggle-timer').addEventListener('click', () => {
-        document.getElementById('timer-container').classList.toggle('hidden');
-    });
+    document.getElementById('show-clock').addEventListener('click', () => showSection('clock-container'));
+    document.getElementById('show-chrono').addEventListener('click', () => showSection('chrono-container'));
+    document.getElementById('show-timer').addEventListener('click', () => showSection('timer-container'));
+
+    // Afficher l'horloge par défaut
+    showSection('clock-container');
 });

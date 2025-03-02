@@ -242,7 +242,7 @@ class SurvivalMode extends Phaser.Scene {
         this.time.addEvent({ delay: 1000, callback: this.updateTimer, callbackScope: this, loop: true });
         this.time.addEvent({ delay: 1000, callback: this.alienShoot, callbackScope: this, loop: true });
         
-        this.createPauseButton();
+        this.createPauseButton(); // Ajoutez cette ligne pour créer le bouton pause
     }
 
     update() {
@@ -310,11 +310,48 @@ class SurvivalMode extends Phaser.Scene {
         .setInteractive()
         .setDepth(1)
         .on('pointerdown', () => {
-            this.scene.pause();
-            this.scene.launch('PauseScene');
+            this.showPauseMenu();
         })
         .on('pointerover', () => button.setStyle({ backgroundColor: '#cc0000' }))
         .on('pointerout', () => button.setStyle({ backgroundColor: '#ff0000' }));
+    }
+
+    showPauseMenu() {
+        this.physics.pause();
+        let bg = this.add.graphics();
+        bg.fillStyle(0x000000, 0.7);
+        bg.fillRoundedRect(300, 180, 400, 300, 20);
+        bg.setDepth(1);
+
+        let pauseText = this.add.text(500, 250, 'Jeu en pause', { fontSize: '40px', fill: '#ffffff' })
+            .setOrigin(0.5)
+            .setDepth(2);
+
+        let resumeButton = this.createButton(500, 350, 'Reprendre', '#0080ff', () => {
+            this.physics.resume();
+            bg.clear();
+            pauseText.destroy();
+            resumeButton.destroy();
+            menuButton.destroy();
+        });
+
+        let menuButton = this.createButton(500, 450, 'Menu Principal', '#ff0000', () => {
+            this.scene.stop();
+            this.scene.start('MenuScene');
+        });
+    }
+
+    createButton(x, y, text, color, callback) {
+        let button = this.add.text(x, y, text, {
+            fontSize: '24px', fill: '#ffffff', backgroundColor: color, padding: { x: 20, y: 10 }, fontStyle: 'bold'
+        })
+        .setOrigin(0.5)
+        .setInteractive({ useHandCursor: true })
+        .setDepth(2)
+        .on('pointerdown', callback)
+        .on('pointerover', () => button.setStyle({ backgroundColor: Phaser.Display.Color.HexStringToColor(color).darken(20).saturate(20).color }))
+        .on('pointerout', () => button.setStyle({ backgroundColor: color }));
+        return button;
     }
 }
 

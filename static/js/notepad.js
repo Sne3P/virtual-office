@@ -1,35 +1,103 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("new-note-btn").addEventListener("click", function() {
-        fetch("/notepad/save/", { method: "POST", body: new FormData() })
-        .then(response => response.json())
-        .then(data => {
-            let note = document.createElement("div");
-            note.classList.add("note");
-            note.dataset.id = data.id;
-            note.innerHTML = `
-                <input class="note-title" value="${data.title}">
-                <textarea class="note-content"></textarea>
-                <button class="delete-note">🗑 Supprimer</button>
-            `;
-            document.getElementById("notes-list").appendChild(note);
+    const newNoteBtn = document.getElementById("new-note-btn");
+    const notesList = document.getElementById("notes-list");
+    const noteTitle = document.getElementById("note-title");
+    const noteContent = document.getElementById("note-content");
+    const deleteNoteBtn = document.getElementById("delete-note-btn");
+
+    let notes = JSON.parse(localStorage.getItem("notes")) || [];
+    let activeNoteId = null;
+
+    function saveNotes() {
+        localStorage.setItem("notes", JSON.stringify(notes));
+    }
+
+    function renderNotesList() {
+        notesList.innerHTML = "";
+        notes.forEach(note => {
+            const noteItem = document.createElement("div");
+            noteItem.className = "note-title-item";
+            noteItem.dataset.id = note.id;
+            noteItem.textContent = note.title;
+            noteItem.addEventListener("click", () => selectNote(note.id));
+            if (note.id === activeNoteId) {
+                noteItem.classList.add("active");
+            }
+            notesList.appendChild(noteItem);
         });
-    });
+    }
 
-    document.addEventListener("click", function(e) {
-        if (e.target.classList.contains("delete-note")) {
-            let note = e.target.closest(".note");
-            fetch(`/notepad/delete/${note.dataset.id}/`, { method: "POST" })
-            .then(() => note.remove());
+    function selectNote(id) {
+        const note = notes.find(n => n.id === id);
+        if (note) {
+            activeNoteId = id;
+            noteTitle.value = note.title;
+            noteContent.value = note.content;
+            noteTitle.disabled = false;
+            noteContent.disabled = false;
+            deleteNoteBtn.disabled = false;
+            adjustTitleInputWidth();
+            renderNotesList();
         }
-    });
+    }
 
-    document.addEventListener("input", function(e) {
-        if (e.target.classList.contains("note-title") || e.target.classList.contains("note-content")) {
-            let note = e.target.closest(".note");
-            let formData = new FormData();
-            formData.append("title", note.querySelector(".note-title").value);
-            formData.append("content", note.querySelector(".note-content").value);
-            fetch(`/notepad/update/${note.dataset.id}/`, { method: "POST", body: formData });
+    function createNote() {
+        const newNote = {
+            id: Date.now(),
+            title: "Nouvelle note",
+            content: ""
+        };
+        notes.push(newNote);
+        saveNotes();
+        renderNotesList();
+        selectNote(newNote.id);
+    }
+
+    function updateNote() {
+        if (activeNoteId !== null) {
+            const note = notes.find(n => n.id === activeNoteId);
+            if (note) {
+                note.title = noteTitle.value.trim() || "Nouvelle note";
+                note.content = noteContent.value;
+                saveNotes();
+                renderNotesList();
+                adjustTitleInputWidth();
+            }
         }
+    }
+
+    function deleteNote() {
+        if (activeNoteId !== null) {
+            notes = notes.filter(n => n.id !== activeNoteId);
+            saveNotes();
+            renderNotesList();
+            if (notes.length > 0) {
+                selectNote(notes[0].id);
+            } else {
+                activeNoteId = null;
+                noteTitle.value = "";
+                noteContent.value = "";
+                noteTitle.disabled = true;
+                noteContent.disabled = true;
+                deleteNoteBtn.disabled = true;
+            }
+        }
+    }
+
+    function adjustTitleInputWidth() {
+        noteTitle.style.width = (noteTitle.value.length + 1) + "ch";
+    }
+
+    newNoteBtn.addEventListener("click", createNote);
+    noteTitle.addEventListener("input", () => {
+        setTimeout(updateNote, 500);
+        adjustTitleInputWidth();
     });
+    noteContent.addEventListener("input", () => setTimeout(updateNote, 500));
+    deleteNoteBtn.addEventListener("click", deleteNote);
+
+    renderNotesList();
+    if (notes.length > 0) {
+        selectNote(notes[0].id);
+    }
 });
