@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
     startMenu.classList.remove('active');
   }
 
-  // Barre de recherche : filtrage des .start-app
+  // Barre de recherche 
   if (startSearch) {
     startSearch.addEventListener('click', e => e.stopPropagation());
 
-    // Nouveau : écouteur d'input pour filtrer
+    
     startSearch.addEventListener('input', function(e) {
       const query = e.target.value.toLowerCase().trim();
       const apps = document.querySelectorAll('.start-app');
@@ -124,11 +124,11 @@ document.addEventListener('DOMContentLoaded', function() {
     win.appendChild(content);
     windowsContainer.appendChild(win);
 
-    // Rendre la fenêtre déplaçable et redimensionnable (via les composants externes)
+   
     window.dragManager.makeDraggable(win, header);
     window.resizeManager.makeResizable(win);
 
-    // Au clic sur la fenêtre (hors boutons), la mettre au premier plan
+ 
     win.addEventListener('mousedown', function(e) {
       if (!e.target.closest('.window-btn')) {
         bringWindowToFront(win);

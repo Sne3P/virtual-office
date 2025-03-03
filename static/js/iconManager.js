@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.desktop-icon').forEach(icon => {
         this.attachIconEvents(icon);
       });
-      // Désélectionner les icônes si on clique ailleurs
+     
       document.addEventListener('click', function(e) {
         if (!e.target.closest('.desktop-icon')) {
           document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));

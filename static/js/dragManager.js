@@ -16,22 +16,20 @@
       handle.addEventListener('mousedown', (e) => {
         e.preventDefault();
 
-        // --- Modification pour mettre la fenêtre au premier plan quand on commence à la dragger ---
-        // Retirer la classe 'active-window' de toutes les fenêtres et l'ajouter à celle-ci.
         if (element.classList.contains('app-window')) {
           document.querySelectorAll('.app-window').forEach(win => win.classList.remove('active-window'));
           element.classList.add('active-window');
         }
         // ------------------------------------------------------------------------------------------
 
-        // Mettre l'élément visuellement devant (z-index)
+ 
         element.style.zIndex = ++this.currentZIndex;
 
         this.dragItem = element;
         this.offsetX = e.clientX - element.offsetLeft;
         this.offsetY = e.clientY - element.offsetTop;
 
-        // Désactiver temporairement les pointer-events sur les iframes enfants
+      
         this.disabledIframes = [];
         element.querySelectorAll('iframe').forEach((iframe) => {
           this.disabledIframes.push({ iframe: iframe, original: iframe.style.pointerEvents });

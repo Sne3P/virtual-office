@@ -27,9 +27,9 @@ class SelectionManager {
     this.iframeListeners = [];
     this.selectionBoxTimeout = null;
     this.mouseDownTime = 0;
-    this.clickThreshold = 200; // en millisecondes
+    this.clickThreshold = 200; 
 
-    // Conserver les références liées pour faciliter la suppression des écouteurs
+
     this._onMouseDownBound = this._onMouseDown.bind(this);
     this._onMouseMoveBound = this._onMouseMove.bind(this);
     this._onMouseUpBound = this._onMouseUp.bind(this);
@@ -107,7 +107,7 @@ class SelectionManager {
 
   _onMouseDown(e) {
     if (e.button !== 0) return;
-    // Si le clic provient d’un élément sélectionnable ou d’un élément exclu, on laisse la gestion au click.
+ 
     if (
       e.target.closest(this.selectableSelector) ||
       this.options.exclusionSelectors.some(sel => e.target.closest(sel))
@@ -120,7 +120,7 @@ class SelectionManager {
     this.startY = e.pageY;
     this.startCtrl = e[this.options.multiSelectModifier + 'Key'];
     this.mouseDownTime = Date.now();
-    // Délai pour différencier clic rapide et clic prolongé
+   
     this.selectionBoxTimeout = setTimeout(() => {
       this._createSelectionBox();
     }, this.clickThreshold);
@@ -156,15 +156,15 @@ class SelectionManager {
     if (!this.isSelecting) return;
     this.isSelecting = false;
     clearTimeout(this.selectionBoxTimeout);
-    // Si aucun drag n'a été initié (clic rapide), ne créer ni traiter la zone de sélection
+
     if (!this.selectionBox) {
       this.dragging = false;
       return;
     }
     const boxRect = this.selectionBox.getBoundingClientRect();
-    // Si la touche multi-sélection n'était pas active, effacer la sélection existante.
+  
     if (!this.startCtrl) this._clearSelection();
-    // Sélectionner les éléments dont le rectangle intersecte la zone de sélection.
+   
     this.container.querySelectorAll(this.selectableSelector).forEach(el => {
       const elRect = el.getBoundingClientRect();
       if (
@@ -185,7 +185,7 @@ class SelectionManager {
   }
 
   _onClick(e) {
-    // Si un drag a été détecté, ignorer le clic ultérieur.
+ 
     if (this.dragging) {
       this.dragging = false;
       return;
@@ -202,14 +202,14 @@ class SelectionManager {
           this.selectedElements.add(selectableItem);
         }
       } else {
-        // Sélection unique : désélectionner d'abord tous les autres.
+       
         this._clearSelection();
         selectableItem.classList.add('selected');
         this.selectedElements.add(selectableItem);
       }
       this.onSelect(Array.from(this.selectedElements));
     } else {
-      // Clic sur le fond : tout désélectionner.
+
       this._clearSelection();
       this.onSelect([]);
     }

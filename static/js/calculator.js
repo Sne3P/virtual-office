@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function calculate(expression) {
       try {
-          // Remplace "x" par "*" et s'assure que l'expression est correcte
+         
           expression = expression.replace(/x/g, "*").replace(/÷/g, "/");
           resultField.value = eval(expression);
       } catch {

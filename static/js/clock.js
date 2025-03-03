@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(updateClock, 1000);
 
     // Chronomètre
-    let chronoTime = 0; // Temps en millisecondes
+    let chronoTime = 0; 
     let chronoInterval;
     const chronoDisplay = document.getElementById('chrono-display');
 
     function formatChrono(time) {
         let minutes = Math.floor(time / 60000);
         let seconds = Math.floor((time % 60000) / 1000);
-        let centièmes = Math.floor((time % 1000) / 10); // Centièmes de seconde
+        let centièmes = Math.floor((time % 1000) / 10); 
         return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(centièmes).padStart(2, '0')}`;
     }
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chronoInterval = setInterval(() => {
                 chronoTime = Date.now() - startTime;
                 chronoDisplay.textContent = formatChrono(chronoTime);
-            }, 10); // Intervalle de 10ms pour des centièmes de seconde
+            }, 10); 
         }
     });
 
@@ -45,13 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
         chronoInterval = null;
     });
 
-    // Minuteur avec entrée en minutes
+   
     let timerInterval;
     document.getElementById('start-timer').addEventListener('click', function() {
         let durationInMinutes = parseInt(document.getElementById('timer-input').value, 10);
         if (isNaN(durationInMinutes) || durationInMinutes <= 0) return;
 
-        let durationInSeconds = durationInMinutes * 60; // Conversion en secondes
+        let durationInSeconds = durationInMinutes * 60; 
         let endTime = Date.now() + durationInSeconds * 1000;
         let timerDisplay = document.getElementById('timer-display');
 

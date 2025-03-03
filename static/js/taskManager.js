@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function(){
                           <button class="close-task-btn" data-window-id="${win.id}">
                             <i class="fa-solid fa-xmark"></i>
                           </button>`;
-        // Lorsqu'on clique sur l'item, restaurer (si minimisée) et activer la fenêtre
+        // Lorsqu'on clique sur l'item, restaurer et activer la fenêtre
         item.addEventListener('click', function(e){
           e.stopPropagation();
           if(win.dataset.state === 'minimized'){

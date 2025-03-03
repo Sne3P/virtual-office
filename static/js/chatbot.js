@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
             displayMessage("❌ Erreur de connexion", "bot-message");
         }
 
-        input.value = ''; // Vide l'input après l'envoi
+        input.value = ''; 
     }
 
     function displayMessage(text, className) {
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
         messageElement.textContent = text;
         chatbotDisplay.appendChild(messageElement);
 
-        // Scroll vers le bas après ajout d'un message
+      
         chatbotDisplay.scrollTop = chatbotDisplay.scrollHeight;
     }
 });

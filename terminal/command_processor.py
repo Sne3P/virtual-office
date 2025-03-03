@@ -29,7 +29,7 @@ def process_command(command):
     elif base_command == 'open':
         if len(tokens) > 1:
             app = tokens[1].lower()
-            # Ici, vous pourriez déclencher une action côté client pour ouvrir l'application.
+           
             return f"Lancement de l'application '{app}' (simulation)"
         else:
             return "Usage: open [nom_app]"

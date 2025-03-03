@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const progressContainer = document.querySelector(".progress-container");
     const volumeSlider = document.getElementById("volume-slider");
 
-    // Fonction pour mettre à jour les icônes et l'effet visuel du morceau en lecture
+  
     function updatePlayButtons() {
         tracks.forEach((track, index) => {
             const playButton = track.querySelector(".play-button i");
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePlayButtons();
     }
 
-    // Play / Pause général (barre de lecture)
+  
     playPauseButton.addEventListener("click", function () {
         if (audioPlayer.paused) {
             audioPlayer.play();
@@ -110,8 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
         playTrack(currentTrackIndex + 1);
     });
 
-    // S'assurer que les musiques ne dépassent pas le rectangle d'affichage en bas
+    
     const trackListContainer = document.querySelector(".track-list");
     trackListContainer.style.overflowY = "auto";
-    trackListContainer.style.maxHeight = "calc(100vh - 200px)"; // Ajustez cette valeur en fonction de la hauteur de votre lecteur
+    trackListContainer.style.maxHeight = "calc(100vh - 200px)"; 
 });
