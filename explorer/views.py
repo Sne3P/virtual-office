@@ -48,7 +48,7 @@ def explorer_view(request, drive_type, directory_id=None):
     sort_field = request.GET.get('sort', 'name')
     view_type = request.GET.get('view', 'grid')
     
-    # Affichage des drives accessibles : personnel, commun, et admin pour les staff
+    # On affiche des drives accessibles
     drives = []
     personal = get_or_create_drive(request.user, 'personal')
     if personal:

@@ -1,20 +1,18 @@
-/* Fenêtres d'application – Glassmorphic Modernisé Inspiré du Context Menu */
 .app-window {
   position: absolute;
   width: 600px;
   height: 400px;
-  background: rgba(255, 255, 255, 0.1); /* Fond très léger */
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
-  border: none; /* Pas de bord */
+  border: none; 
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Ombre légère et moderne */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   pointer-events: auto;
   z-index: 1;
   display: flex;
   flex-direction: column;
   animation: windowOpen 0.3s ease-out;
-  /* Aucun transition globale pour un drag/resize ultra réactif */
 }
 
 @keyframes windowOpen {
@@ -31,7 +29,6 @@
   animation: windowClose 0.3s ease-out;
 }
 
-/* Animation de minimisation */
 .minimize-animation {
   animation: minimizeWindow 0.3s ease-out forwards;
 }
@@ -40,7 +37,6 @@
   to   { opacity: 0; transform: scale(0.5); }
 }
 
-/* État maximisé – la fenêtre s'étend jusqu'aux bords de l'écran */
 .app-window.maximized {
   top: 0;
   left: 0;
@@ -48,12 +44,10 @@
   height: 100vh;
 }
 
-/* Classe .animating à appliquer lors des transitions maximize/restore */
 .animating {
   transition: top 0.3s ease, left 0.3s ease, width 0.3s ease, height 0.3s ease;
 }
 
-/* En-tête et contrôles – Style inspiré du context menu */
 .window-header {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
@@ -108,7 +102,6 @@
   background: #28c840;
 }
 
-/* Contenu de la fenêtre */
 .window-content {
   flex: 1;
   width: 100%;
@@ -131,7 +124,6 @@
   transform: translateZ(0);
 }
 
-/* Zones de redimensionnement agrandies pour faciliter l'usage */
 .resizer {
   width: 20px;
   height: 20px;

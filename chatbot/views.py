@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 
-# Remplace par ta clé API Cohere (elle est gratuite t'es pas obligé de me voler la mienne fait pas le flemmard)
 cohere_client = cohere.Client("kWy6hVux38mEMUfUGhLaa6Z9GDKMwbbVvP1vaHR2")
 
 def chatbot_view(request):
@@ -20,13 +19,12 @@ def chatbot_response(request):
             if not user_message:
                 return JsonResponse({"error": "Message vide"}, status=400)
 
-            # Envoi du message à Cohere
             response = cohere_client.chat(
                 message=user_message,
-                model="command"  # Modèle gratuit
+                model="command" 
             )
 
-            bot_message = response.text  # Récupère la réponse du chatbot
+            bot_message = response.text 
 
             return JsonResponse({"message": bot_message})
 

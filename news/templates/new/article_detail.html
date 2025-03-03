@@ -9,9 +9,7 @@
     <p class="news-description">{{ article.description }}</p>
     <p class="news-published">Publié le : {{ article.published_at }}</p>
 
-    <!-- Lien pour voir l'article original -->
     <a href="{{ article.url }}" class="btn btn-primary" target="_blank">Voir l'article original</a>
-    <!-- Bouton pour revenir aux recherches -->
     <a href="{% url 'news' %}" class="btn btn-secondary mt-3">Revenir aux recherches</a>
 </div>
 

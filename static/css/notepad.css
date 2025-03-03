@@ -1,4 +1,3 @@
-/* ===== Apple Notes Inspired Style ===== */
 {
     margin: 0;
     padding: 0;
@@ -10,25 +9,24 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Assurer que l'élément reste centré */
-    padding: 0; /* Éviter que ça touche les bords */
-    overflow: hidden; /* Empêcher le scroll */
-    margin: 0; /* Enlever les marges */
+    height: 100vh;
+    padding: 0;
+    overflow: hidden;
+    margin: 0; 
 }
 
 .notepad-container {
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.1); /* Légère transparence */
+    background: rgba(255, 255, 255, 0.1); 
     backdrop-filter: blur(15px);
-    border-radius: 0; /* Pas de bordure arrondie */
+    border-radius: 0;
     display: flex;
-    box-shadow: none; /* Suppression de l'ombre */
+    box-shadow: none; 
     overflow: hidden;
-    border: none; /* Suppression de la bordure */
+    border: none; 
 }
 
-/* Sidebar */
 .sidebar {
     width: 30%;
     background: rgba(255, 255, 255, 0.484);
@@ -43,12 +41,12 @@ h2 {
     margin-bottom: 15px;
     font-size: 22px;
     font-weight: 600;
-    color: #222; /* Couleur plus foncée pour une meilleure visibilité */
+    color: #222;
 }
 
 #new-note-btn {
     background: #FFD56B;
-    color: #000; /* Couleur noire pour une meilleure visibilité */
+    color: #000; 
     border: none;
     border-radius: 12px;
     padding: 12px;
@@ -64,19 +62,17 @@ h2 {
     transform: scale(1.03);
 }
 
-/* Notes list */
 #notes-list {
     flex-grow: 1;
     overflow-y: auto;
     max-height: 450px;
     padding-right: 5px;
-    padding-bottom: 10px; /* Ajout de padding en bas pour éviter que le hover soit coupé */
-    padding-left: 5px; /* Ajout de padding à gauche pour éviter que le hover soit coupé */
+    padding-bottom: 10px; 
+    padding-left: 5px;
 }
 
-/* Style des notes dans la liste */
 .note-title-item {
-    background: rgba(255, 255, 255, 0.2); /* Légère transparence */
+    background: rgba(255, 255, 255, 0.2); 
     padding: 12px;
     margin-bottom: 6px;
     border-radius: 10px;
@@ -84,7 +80,7 @@ h2 {
     transition: background 0.3s ease, transform 0.1s;
     font-size: 14px;
     font-weight: 500;
-    color: #222; /* Couleur plus foncée pour une meilleure visibilité */
+    color: #222; 
     border: 1px solid transparent;
 }
 
@@ -93,14 +89,12 @@ h2 {
     transform: scale(1.02);
 }
 
-/* Note active */
 .note-title-item.active {
     background: #FFD56B;
     color: black;
     border: 1px solid #FFC843;
 }
 
-/* Scroll personnalisé */
 #notes-list::-webkit-scrollbar {
     width: 6px;
 }
@@ -110,13 +104,12 @@ h2 {
     border-radius: 4px;
 }
 
-/* Éditeur */
 .editor {
     width: 70%;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.1); /* Légère transparence */
+    background: rgba(255, 255, 255, 0.1); 
 }
 
 .note-title {
@@ -126,7 +119,7 @@ h2 {
     background: transparent;
     border: none;
     outline: none;
-    color: #222; /* Couleur plus foncée pour une meilleure visibilité */
+    color: #222; 
     margin-bottom: 10px;
     padding: 5px 10px;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
@@ -139,7 +132,7 @@ h2 {
     background: transparent;
     border: none;
     outline: none;
-    color: #333; /* Couleur plus foncée pour une meilleure visibilité */
+    color: #333; 
     font-size: 16px;
     flex-grow: 1;
     overflow-y: auto;
@@ -148,7 +141,6 @@ h2 {
     line-height: 1.6;
 }
 
-/* Scroll personnalisé pour le contenu */
 .note-content::-webkit-scrollbar {
     width: 6px;
 }
@@ -158,7 +150,6 @@ h2 {
     border-radius: 4px;
 }
 
-/* Bouton Supprimer */
 .delete-note-btn {
     background: rgba(255, 59, 48, 0.2);
     color: #D32F2F;

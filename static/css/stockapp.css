@@ -1,4 +1,3 @@
-/* ----- Fond général ----- */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #1c1c1e;
@@ -10,7 +9,6 @@ body {
     min-height: 100vh;
 }
 
-/* ----- Conteneur principal ----- */
 .container {
     width: 90%;
     max-width: 1000px;
@@ -22,7 +20,6 @@ body {
     backdrop-filter: blur(10px);
 }
 
-/* ----- Titre ----- */
 .title {
     font-size: 2rem;
     font-weight: 700;
@@ -31,7 +28,6 @@ body {
     text-shadow: 0 0 10px rgba(0, 122, 255, 0.7);
 }
 
-/* ----- Barre de recherche ----- */
 .search-form {
     display: flex;
     justify-content: center;
@@ -75,7 +71,6 @@ body {
     background: #005ecb;
 }
 
-/* ----- Tableau des données boursières ----- */
 .table {
     width: 100%;
     margin-top: 15px;
@@ -104,17 +99,15 @@ body {
     margin-top: 15px;
     color: #ff3b30;
     font-size: 1rem;
-    display: none; /* Masquer par défaut */
+    display: none; 
 }
 
-/* Style pour la section des résultats avec une hauteur limitée et scroll */
 .stock-data-list {
-    max-height: 60vh; /* Hauteur maximale pour le conteneur */
-    overflow-y: auto; /* Active le défilement vertical */
-    padding-right: 10px; /* Espace pour éviter que le scroll soit caché */
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px; 
 }
 
-/* Personnalisation de la barre de défilement */
 .stock-data-list::-webkit-scrollbar {
     width: 8px;
 }
@@ -129,11 +122,11 @@ body {
 }
 
 .scroll-container {
-    max-height: 400px; /* Hauteur maximale avant de commencer à scroller */
-    overflow-y: auto;  /* Ajoute la barre de défilement verticale */
-    margin-top: 15px;  /* Espacement avec le formulaire */
-    border: 1px solid #ddd; /* Optionnel: bordure pour délimiter le conteneur */
-    padding: 10px; /* Optionnel: espacement intérieur */
+    max-height: 400px;
+    overflow-y: auto;  
+    margin-top: 15px;  
+    border: 1px solid #ddd;
+    padding: 10px; 
 }
 
 .stock-chart {

@@ -18,7 +18,6 @@ def create_photo_from_file(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=File)
 def delete_file_from_storage(sender, instance, **kwargs):
-    # Ce signal s'assure que le fichier physique est supprimé
     if instance.file:
         try:
             if os.path.isfile(instance.file.path):

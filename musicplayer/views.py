@@ -6,7 +6,7 @@ from .models import LocalMusic
 
 
 def musicplayer_view(request):
-    tracks = None  # Mettre `None` au lieu de `[]` pour différencier l'état initial
+    tracks = None 
     form = MusicSearchForm(request.GET or None)
 
     if form.is_valid():

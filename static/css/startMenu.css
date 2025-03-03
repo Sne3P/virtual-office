@@ -1,13 +1,12 @@
-/* Start Menu – design modernisé avec animation et pointer-events géré */
 #start-menu {
   position: fixed;
-  bottom: 70px;  /* Décalé par rapport à la Taskbar */
+  bottom: 70px; 
   left: 20px;
   width: 400px;
   max-height: 600px;
-  background: rgba(255, 255, 255, 0.1);  /* Opacité réduite pour un effet plus subtil */
+  background: rgba(255, 255, 255, 0.1); 
   backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);  /* Bordure légère */
+  border: 1px solid rgba(255, 255, 255, 0.2);  
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   overflow: hidden;
@@ -15,18 +14,18 @@
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;  /* Empêche de capturer les clics quand inactif */
+  pointer-events: none;  
 }
 
 #start-menu.active {
   opacity: 1;
   transform: translateY(0);
-  pointer-events: auto;  /* Autorise les interactions quand actif */
+  pointer-events: auto;  
 }
 
 .start-menu-content {
   padding: 20px;
-  color: #f0f0f0;  /* Texte clair pour contraster avec le fond sombre */
+  color: #f0f0f0;  
 }
 
 .start-menu-header {
@@ -56,9 +55,8 @@
   gap: 10px;
 }
 
-/* Espacement renforcé pour la barre de recherche */
 .start-menu-search {
-  margin: 15px 20px; /* Espacement vertical et horizontal ajusté */
+  margin: 15px 20px; 
 }
 
 .start-menu-search input {
@@ -70,7 +68,7 @@
   font-size: 16px;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
   background: rgba(255, 255, 255, 0.15);
-  color: #ffffff; /* Couleur de la police modifiée */
+  color: #ffffff; 
 }
 
 
@@ -107,6 +105,6 @@
 }
 
 #start-menu {
-  max-height: 400px; /* ajustez la hauteur maximum selon vos besoins */
+  max-height: 400px; 
   overflow-y: auto;
 }

@@ -14,5 +14,5 @@ class Photo(models.Model):
     
     def delete(self, *args, **kwargs):
         if self.file:
-            self.file.delete()  # Appelle notre méthode personnalisée dans File qui supprime le fichier sur disque
+            self.file.delete() 
         super().delete(*args, **kwargs)

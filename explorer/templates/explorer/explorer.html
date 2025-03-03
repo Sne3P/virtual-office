@@ -25,7 +25,6 @@
       {% endfor %}
     </div>
     <div id="explorer-actions">
-      <!-- Ordre des boutons : New Folder, New File, Reload, Toggle View, Sort by Name, Sort by Date, Delete Selected -->
       <button id="new-folder-btn" class="action-btn" title="New Folder">
         <i class="fa-solid fa-folder-plus"></i>
       </button>
@@ -53,9 +52,7 @@
       </button>
     </div>
   </div>
-  <!-- Corps de l'explorer -->
   <div id="explorer-body">
-    <!-- Sidebar -->
     <div id="explorer-sidebar">
       <h3>{{ current_directory.drive.name }}</h3>
       {% if current_directory.parent %}
@@ -74,7 +71,6 @@
         {% endfor %}
       </ul>
     </div>
-    <!-- Zone principale -->
     <div id="explorer-main" class="{{ view_type }}-view"
          data-create-directory-url="{{ create_directory_url }}"
          data-upload-file-url="{{ upload_file_url }}"
@@ -82,7 +78,6 @@
          data-delete-url="{{ delete_selected_url }}"
          data-rename-url-template="{{ rename_url_template }}"
          data-move-url-template="{{ move_url_template }}">
-      <!-- Breadcrumbs -->
       <div id="explorer-breadcrumbs">
         <a href="{% url 'explorer:explorer_view' current_directory.drive.drive_type %}" class="breadcrumb-root">
           {{ current_directory.drive.name }}
@@ -96,7 +91,6 @@
         <span class="breadcrumb-sep">&gt;</span>
         <span class="breadcrumb-current">{{ current_directory.name }}</span>
       </div>
-      <!-- Contenu de l'explorer -->
       <div class="explorer-content">
         {% for sub in subdirectories %}
           <div class="explorer-item folder-item" 

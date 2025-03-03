@@ -10,5 +10,5 @@ def get_time(request):
     return JsonResponse({'time': now.strftime('%H:%M:%S')})
 
 def start_timer(request):
-    duration = int(request.GET.get('duration', 0))  # Récupération du temps en secondes
+    duration = int(request.GET.get('duration', 0))
     return JsonResponse({'message': 'Minuteur démarré', 'end_time': datetime.datetime.now().timestamp() + duration})

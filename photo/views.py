@@ -6,7 +6,7 @@ from explorer.models import Drive
 from django.db.models import Q
 
 def photo_list(request):
-    # Récupère les drives auxquels l'utilisateur a accès
+    # recupere les drives auxquels l'utilisateur a acces
     drives = []
     personal = Drive.objects.filter(drive_type='personal', owner=request.user).first()
     if personal:
@@ -42,7 +42,6 @@ def photo_upload(request):
     return render(request, 'photo/photo_upload.html', {'form': form})
 
 def photo_delete(request, pk):
-    # Cette vue de suppression doit être appelée en POST
     photo = get_object_or_404(Photo, pk=pk)
     photo.delete()
     return JsonResponse({'success': True})

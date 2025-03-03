@@ -1,5 +1,3 @@
-# apps_config.py
-
 APPS = [
     {
         'id': 'terminal',

@@ -91,7 +91,7 @@ class File(models.Model):
         return self.name
     
     def delete(self, *args, **kwargs):
-        # Supprime le fichier du système de fichiers
+        # supprime le fichier du systeme de fichier
         if self.file:
             try:
                 if os.path.isfile(self.file.path):

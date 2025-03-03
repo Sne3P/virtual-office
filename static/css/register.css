@@ -1,4 +1,3 @@
-/* Fond identique au bureau */
 body {
     margin: 0;
     padding: 0;
@@ -8,7 +7,6 @@ body {
     color: #fff;
   }
   
-  /* Container centré */
   .login-container {
     display: flex;
     align-items: center;
@@ -16,7 +14,6 @@ body {
     height: 100vh;
   }
   
-  /* Carte glassmorphic centrale */
   .login-box {
     background: rgba(255, 255, 255, 0.08);
     border-radius: 16px;
@@ -32,14 +29,12 @@ body {
     animation: fadeIn 0.5s ease-in-out;
   }
   
-  /* Titre */
   .login-box h2 {
     font-size: 2rem;
     margin-bottom: 1.8rem;
     letter-spacing: 1px;
   }
   
-  /* Groupes de formulaire - position relative pour les tooltips */
   .form-group {
     position: relative;
     margin-bottom: 2rem;
@@ -53,7 +48,6 @@ body {
     color: rgba(255, 255, 255, 0.9);
   }
   
-  /* Inputs glassmorphic transparents */
   .form-group input {
     width: 90%;
     padding: 0.75rem 1rem;
@@ -76,7 +70,6 @@ body {
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
   }
   
-  /* Bouton glassmorphic transparent */
   .btn {
     width: 100%;
     padding: 0.75rem;
@@ -96,7 +89,6 @@ body {
     background: rgba(255, 255, 255, 0.1);
   }
   
-  /* Texte d'inscription */
   .register-text {
     margin-top: 1.5rem;
     font-size: 0.9rem;
@@ -113,18 +105,16 @@ body {
     border-bottom: 1px solid #00ccff;
   }
   
-  /* Animation d'apparition */
   @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
   }
   
-  /* Styles pour les tooltips glassmorphic */
   .tooltip {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 100%; /* Positionné au-dessus de l'input */
+    bottom: 100%;
     margin-bottom: 8px;
     background: rgb(56, 56, 56);
     border-radius: 8px;
