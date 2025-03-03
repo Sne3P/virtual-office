@@ -105,3 +105,8 @@
   font-size: 16px;
   color: #fff;
 }
+
+#start-menu {
+  max-height: 400px; /* ajustez la hauteur maximum selon vos besoins */
+  overflow-y: auto;
+}

@@ -15,17 +15,29 @@
       handle.style.cursor = 'move';
       handle.addEventListener('mousedown', (e) => {
         e.preventDefault();
-        // Mettre l'élément au premier plan
+
+        // --- Modification pour mettre la fenêtre au premier plan quand on commence à la dragger ---
+        // Retirer la classe 'active-window' de toutes les fenêtres et l'ajouter à celle-ci.
+        if (element.classList.contains('app-window')) {
+          document.querySelectorAll('.app-window').forEach(win => win.classList.remove('active-window'));
+          element.classList.add('active-window');
+        }
+        // ------------------------------------------------------------------------------------------
+
+        // Mettre l'élément visuellement devant (z-index)
         element.style.zIndex = ++this.currentZIndex;
+
         this.dragItem = element;
         this.offsetX = e.clientX - element.offsetLeft;
         this.offsetY = e.clientY - element.offsetTop;
+
         // Désactiver temporairement les pointer-events sur les iframes enfants
         this.disabledIframes = [];
         element.querySelectorAll('iframe').forEach((iframe) => {
           this.disabledIframes.push({ iframe: iframe, original: iframe.style.pointerEvents });
           iframe.style.pointerEvents = 'none';
         });
+
         document.addEventListener('mousemove', this.mouseMoveHandler);
         document.addEventListener('mouseup', this.mouseUpHandler);
       });
@@ -49,6 +61,11 @@
       this.dragItem = null;
       document.removeEventListener('mousemove', this.mouseMoveHandler);
       document.removeEventListener('mouseup', this.mouseUpHandler);
+    }
+
+    bringToFront(element) {
+      // Méthode complémentaire appelée depuis desktop.js
+      element.style.zIndex = ++this.currentZIndex;
     }
   }
   

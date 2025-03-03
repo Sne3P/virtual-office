@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const desktop = document.getElementById('desktop');
   const startSearch = document.getElementById('start-search');
 
+  // Ajout pour permettre le scroll dans le start menu :
+  if (startMenu) {
+    startMenu.style.maxHeight = '400px';
+    startMenu.style.overflowY = 'auto';
+  }
+
   // Désactivation du clic droit natif sauf sur notre menu custom
   document.addEventListener('contextmenu', function(e) {
     if (!e.target.closest('.context-menu')) e.preventDefault();
@@ -17,8 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
     startMenu.classList.remove('active');
   }
 
+  // Barre de recherche : filtrage des .start-app
   if (startSearch) {
     startSearch.addEventListener('click', e => e.stopPropagation());
+
+    // Nouveau : écouteur d'input pour filtrer
+    startSearch.addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase().trim();
+      const apps = document.querySelectorAll('.start-app');
+      apps.forEach(app => {
+        const text = app.textContent.toLowerCase();
+        app.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
   }
 
   function openTaskManager() {
@@ -55,6 +72,14 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       win.querySelector('.window-title').textContent = cfg ? cfg.name : app;
     }
+  }
+
+  // Fonction centralisée pour mettre la fenêtre win au premier plan
+  function bringWindowToFront(win) {
+    deactivateAllWindows();
+    win.classList.add('active-window');
+    window.dragManager.bringToFront(win);
+    markTaskbarActive(win.id);
   }
 
   function createAppWindow(appName) {
@@ -103,12 +128,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.dragManager.makeDraggable(win, header);
     window.resizeManager.makeResizable(win);
 
+    // Au clic sur la fenêtre (hors boutons), la mettre au premier plan
     win.addEventListener('mousedown', function(e) {
       if (!e.target.closest('.window-btn')) {
-        deactivateAllWindows();
-        win.classList.add('active-window');
-        window.dragManager.bringToFront(win);
-        markTaskbarActive(win.id);
+        bringWindowToFront(win);
       }
     });
 
@@ -224,10 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     win.classList.remove('minimized');
                     win.style.display = 'block';
                   }
-                  deactivateAllWindows();
-                  win.classList.add('active-window');
-                  markTaskbarActive(win.id);
-                  window.dragManager.bringToFront(win);
+                  bringWindowToFront(win);
                   updateTaskManager();
                 }
               }
@@ -243,10 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
               win.classList.remove('minimized');
               win.style.display = 'block';
             }
-            deactivateAllWindows();
-            win.classList.add('active-window');
-            window.dragManager.bringToFront(win);
-            markTaskbarActive(win.id);
+            bringWindowToFront(win);
             updateTaskManager();
           }
         }
@@ -342,8 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopIconsContainer = document.querySelector('.desktop-icons');
     if (desktopIconsContainer) {
       new SelectionManager(desktopIconsContainer, '.desktop-icon', selectedIcons => {
-        // Action lors de la sélection multiple, par ex. afficher le nombre d'icônes sélectionnées
-        // console.log(selectedIcons.length, 'icône(s) sélectionnée(s)');
+        // Action lors de la sélection multiple
       }, {
         exclusionSelectors: []
       });

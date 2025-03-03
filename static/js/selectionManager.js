@@ -209,7 +209,7 @@ class SelectionManager {
       }
       this.onSelect(Array.from(this.selectedElements));
     } else {
-      // Clic sur le fond (ou dans une iframe non sélectionnable) : tout désélectionner.
+      // Clic sur le fond : tout désélectionner.
       this._clearSelection();
       this.onSelect([]);
     }
