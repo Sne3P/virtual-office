@@ -1,5 +1,13 @@
 # Virtual Office
 
+Membres groupe 10 : 
+ROBERT Bastien
+ACHAQ Ilyes
+LEMOGO KAMNEN Collins
+MOUTIER Antoine
+ROBILLART Flavie
+BELKHETAB Kawtar 
+
 Pour installer et tester le projet, veuillez suivre les étapes suivantes.
 
 # Installation
