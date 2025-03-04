@@ -1,16 +1,35 @@
 # Virtual Office
+Ce projet est un virtual desktop qui permet de se connecter et d'accéder à son environnement avec plusieurs applications.
 
-Membres groupe 10 : 
-ROBERT Bastien
-ACHAQ Ilyes
-LEMOGO KAMNEN Collins
-MOUTIER Antoine
-ROBILLART Flavie
-BELKHETAB Kawtar 
+## Design & Interface
+L'interface utilisateur s'inspire du style **glassmorphism** de macOS, avec des éléments semi-transparents, des arrière-plans floutés et des bordures subtiles. 
 
-Pour installer et tester le projet, veuillez suivre les étapes suivantes.
+## Fonctionnalités
+Virtual Office propose plusieurs applications intégrées :
+
+- **📝 Bloc-notes** 
+- **🧮 Calculatrice** 
+- **📁 Explorateur de fichiers**
+- **🎵 Lecteur de musique** 
+- **🌤 Application météo** 
+- **⏰ Horloge** 
+- **💻 Terminal** 
+- **📅 Agenda** 
+- **🤖 Chatbot** 
+- **🎮 Application de jeux** 
+- **📽 Lecteur multimédia** 
+- **📰 Application de nouvelles** 
+- **🖼 Visionneuse de photos** 
+- **📈 Application boursière** 
+
+
+
+
+
+
 
 # Installation
+Pour installer et tester le projet, veuillez suivre les étapes suivantes.
 
 ```
 git clone https://github.com/votre-utilisateur/virtual-office.git    
