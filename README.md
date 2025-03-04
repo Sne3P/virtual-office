@@ -23,8 +23,7 @@ Virtual Office propose plusieurs applications intégrées :
 - **📈 Application boursière** 
 
 
-
-
+https://github.com/user-attachments/assets/ee0385d2-8f4c-49fe-ac3e-3101999becc4
 
 
 
